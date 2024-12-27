@@ -1,5 +1,0 @@
-[14:02:53] Lime started
-[14:02:53] ./content/classd.x
-[14:02:53] 22 frames
-[14:03:00] Ending application...
-
