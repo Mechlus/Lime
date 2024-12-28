@@ -15,14 +15,17 @@ public:
 
 	Billboard() {
 		bb = smgr->addBillboardSceneNode();
+		bb->grab();
 	}
 	Billboard(const Billboard& other) {
 		bb = smgr->addBillboardSceneNode();
+		bb->grab();
 		bb = other.bb;
 		myMaterial = other.myMaterial;
 		bb->getMaterial(0) = other.myMaterial;
 	}
 	Billboard(const Material& material) {
+		bb->grab();
 		bb = smgr->addBillboardSceneNode();
 		loadMaterial(material);
 	}

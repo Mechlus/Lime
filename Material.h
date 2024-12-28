@@ -115,7 +115,7 @@ public:
     }
 
     void setDiffuseColor(Vector3D& color) {
-        mat.DiffuseColor = irr::video::SColor(color.x, color.y, color.z, 1.0f);
+        mat.DiffuseColor = irr::video::SColor(255, color.x, color.y, color.z);
     }
 
     Vector3D getAmbientColor() {
@@ -123,7 +123,7 @@ public:
     }
 
     void setAmbientColor(Vector3D& color) {
-        mat.AmbientColor = irr::video::SColor(color.x, color.y, color.z, 1.0f);
+        mat.AmbientColor = irr::video::SColor(255, color.x, color.y, color.z);
     }
 
     Vector3D getEmissiveColor() {
@@ -131,7 +131,7 @@ public:
     }
 
     void setEmissiveColor(Vector3D& color) {
-        mat.EmissiveColor = irr::video::SColor(color.x, color.y, color.z, 1.0f);
+        mat.EmissiveColor = irr::video::SColor(255, color.x, color.y, color.z);
     }
 
     Vector3D getSpecularColor() {
@@ -139,7 +139,7 @@ public:
     }
 
     void setSpecularColor(Vector3D& color) {
-        mat.SpecularColor = irr::video::SColor(color.x, color.y, color.z, 1.0f);
+        mat.SpecularColor = irr::video::SColor(255, color.x, color.y, color.z);
     }
 
     bool getGourad() {

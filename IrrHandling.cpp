@@ -3,7 +3,7 @@
 #include "LimeReceiver.h"
 #include "Sound.h"
 
-#include <filesystem> // C++17
+#include <filesystem>
 namespace fs = std::filesystem;
 
 using namespace irr;
@@ -85,6 +85,8 @@ void IrrHandling::initScene()
 	smgr = device->getSceneManager();
 	guienv = device->getGUIEnvironment();
 	driver->getGPUProgrammingServices(); // for shaders, need to do in Material.h
+
+	modelImporter = new IrrAssimp(smgr);
 
 	appLoop();
 }

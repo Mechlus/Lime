@@ -17,6 +17,7 @@ public:
 	std::vector<irr::video::SMaterial> materials;
 	irr::scene::ITriangleSelector* selector = 0;
 	bool collisionEnabled = false;
+	irr::scene::IShadowVolumeSceneNode* shadow = 0;
 
 	StaticMesh() : meshNode(nullptr) {}
 
@@ -25,6 +26,7 @@ public:
 	}
 
 	StaticMesh(const StaticMesh& other) {
+		meshNode->drop();
 		meshNode = other.meshNode;
 		materials = other.materials;
 		meshPath = other.meshPath;
@@ -52,11 +54,37 @@ public:
 		return meshPath;
 	}
 
+	void receiveShadows(bool enable) {
+		if (meshNode) {
+			if (enable && !shadow) {
+				shadow = meshNode->addShadowVolumeSceneNode();
+			} else if (!enable && shadow) {
+				shadow->remove();
+				if (shadow)
+					shadow = nullptr;
+			}
+		}
+	}
+
+	bool getShadows() {
+		if (meshNode)
+			return shadow != nullptr;
+		return false;
+	}
+
 	bool loadMesh(const std::string& filePath) {
-		irr::scene::IAnimatedMesh* mesh = smgr->getMesh(filePath.c_str());
+		boolean fbx = core::hasFileExtension(filePath.c_str(), "fbx");
+		irr::scene::IAnimatedMesh* mesh = nullptr;
+
+		if (fbx) {
+			mesh = modelImporter->getMesh(filePath.c_str());
+		}
+		else {
+			mesh = smgr->getMesh(filePath.c_str());
+		}
+
 		if (!mesh) {
 			std::string currentPath = std::filesystem::current_path().string();
-			dConsole.sendMsg(currentPath.c_str(), 1);
 			return false;
 		}
 
@@ -64,6 +92,7 @@ public:
 		meshNode = smgr->addAnimatedMeshSceneNode(mesh);
 		if (!meshNode) return false;
 
+		meshNode->grab();
 		materials.clear();
 		for (int i = 0; i < meshNode->getMaterialCount(); ++i) {
 			materials.push_back(meshNode->getMaterial(i));
@@ -89,6 +118,7 @@ public:
 	}
 
 	void deload() {
+		dConsole.sendMsg("bye", 0);
 		if (meshNode) {
 			meshNode->remove();
 			meshNode = nullptr;
@@ -183,6 +213,7 @@ public:
 	int getID() {
 		if (meshNode)
 			return meshNode->getID();
+		return -1;
 	}
 
 	void setID(int i) {
@@ -251,6 +282,11 @@ public:
 		}
 		return getBoneData(bone);
 	}
+
+	void normalizeNormals(boolean enable) {
+		if (meshNode)
+			meshNode->setMaterialFlag(irr::video::EMF_NORMALIZE_NORMALS, enable);
+	}
 };
 
 void bindStaticMesh() {
@@ -264,7 +300,8 @@ void bindStaticMesh() {
 		"scale", sol::property(&StaticMesh::getScale, &StaticMesh::setScale),
 		"parent", sol::property(&StaticMesh::getParent, &StaticMesh::setParent),
 		"ID", sol::property(&StaticMesh::getID, &StaticMesh::setID),
-		"frame", sol::property(&StaticMesh::getFrame, &StaticMesh::setFrame)
+		"frame", sol::property(&StaticMesh::getFrame, &StaticMesh::setFrame),
+		"shadows", sol::property(&StaticMesh::getShadows, &StaticMesh::receiveShadows)
 	);
 
 	bind_type["load"] = &StaticMesh::loadMesh;
@@ -276,4 +313,5 @@ void bindStaticMesh() {
 	bind_type["getBoneDataByIndex"] = &StaticMesh::getBoneInfoByIndex;
 	bind_type["getBoneDataByName"] = &StaticMesh::getBoneInfoByName;
 	bind_type["getFrameCount"] = &StaticMesh::getFrameCount;
+	bind_type["normalizeNormals"] = &StaticMesh::normalizeNormals;
 }

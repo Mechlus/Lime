@@ -7,6 +7,7 @@
 #include "Material.h"
 #include "StaticMesh.h"
 #include "Texture.h"
+#include "Light.h"
 #include "Warden.h"
 
 #include <sol/sol.hpp>
@@ -34,6 +35,7 @@ int LuaLime::initLua(irr::scene::ISceneManager* smgr, irr::video::IVideoDriver* 
 	bindMaterial();
 	bindStaticMesh();
 	bindTexture();
+	bindLight();
 
 	return 0;
 }

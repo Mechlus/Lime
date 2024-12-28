@@ -11,6 +11,7 @@
 #include "DebugConsole.h"
 
 #pragma comment(lib, "lua51.lib")
+#pragma comment(lib, "assimp-vc143-mt.lib")
 
 #ifdef _IRR_WINDOWS_
 #pragma comment(lib, "Irrlicht.lib")

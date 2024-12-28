@@ -392,6 +392,19 @@ namespace Warden {
 		applyFogSettings();
 	}
 
+	// Shadows
+	void enableRealTimeShadows(bool enable) {
+		irrHandler->stencil = enable;
+	}
+
+	void setShadowColor(const Vector3D& color) {
+		smgr->setShadowColor(video::SColor(255, static_cast<u32>(color.x), static_cast<u32>(color.y), static_cast<u32>(color.z)));
+	}
+
+	void setShadowOpacity(float opacity) {
+		smgr->setShadowColor(video::SColor(opacity, smgr->getShadowColor().getRed(), static_cast<u32>(smgr->getShadowColor().getGreen()), smgr->getShadowColor().getBlue()));
+	}
+
 	// Sound
 	int play2DSound(const std::string& filePath, bool loop = false) {
 		return soundManager->play2DSound(filePath, loop);
@@ -506,6 +519,9 @@ void bindWarden(sol::table application, sol::table world, sol::table sound, sol:
 	world["SetPixelFog"] = &Warden::setFogPixel;
 	world["SetRangeFog"] = &Warden::useDistanceForFog;
 	world["SetFogParameters"] = &Warden::setFogSettings;
+	world["SetCastShadows"] = &Warden::enableRealTimeShadows;
+	world["SetShadowColor"] = &Warden::setShadowColor;
+	world["SetShadowOpacity"] = &Warden::setShadowOpacity;
 
 	// gui/2D images/text
 

@@ -16,10 +16,16 @@ public:
 
 	Camera3D() {
 		camera = smgr->addCameraSceneNode();
+		camera->grab();
 	}
 
 	Camera3D(const Camera3D& other) {
+		if (smgr->getActiveCamera() == camera) {
+			smgr->setActiveCamera(other.camera);
+		}
+		destroy();
 		camera = other.camera;
+		camera->grab();
 	}
 
 	void destroy() {
