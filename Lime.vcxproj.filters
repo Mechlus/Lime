@@ -42,13 +42,16 @@
     <ClCompile Include="Sound.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\irrasimp\IrrAssimp\IrrAssimp.cpp">
+    <ClCompile Include="IrrAssimp.cpp">
       <Filter>IrrAsimp</Filter>
     </ClCompile>
-    <ClCompile Include="..\irrasimp\IrrAssimp\IrrAssimpImport.cpp">
+    <ClCompile Include="IrrAssimpExport.cpp">
       <Filter>IrrAsimp</Filter>
     </ClCompile>
-    <ClCompile Include="..\irrasimp\IrrAssimp\IrrAssimpUtils.cpp">
+    <ClCompile Include="IrrAssimpImport.cpp">
+      <Filter>IrrAsimp</Filter>
+    </ClCompile>
+    <ClCompile Include="IrrAssimpUtils.cpp">
       <Filter>IrrAsimp</Filter>
     </ClCompile>
   </ItemGroup>
@@ -104,16 +107,16 @@
     <ClInclude Include="Sound.h">
       <Filter>Source Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\irrasimp\IrrAssimp\IrrAssimp.h">
+    <ClInclude Include="IrrAssimpUtils.h">
       <Filter>IrrAsimp</Filter>
     </ClInclude>
-    <ClInclude Include="..\irrasimp\IrrAssimp\IrrAssimpImport.h">
+    <ClInclude Include="IrrAssimp.h">
       <Filter>IrrAsimp</Filter>
     </ClInclude>
-    <ClInclude Include="..\irrasimp\IrrAssimp\IrrAssimpUtils.h">
+    <ClInclude Include="IrrAssimpExport.h">
       <Filter>IrrAsimp</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
+    <ClInclude Include="IrrAssimpImport.h">
       <Filter>IrrAsimp</Filter>
     </ClInclude>
   </ItemGroup>

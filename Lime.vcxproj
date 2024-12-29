@@ -147,30 +147,31 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\irrasimp\IrrAssimp\IrrAssimp.cpp" />
-    <ClCompile Include="..\irrasimp\IrrAssimp\IrrAssimpImport.cpp" />
-    <ClCompile Include="..\irrasimp\IrrAssimp\IrrAssimpUtils.cpp" />
     <ClCompile Include="DebugConsole.cpp" />
+    <ClCompile Include="IrrAssimp.cpp" />
+    <ClCompile Include="IrrAssimpExport.cpp" />
+    <ClCompile Include="IrrAssimpImport.cpp" />
+    <ClCompile Include="IrrAssimpUtils.cpp" />
     <ClCompile Include="IrrHandling.cpp" />
     <ClCompile Include="Lime.cpp" />
     <ClCompile Include="LuaLime.cpp" />
     <ClCompile Include="Sound.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\irrasimp\IrrAssimp\IrrAssimp.h" />
-    <ClInclude Include="..\irrasimp\IrrAssimp\IrrAssimpImport.h" />
-    <ClInclude Include="..\irrasimp\IrrAssimp\IrrAssimpUtils.h" />
     <ClInclude Include="Billboard.h" />
     <ClInclude Include="Camera3D.h" />
     <ClInclude Include="DebugConsole.h" />
     <ClInclude Include="Helper.h" />
+    <ClInclude Include="IrrAssimp.h" />
+    <ClInclude Include="IrrAssimpExport.h" />
+    <ClInclude Include="IrrAssimpImport.h" />
+    <ClInclude Include="IrrAssimpUtils.h" />
     <ClInclude Include="IrrHandling.h" />
     <ClInclude Include="IrrManagers.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LimeReceiver.h" />
     <ClInclude Include="LuaLime.h" />
     <ClInclude Include="Material.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="Save.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="StaticMesh.h" />
