@@ -22,9 +22,6 @@
     <Filter Include="Source Files\Scene3D">
       <UniqueIdentifier>{c6e25fbc-a86d-46ab-b7b7-a4c247aed64f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="IrrAsimp">
-      <UniqueIdentifier>{cfae3e7c-cb62-427c-b4fd-b96e44ffc960}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Lime.cpp">
@@ -41,18 +38,6 @@
     </ClCompile>
     <ClCompile Include="Sound.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="IrrAssimp.cpp">
-      <Filter>IrrAsimp</Filter>
-    </ClCompile>
-    <ClCompile Include="IrrAssimpExport.cpp">
-      <Filter>IrrAsimp</Filter>
-    </ClCompile>
-    <ClCompile Include="IrrAssimpImport.cpp">
-      <Filter>IrrAsimp</Filter>
-    </ClCompile>
-    <ClCompile Include="IrrAssimpUtils.cpp">
-      <Filter>IrrAsimp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -106,18 +91,6 @@
     </ClInclude>
     <ClInclude Include="Sound.h">
       <Filter>Source Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="IrrAssimpUtils.h">
-      <Filter>IrrAsimp</Filter>
-    </ClInclude>
-    <ClInclude Include="IrrAssimp.h">
-      <Filter>IrrAsimp</Filter>
-    </ClInclude>
-    <ClInclude Include="IrrAssimpExport.h">
-      <Filter>IrrAsimp</Filter>
-    </ClInclude>
-    <ClInclude Include="IrrAssimpImport.h">
-      <Filter>IrrAsimp</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

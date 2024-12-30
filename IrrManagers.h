@@ -1,7 +1,6 @@
 #pragma once
 
 #include "irrlicht.h"
-#include "IrrAssimp.h"
 #include "IrrHandling.h"
 #include "LimeReceiver.h"
 #include "Sound.h"
@@ -15,4 +14,6 @@ inline IrrHandling* irrHandler = nullptr;
 inline LimeReceiver* receiver = nullptr;
 inline irrklang::ISoundEngine* sound = nullptr;
 inline SoundManager* soundManager = nullptr;
-inline IrrAssimp* modelImporter = nullptr;
+
+inline irr::scene::ICameraSceneNode* mainCamera = nullptr;
+inline irr::scene::ISceneNode* mainCameraForward = nullptr;

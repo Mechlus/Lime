@@ -73,18 +73,27 @@ public:
 	}
 
 	bool loadMesh(const std::string& filePath) {
-		boolean fbx = core::hasFileExtension(filePath.c_str(), "fbx");
+		return fullLoadMesh(filePath, false);
+	}
+
+	bool loadMeshWithTangents(const std::string& filePath) {
+		return fullLoadMesh(filePath, true);
+	}
+
+	bool fullLoadMesh(const std::string& filePath, bool doTangents) {
+		bool fbx = core::hasFileExtension(filePath.c_str(), "fbx");
 		irr::scene::IAnimatedMesh* mesh = nullptr;
 
-		if (fbx) {
-			mesh = modelImporter->getMesh(filePath.c_str());
-		}
-		else {
+		if (!doTangents)
 			mesh = smgr->getMesh(filePath.c_str());
+		else {
+			irr::scene::IMeshManipulator* manipulator = smgr->getMeshManipulator();
+			mesh = manipulator->createAnimatedMesh(manipulator->createMeshWithTangents(smgr->getMesh(filePath.c_str())->getMesh(0)));
 		}
 
 		if (!mesh) {
 			std::string currentPath = std::filesystem::current_path().string();
+			dConsole.sendMsg(currentPath.c_str(), 0);
 			return false;
 		}
 
@@ -118,7 +127,6 @@ public:
 	}
 
 	void deload() {
-		dConsole.sendMsg("bye", 0);
 		if (meshNode) {
 			meshNode->remove();
 			meshNode = nullptr;
@@ -305,6 +313,7 @@ void bindStaticMesh() {
 	);
 
 	bind_type["load"] = &StaticMesh::loadMesh;
+	bind_type["loadWithTangents"] = &StaticMesh::loadMeshWithTangents;
 	bind_type["loadMaterial"] = &StaticMesh::loadMaterial;
 	bind_type["destroy"] = &StaticMesh::deload;
 	bind_type["getVertexCount"] = &StaticMesh::getVertexCount;

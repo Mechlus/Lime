@@ -86,8 +86,6 @@ void IrrHandling::initScene()
 	guienv = device->getGUIEnvironment();
 	driver->getGPUProgrammingServices(); // for shaders, need to do in Material.h
 
-	modelImporter = new IrrAssimp(smgr);
-
 	appLoop();
 }
 
@@ -191,6 +189,10 @@ void IrrHandling::appLoop() {
 				sol::error err = result;
 				dConsole.sendMsg(std::string(err.what()).c_str(), 1);
 			}
+		}
+
+		if (mainCamera) {
+			mainCamera->setTarget(mainCameraForward->getAbsolutePosition());
 		}
 
 		driver->beginScene(true, true, backgroundColor);

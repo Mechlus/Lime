@@ -25,8 +25,8 @@ public:
 		bb->getMaterial(0) = other.myMaterial;
 	}
 	Billboard(const Material& material) {
-		bb->grab();
 		bb = smgr->addBillboardSceneNode();
+		bb->grab();
 		loadMaterial(material);
 	}
 

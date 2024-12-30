@@ -405,6 +405,10 @@ namespace Warden {
 		smgr->setShadowColor(video::SColor(opacity, smgr->getShadowColor().getRed(), static_cast<u32>(smgr->getShadowColor().getGreen()), smgr->getShadowColor().getBlue()));
 	}
 
+	void setAmbientColor(const Vector3D& color) {
+		smgr->setAmbientLight(video::SColorf(static_cast<u32>(color.x) / 255.0f, static_cast<u32>(color.y) / 255.0f, static_cast<u32>(color.z) / 255.0f, 1.0f));
+	}
+
 	// Sound
 	int play2DSound(const std::string& filePath, bool loop = false) {
 		return soundManager->play2DSound(filePath, loop);
@@ -522,6 +526,7 @@ void bindWarden(sol::table application, sol::table world, sol::table sound, sol:
 	world["SetCastShadows"] = &Warden::enableRealTimeShadows;
 	world["SetShadowColor"] = &Warden::setShadowColor;
 	world["SetShadowOpacity"] = &Warden::setShadowOpacity;
+	world["SetAmbientColor"] = &Warden::setAmbientColor;
 
 	// gui/2D images/text
 

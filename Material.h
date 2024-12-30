@@ -115,7 +115,7 @@ public:
     }
 
     void setDiffuseColor(Vector3D& color) {
-        mat.DiffuseColor = irr::video::SColor(255, color.x, color.y, color.z);
+        mat.DiffuseColor.set(1, color.x / 255.0f, color.y / 255.0f, color.z / 255.0f);
     }
 
     Vector3D getAmbientColor() {
@@ -123,7 +123,7 @@ public:
     }
 
     void setAmbientColor(Vector3D& color) {
-        mat.AmbientColor = irr::video::SColor(255, color.x, color.y, color.z);
+        mat.AmbientColor.set(1, color.x/255.0f, color.y/255.0f, color.z/255.0f);
     }
 
     Vector3D getEmissiveColor() {
@@ -131,7 +131,7 @@ public:
     }
 
     void setEmissiveColor(Vector3D& color) {
-        mat.EmissiveColor = irr::video::SColor(255, color.x, color.y, color.z);
+        mat.EmissiveColor.set(1, color.x / 255.0f, color.y / 255.0f, color.z / 255.0f);
     }
 
     Vector3D getSpecularColor() {
@@ -139,7 +139,7 @@ public:
     }
 
     void setSpecularColor(Vector3D& color) {
-        mat.SpecularColor = irr::video::SColor(255, color.x, color.y, color.z);
+        mat.SpecularColor.set(1, color.x / 255.0f, color.y / 255.0f, color.z / 255.0f);
     }
 
     bool getGourad() {
@@ -348,7 +348,7 @@ void bindMaterial() {
         "wireframe", sol::property(&Material::getWireframe, &Material::setWireframe),
         "lighting", sol::property(&Material::getLighting, &Material::setLighting),
         "diffuseColor", sol::property(&Material::getDiffuseColor, &Material::setDiffuseColor),
-        "ambientColor", sol::property(&Material::getAmbientColor, &Material::setAmbientColor),
+        //"ambientColor", sol::property(&Material::getAmbientColor, &Material::setAmbientColor), Makes all lighting and colors not work?
         "emissiveColor", sol::property(&Material::getEmissiveColor, &Material::setEmissiveColor),
         "specularColor", sol::property(&Material::getSpecularColor, &Material::setSpecularColor),
         "gouradShading", sol::property(&Material::getGourad, &Material::setGourad),
@@ -364,7 +364,6 @@ void bindMaterial() {
         "textureWrap", sol::property(&Material::getWrapUV, &Material::setWrapUV),
         "textureWrapU", sol::property(&Material::getWrapU, &Material::setWrapU),
         "textureWrapV", sol::property(&Material::getWrapV, &Material::setWrapV),
-        "texture", sol::property(&Material::getTexture, &Material::setTexture),
         "ID", sol::property(&Material::getID, &Material::setID)
     );
 
@@ -373,6 +372,7 @@ void bindMaterial() {
     bind_type["setTextureUVWrapping"] = &Material::setWrapUV;
     bind_type["setTextureUWrapping"] = &Material::setWrapU;
     bind_type["setTextureVWrapping"] = &Material::setWrapV;
+    bind_type["setTexture"] = &Material::setTexture;
 
     bind_type["setTextureScale"] = &Material::setTextureScale;
     bind_type["getTextureScale"] = &Material::setTextureScale;
