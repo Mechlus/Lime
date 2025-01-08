@@ -17,6 +17,8 @@ public:
 	std::vector<irr::video::SMaterial> materials;
 	irr::scene::ITriangleSelector* selector = 0;
 	bool collisionEnabled = false;
+	irr::video::SColor vColor;
+	int opacity = 255;
 
 	StaticMesh() : meshNode(nullptr) {}
 
@@ -326,6 +328,33 @@ public:
 		if (meshNode)
 			meshNode->getMesh()->setHardwareMappingHint((irr::scene::E_HARDWARE_MAPPING)i);
 	}
+
+	int getOpacity() {
+		if (meshNode)
+			return opacity;
+		return 0;
+	}
+
+	void setOpacity(int op) {
+		opacity = op;
+		irr::scene::IMeshManipulator* meshManipulator = device->getSceneManager()->getMeshManipulator();
+		//meshManipulator->setVertexColors(meshNode->getMesh(), video::SColor(255, 255, 0, 0));
+		meshManipulator->setVertexColorAlpha(meshNode->getMesh(), opacity);
+	}
+
+	Vector3D getVColor() {
+		if (meshNode)
+			return Vector3D(vColor.getRed(), vColor.getGreen(), vColor.getBlue());
+		return Vector3D();
+	}
+
+	void setVColor(const Vector3D& col) {
+		if (meshNode) {
+			vColor = irr::video::SColor(opacity, col.x, col.y, col.z);
+			irr::scene::IMeshManipulator* meshManipulator = device->getSceneManager()->getMeshManipulator();
+			meshManipulator->setVertexColors(meshNode->getMesh(), vColor);
+		}
+	}
 };
 
 void bindStaticMesh() {
@@ -340,7 +369,9 @@ void bindStaticMesh() {
 		//"parent", sol::property(&StaticMesh::getParent, &StaticMesh::setParent),
 		"ID", sol::property(&StaticMesh::getID, &StaticMesh::setID),
 		"frame", sol::property(&StaticMesh::getFrame, &StaticMesh::setFrame),
-		"debug", sol::property(&StaticMesh::getDebug, &StaticMesh::setDebug)
+		"debug", sol::property(&StaticMesh::getDebug, &StaticMesh::setDebug),
+		"vertexColor", sol::property(&StaticMesh::getVColor, &StaticMesh::setVColor),
+		"vertexAlpha", sol::property(&StaticMesh::getOpacity, &StaticMesh::setOpacity)
 	);
 
 	bind_type["load"] = &StaticMesh::loadMesh;
