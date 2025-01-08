@@ -7,37 +7,6 @@
 #include "Vector3D.h"
 #include "LuaLime.h"
 
-irr::video::E_MATERIAL_TYPE intToMaterialType(int i) {
-    switch (i) {
-    case 0:  return irr::video::EMT_SOLID;
-    case 1:  return irr::video::EMT_SOLID_2_LAYER;
-    case 2:  return irr::video::EMT_LIGHTMAP;
-    case 3:  return irr::video::EMT_LIGHTMAP_ADD;
-    case 4:  return irr::video::EMT_LIGHTMAP_M2;
-    case 5:  return irr::video::EMT_LIGHTMAP_M4;
-    case 6:  return irr::video::EMT_LIGHTMAP_LIGHTING;
-    case 7:  return irr::video::EMT_LIGHTMAP_LIGHTING_M2;
-    case 8:  return irr::video::EMT_LIGHTMAP_LIGHTING_M4;
-    case 9:  return irr::video::EMT_DETAIL_MAP;
-    case 10: return irr::video::EMT_SPHERE_MAP;
-    case 11: return irr::video::EMT_REFLECTION_2_LAYER;
-    case 12: return irr::video::EMT_TRANSPARENT_ADD_COLOR;
-    case 13: return irr::video::EMT_TRANSPARENT_ALPHA_CHANNEL;
-    case 14: return irr::video::EMT_TRANSPARENT_ALPHA_CHANNEL_REF;
-    case 15: return irr::video::EMT_TRANSPARENT_VERTEX_ALPHA;
-    case 16: return irr::video::EMT_TRANSPARENT_REFLECTION_2_LAYER;
-    case 17: return irr::video::EMT_NORMAL_MAP_SOLID;
-    case 18: return irr::video::EMT_NORMAL_MAP_TRANSPARENT_ADD_COLOR;
-    case 19: return irr::video::EMT_NORMAL_MAP_TRANSPARENT_VERTEX_ALPHA;
-    case 20: return irr::video::EMT_PARALLAX_MAP_SOLID;
-    case 21: return irr::video::EMT_PARALLAX_MAP_TRANSPARENT_ADD_COLOR;
-    case 22: return irr::video::EMT_PARALLAX_MAP_TRANSPARENT_VERTEX_ALPHA;
-    case 23: return irr::video::EMT_ONETEXTURE_BLEND;
-    case 24: return irr::video::EMT_FORCE_32BIT;
-    default: return irr::video::EMT_SOLID;
-    }
-}
-
 class Material
 {
 public:
@@ -67,7 +36,7 @@ public:
 	}
 
 	void setMaterialType(int i) {
-        mat.MaterialType = intToMaterialType(i);
+        mat.MaterialType = (irr::video::E_MATERIAL_TYPE)i;
 	}
 
     bool getFog() {
@@ -334,6 +303,10 @@ public:
         // no function for this in irrlicht yet
         return Vector2D();
     }
+
+    void setMaterialFlag(int i, bool enable) {
+        mat.setFlag((irr::video::E_MATERIAL_FLAG)i, enable);
+    }
 };
 
 void bindMaterial() {
@@ -376,4 +349,6 @@ void bindMaterial() {
 
     bind_type["setTextureScale"] = &Material::setTextureScale;
     bind_type["getTextureScale"] = &Material::setTextureScale;
+
+    bind_type["setMaterialFlag"] = &Material::setMaterialFlag;
 }

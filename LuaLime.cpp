@@ -8,6 +8,8 @@
 #include "StaticMesh.h"
 #include "Texture.h"
 #include "Light.h"
+#include "Text3D.h"
+#include "WaterMesh.h"
 #include "Warden.h"
 
 #include <sol/sol.hpp>
@@ -36,6 +38,8 @@ int LuaLime::initLua(irr::scene::ISceneManager* smgr, irr::video::IVideoDriver* 
 	bindStaticMesh();
 	bindTexture();
 	bindLight();
+	bindText3D();
+	bindWater();
 
 	return 0;
 }

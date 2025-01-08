@@ -147,30 +147,42 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CGUIFont.cpp" />
     <ClCompile Include="DebugConsole.cpp" />
     <ClCompile Include="IrrHandling.cpp" />
     <ClCompile Include="Lime.cpp" />
+    <ClCompile Include="Line.cpp" />
     <ClCompile Include="LuaLime.cpp" />
+    <ClCompile Include="os.cpp" />
     <ClCompile Include="Sound.cpp" />
+    <ClCompile Include="TextArea.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Billboard.h" />
     <ClInclude Include="Camera3D.h" />
+    <ClInclude Include="CGUIFont.h" />
     <ClInclude Include="DebugConsole.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="IrrHandling.h" />
     <ClInclude Include="IrrManagers.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LimeReceiver.h" />
+    <ClInclude Include="Line.h" />
     <ClInclude Include="LuaLime.h" />
     <ClInclude Include="Material.h" />
+    <ClInclude Include="os.h" />
     <ClInclude Include="Save.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="StaticMesh.h" />
+    <ClInclude Include="Text3D.h" />
+    <ClInclude Include="TextArea.h" />
+    <ClInclude Include="TextElement.h" />
+    <ClInclude Include="TextLine.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Vector2D.h" />
     <ClInclude Include="Vector3D.h" />
     <ClInclude Include="Warden.h" />
+    <ClInclude Include="WaterMesh.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Lime.rc" />

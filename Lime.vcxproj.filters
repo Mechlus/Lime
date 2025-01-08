@@ -22,6 +22,12 @@
     <Filter Include="Source Files\Scene3D">
       <UniqueIdentifier>{c6e25fbc-a86d-46ab-b7b7-a4c247aed64f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Scene2D\Deprecated">
+      <UniqueIdentifier>{da41a675-e0ea-4d89-b44f-8e67032d4874}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scene2D\Deprecated\TextArea">
+      <UniqueIdentifier>{6569ff38-9827-4012-a5c2-3888bf0bb9bf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Lime.cpp">
@@ -38,6 +44,18 @@
     </ClCompile>
     <ClCompile Include="Sound.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Line.cpp">
+      <Filter>Source Files\Scene2D\Deprecated\TextArea</Filter>
+    </ClCompile>
+    <ClCompile Include="TextArea.cpp">
+      <Filter>Source Files\Scene2D\Deprecated\TextArea</Filter>
+    </ClCompile>
+    <ClCompile Include="CGUIFont.cpp">
+      <Filter>Source Files\Scene2D\Deprecated\TextArea</Filter>
+    </ClCompile>
+    <ClCompile Include="os.cpp">
+      <Filter>Source Files\Scene2D\Deprecated\TextArea</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -91,6 +109,30 @@
     </ClInclude>
     <ClInclude Include="Sound.h">
       <Filter>Source Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="TextArea.h">
+      <Filter>Source Files\Scene2D\Deprecated\TextArea</Filter>
+    </ClInclude>
+    <ClInclude Include="Line.h">
+      <Filter>Source Files\Scene2D\Deprecated\TextArea</Filter>
+    </ClInclude>
+    <ClInclude Include="CGUIFont.h">
+      <Filter>Source Files\Scene2D\Deprecated\TextArea</Filter>
+    </ClInclude>
+    <ClInclude Include="os.h">
+      <Filter>Source Files\Scene2D\Deprecated\TextArea</Filter>
+    </ClInclude>
+    <ClInclude Include="TextLine.h">
+      <Filter>Source Files\Scene2D\Deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="TextElement.h">
+      <Filter>Source Files\Scene2D\Deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="Text3D.h">
+      <Filter>Source Files\Scene3D</Filter>
+    </ClInclude>
+    <ClInclude Include="WaterMesh.h">
+      <Filter>Source Files\Scene3D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

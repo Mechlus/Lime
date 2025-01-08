@@ -164,6 +164,14 @@ void IrrHandling::appLoop() {
 
 	f32 const frameDur = 1000.f / m_frameLimit;
 
+	ILightSceneNode* pLight = device->getSceneManager()->addLightSceneNode();
+	SLight& l = pLight->getLightData();
+	l.Type = ELT_DIRECTIONAL;
+	ISceneNode* pNode = device->getSceneManager()->addEmptySceneNode();
+	pLight->setPosition(vector3df(1, 0, 1)); //default is (1,1,0) for directional lights
+	pLight->setParent(pNode);
+	//now rotate pNode to set light angle
+
 	while (device->run()) {
 		const u32 now = device->getTimer()->getTime();
 		dt = (now - then) / 16.667f;

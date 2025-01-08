@@ -17,7 +17,6 @@ public:
 	std::vector<irr::video::SMaterial> materials;
 	irr::scene::ITriangleSelector* selector = 0;
 	bool collisionEnabled = false;
-	irr::scene::IShadowVolumeSceneNode* shadow = 0;
 
 	StaticMesh() : meshNode(nullptr) {}
 
@@ -52,24 +51,6 @@ public:
 
 	std::string getMesh() const {
 		return meshPath;
-	}
-
-	void receiveShadows(bool enable) {
-		if (meshNode) {
-			if (enable && !shadow) {
-				shadow = meshNode->addShadowVolumeSceneNode();
-			} else if (!enable && shadow) {
-				shadow->remove();
-				if (shadow)
-					shadow = nullptr;
-			}
-		}
-	}
-
-	bool getShadows() {
-		if (meshNode)
-			return shadow != nullptr;
-		return false;
 	}
 
 	bool loadMesh(const std::string& filePath) {
@@ -107,6 +88,10 @@ public:
 			materials.push_back(meshNode->getMaterial(i));
 		}
 
+		meshNode->addShadowVolumeSceneNode();
+
+		mesh->drop();
+
 		return true;
 	}
 
@@ -143,9 +128,10 @@ public:
 	}
 
 	StaticMesh* getParent() {
+		return nullptr;
 		if (meshNode && meshNode->getParent() && meshNode->getParent()->getType() == irr::scene::ESNT_ANIMATED_MESH) {
 			auto parentNode = static_cast<irr::scene::IAnimatedMeshSceneNode*>(meshNode->getParent());
-			return new StaticMesh{ parentNode };
+			return new StaticMesh{ parentNode }; // probably don't do this
 		}
 		return nullptr;
 	}
@@ -153,7 +139,9 @@ public:
 	void setParent(StaticMesh* parent) {
 		if (meshNode && parent && parent->meshNode) {
 			meshNode->setParent(parent->meshNode);
+			return;
 		}
+		meshNode->setParent(nullptr);
 	}
 
 	bool getCollision() const {
@@ -291,9 +279,52 @@ public:
 		return getBoneData(bone);
 	}
 
-	void normalizeNormals(boolean enable) {
+	void normalizeNormals(bool enable) {
 		if (meshNode)
 			meshNode->setMaterialFlag(irr::video::EMF_NORMALIZE_NORMALS, enable);
+	}
+
+	bool getDebug() {
+		if (meshNode)
+			return meshNode->isDebugDataVisible();
+		return false;
+	}
+
+	void setDebug(bool visible) {
+		if (meshNode) {
+			if (visible)
+				meshNode->setDebugDataVisible(irr::scene::EDS_FULL);
+			else
+				meshNode->setDebugDataVisible(irr::scene::EDS_OFF);
+		}
+	}
+
+	sol::table getBoundingBox(int i) {
+		sol::table result = lua->create_table();
+		result["min"] = Vector3D();
+		result["max"] = Vector3D();
+
+		irr::scene::IAnimatedMesh* mesh = meshNode->getMesh();
+		if (mesh) {
+			scene::IMeshBuffer* buffer = mesh->getMeshBuffer(i);
+			if (buffer) {
+				core::aabbox3d<f32> bb = buffer->getBoundingBox();
+				result["min"] = Vector3D(bb.MinEdge.X, bb.MinEdge.Y, bb.MinEdge.Z);
+				result["max"] = Vector3D(bb.MaxEdge.X, bb.MaxEdge.Y, bb.MaxEdge.Z);
+			}
+		}
+
+		return result;
+	}
+
+	void makePlanarMapping() {
+		if (meshNode)
+			smgr->getMeshManipulator()->makePlanarTextureMapping(meshNode->getMesh(), 0.004f);
+	}
+
+	void setHardwareHint(int i) {
+		if (meshNode)
+			meshNode->getMesh()->setHardwareMappingHint((irr::scene::E_HARDWARE_MAPPING)i);
 	}
 };
 
@@ -306,10 +337,10 @@ void bindStaticMesh() {
 		"position", sol::property(&StaticMesh::getPosition, &StaticMesh::setPosition),
 		"rotation", sol::property(&StaticMesh::getRotation, &StaticMesh::setRotation),
 		"scale", sol::property(&StaticMesh::getScale, &StaticMesh::setScale),
-		"parent", sol::property(&StaticMesh::getParent, &StaticMesh::setParent),
+		//"parent", sol::property(&StaticMesh::getParent, &StaticMesh::setParent),
 		"ID", sol::property(&StaticMesh::getID, &StaticMesh::setID),
 		"frame", sol::property(&StaticMesh::getFrame, &StaticMesh::setFrame),
-		"shadows", sol::property(&StaticMesh::getShadows, &StaticMesh::receiveShadows)
+		"debug", sol::property(&StaticMesh::getDebug, &StaticMesh::setDebug)
 	);
 
 	bind_type["load"] = &StaticMesh::loadMesh;
@@ -323,4 +354,8 @@ void bindStaticMesh() {
 	bind_type["getBoneDataByName"] = &StaticMesh::getBoneInfoByName;
 	bind_type["getFrameCount"] = &StaticMesh::getFrameCount;
 	bind_type["normalizeNormals"] = &StaticMesh::normalizeNormals;
+	bind_type["setParent"] = &StaticMesh::setParent;
+	bind_type["getBoundingBox"] = &StaticMesh::getBoundingBox;
+	bind_type["toPlanarMapping"] = &StaticMesh::makePlanarMapping;
+	bind_type["setHardwareMappingHint"] = &StaticMesh::setHardwareHint;
 }

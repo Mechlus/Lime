@@ -77,6 +77,11 @@ namespace Warden {
 		*/
 	}
 
+	void setShadows(bool enable) {
+		if (irrHandler)
+			irrHandler->stencil = enable;
+	}
+
 	// set window size
 	bool setWindowSize(Vector2D& sizes) {
 		if (sizes.x > 0 && sizes.y > 0) {
@@ -393,18 +398,6 @@ namespace Warden {
 	}
 
 	// Shadows
-	void enableRealTimeShadows(bool enable) {
-		irrHandler->stencil = enable;
-	}
-
-	void setShadowColor(const Vector3D& color) {
-		smgr->setShadowColor(video::SColor(255, static_cast<u32>(color.x), static_cast<u32>(color.y), static_cast<u32>(color.z)));
-	}
-
-	void setShadowOpacity(float opacity) {
-		smgr->setShadowColor(video::SColor(opacity, smgr->getShadowColor().getRed(), static_cast<u32>(smgr->getShadowColor().getGreen()), smgr->getShadowColor().getBlue()));
-	}
-
 	void setAmbientColor(const Vector3D& color) {
 		smgr->setAmbientLight(video::SColorf(static_cast<u32>(color.x) / 255.0f, static_cast<u32>(color.y) / 255.0f, static_cast<u32>(color.z) / 255.0f, 1.0f));
 	}
@@ -485,6 +478,78 @@ namespace Warden {
 	std::string printChannelList() {
 		return soundManager->printChannelList();
 	}
+
+	// Fonts
+	bool embedFont(const std::string& fontPath) {
+		std::string fontName = std::filesystem::path(fontPath).stem().string();
+
+		if (fontCache.find(fontName) != fontCache.end())
+			return true;
+
+		gui::IGUIFont* font = guienv->getFont(fontPath.c_str());
+		if (!font)
+			return false;
+
+		fontCache[fontName] = font;
+		return true;
+	}
+
+	bool setDefaultFont(const std::string& fontName) {
+		if (device) {
+			auto it = fontCache.find(fontName);
+			if (it != fontCache.end()) {
+				irr::gui::IGUISkin* skin = guienv->getSkin();
+				skin->setFont(it->second);
+				defaultFont = it->first;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	std::string getFontList() {
+		std::string result;
+		for (const auto& pair : fontCache) {
+			result += pair.first + ", ";
+		}
+		if (!result.empty()) {
+			result.pop_back();
+			result.pop_back();
+		}
+		return result;
+	}
+
+	// Other World Stuff
+	Vector2D toScreenPosition(const Vector3D& pos) {
+		irr::core::vector3df world = irr::core::vector3df(pos.x, pos.y, pos.z);
+		irr::core::vector2di screen = smgr->getSceneCollisionManager()->getScreenCoordinatesFrom3DPosition(world, smgr->getActiveCamera());
+
+		return Vector2D(screen.X, screen.Y);
+	}
+
+	// 2D
+	void setBilinearFiltering(bool enable) {
+		if (device) {
+			driver->getMaterial2D().TextureLayer[0].BilinearFilter = enable;
+		}
+	}
+
+	void setAnisotropicFiltering(bool enable) {
+		if (device) {
+			driver->getMaterial2D().TextureLayer[0].AnisotropicFilter = enable;
+		}
+	}
+
+	void setTrilinearFiltering(bool enable) {
+		if (device) {
+			driver->getMaterial2D().TextureLayer[0].TrilinearFilter = enable;
+		}
+	}
+
+	void setAntiAliasing(int i) {
+		if (device)
+			driver->getMaterial2D().AntiAliasing = (irr::video::E_ANTI_ALIASING_MODE)i;
+	}
 };
 
 void bindWarden(sol::table application, sol::table world, sol::table sound, sol::table gui, sol::table input) {
@@ -523,12 +588,18 @@ void bindWarden(sol::table application, sol::table world, sol::table sound, sol:
 	world["SetPixelFog"] = &Warden::setFogPixel;
 	world["SetRangeFog"] = &Warden::useDistanceForFog;
 	world["SetFogParameters"] = &Warden::setFogSettings;
-	world["SetCastShadows"] = &Warden::enableRealTimeShadows;
-	world["SetShadowColor"] = &Warden::setShadowColor;
-	world["SetShadowOpacity"] = &Warden::setShadowOpacity;
 	world["SetAmbientColor"] = &Warden::setAmbientColor;
+	world["ConvertToScreenPosition"] = &Warden::toScreenPosition;
+	world["SetShadows"] = &Warden::setShadows;
 
 	// gui/2D images/text
+	gui["ImportFont"] = &Warden::embedFont;
+	gui["SetDefaultFont"] = &Warden::setDefaultFont;
+	gui["GetImportedFontsList"] = &Warden::getFontList;
+	gui["SetBilinearFiltering"] = &Warden::setBilinearFiltering;
+	gui["SetAnisotropicFiltering"] = &Warden::setAnisotropicFiltering;
+	gui["SetTrilinearFiltering"] = &Warden::setTrilinearFiltering;
+	gui["SetAntiAliasing"] = &Warden::setAntiAliasing;
 
 	// sound
 	sound["PlaySound2D"] = &Warden::play2DSound;

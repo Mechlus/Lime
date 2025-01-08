@@ -34,22 +34,21 @@ public:
 	}
 
 	irr::scene::ICameraSceneNode* createCamera() {
+		// Create empty child nodes to use as reference points for targetting
+		forwardChild = smgr->addEmptySceneNode();
+		upChild = smgr->addEmptySceneNode();
+		leftChild = smgr->addEmptySceneNode();
 		irr::scene::ICameraSceneNode* cam = smgr->addCameraSceneNode();
 
-		// Create empty child nodes to use as reference points for targetting
-
 		// Forward
-		forwardChild = smgr->addEmptySceneNode();
 		cam->addChild(forwardChild);
 		forwardChild->setPosition(irr::core::vector3df(0,0,100));
 
 		// Up
-		upChild = smgr->addEmptySceneNode();
 		cam->addChild(upChild);
 		upChild->setPosition(irr::core::vector3df(0, 1, 0));
 
 		// Left
-		leftChild = smgr->addEmptySceneNode();
 		cam->addChild(leftChild);
 		leftChild->setPosition(irr::core::vector3df(-1, 0, 0));
 

@@ -3,6 +3,7 @@
 #include "irrlicht.h"
 #include "IrrManagers.h"
 #include "Material.h"
+#include "StaticMesh.h"
 #include "Vector2D.h"
 #include "Vector3D.h"
 #include "LuaLime.h"
@@ -68,6 +69,25 @@ public:
 		bb->setPivotY(y);
 	}
 
+	bool getVisible() {
+		if (bb)
+			return bb->isVisible();
+		return false;
+	}
+
+	void setVisible(bool visible) {
+		if (bb)
+			bb->setVisible(visible);
+	}
+
+	void setParent(StaticMesh* parent) {
+		if (bb && parent->meshNode) {
+			bb->setParent(parent->meshNode);
+			return;
+		}
+		bb->setParent(nullptr);
+	}
+
 	void destroy() {
 		if (bb)
 			bb->remove();
@@ -81,9 +101,11 @@ void bindBillboard() {
 		"position", sol::property(&Billboard::getPosition, &Billboard::setPosition),
 		"size", sol::property(&Billboard::getSize, &Billboard::setSize),
 		"yPivot", sol::property(&Billboard::getYPivot, &Billboard::setYPivot),
-		"lockAxis", sol::property(&Billboard::getRotLock, &Billboard::setRotLock)
+		"lockAxis", sol::property(&Billboard::getRotLock, &Billboard::setRotLock),
+		"visible", sol::property(&Billboard::getVisible, &Billboard::setVisible)
 	);
 
 	bind_type["loadMaterial"] = &Billboard::loadMaterial;
 	bind_type["destroy"] = &Billboard::destroy;
+	bind_type["setParent"] = &Billboard::setParent;
 }

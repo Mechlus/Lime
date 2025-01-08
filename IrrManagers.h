@@ -4,6 +4,7 @@
 #include "IrrHandling.h"
 #include "LimeReceiver.h"
 #include "Sound.h"
+#include <map>
 
 inline irr::IrrlichtDevice* device = nullptr;
 inline irr::video::IVideoDriver* driver = nullptr;
@@ -14,6 +15,8 @@ inline IrrHandling* irrHandler = nullptr;
 inline LimeReceiver* receiver = nullptr;
 inline irrklang::ISoundEngine* sound = nullptr;
 inline SoundManager* soundManager = nullptr;
+inline std::map<std::string, gui::IGUIFont*> fontCache;
+inline std::string defaultFont;
 
 inline irr::scene::ICameraSceneNode* mainCamera = nullptr;
 inline irr::scene::ISceneNode* mainCameraForward = nullptr;
