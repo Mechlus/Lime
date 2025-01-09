@@ -167,6 +167,17 @@ public:
 	}
 	*/
 
+	float getAspect() {
+		if (camera)
+			return camera->getAspectRatio();
+		return 0.0f;
+	}
+
+	void setAspect(float a) {
+		if (camera)
+			camera->setAspectRatio(a);
+	}
+
 	bool getOrtho() {
 		return camera->isOrthogonal();
 	}
@@ -183,7 +194,8 @@ void bindCamera3D() {
 		"rotation", sol::property(&Camera3D::getRotation, &Camera3D::setRotation),
 		"viewPlanes", sol::property(&Camera3D::getPlanes, &Camera3D::setPlanes),
 		"fieldOfView", sol::property(&Camera3D::getFOV, &Camera3D::setFOV),
-		"visible", sol::property(&Camera3D::getVisible, &Camera3D::setVisible)
+		"visible", sol::property(&Camera3D::getVisible, &Camera3D::setVisible),
+		"aspectRatio", sol::property(&Camera3D::getAspect, &Camera3D::setAspect)
 		//,"target", sol::property(&Camera3D::getTarget, &Camera3D::setTarget)
 	);
 

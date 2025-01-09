@@ -163,6 +163,7 @@
     <ClInclude Include="CGUIFont.h" />
     <ClInclude Include="DebugConsole.h" />
     <ClInclude Include="Helper.h" />
+    <ClInclude Include="Image2D.h" />
     <ClInclude Include="IrrHandling.h" />
     <ClInclude Include="IrrManagers.h" />
     <ClInclude Include="Light.h" />

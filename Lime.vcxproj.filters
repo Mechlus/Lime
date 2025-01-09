@@ -134,6 +134,9 @@
     <ClInclude Include="WaterMesh.h">
       <Filter>Source Files\Scene3D</Filter>
     </ClInclude>
+    <ClInclude Include="Image2D.h">
+      <Filter>Source Files\Scene2D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Lime.rc">

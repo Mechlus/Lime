@@ -29,6 +29,11 @@ public:
 	std::string getPath() const {
 		return path;
 	}
+
+	void keyColor(const Vector2D& pos) {
+		if (texture)
+			driver->makeColorKeyTexture(texture, core::position2d<s32>(pos.x, pos.y));
+	}
 };
 
 void bindTexture() {
@@ -38,4 +43,5 @@ void bindTexture() {
 
 	bind_type["load"] = &Texture::load;
 	bind_type["toStr"] = &Texture::getPath;
+	bind_type["keyColor"] = &Texture::keyColor;
 }
