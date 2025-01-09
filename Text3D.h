@@ -155,7 +155,7 @@ void bindText3D() {
 		
 		"position", sol::property(&Text3D::getPosition, &Text3D::setPosition),
 		"visible", sol::property(&Text3D::getVisibility, &Text3D::setVisibility),
-		"color", sol::property(&Text3D::getColor, &Text3D::setColor),
+		"textColor", sol::property(&Text3D::getColor, &Text3D::setColor),
 		"opacity", sol::property(&Text3D::getOpacity, &Text3D::setOpacity),
 		"text", sol::property(&Text3D::getText, &Text3D::setText)
 	);

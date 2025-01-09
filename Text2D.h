@@ -12,11 +12,11 @@ class Text2D
 	irr::gui::IGUIStaticText* text;
 
 public:
-	Text2D() : Text2D("Text", Vector2D(0,0), Vector2D(64, 16)) {}
+	Text2D() : Text2D("Text", Vector2D(0,0), Vector2D(256, 16)) {}
 
-	Text2D(std::string tx) : Text2D(tx, Vector2D(0, 0), Vector2D(64, 16)) {}
+	Text2D(std::string tx) : Text2D(tx, Vector2D(0, 0), Vector2D(256, 16)) {}
 
-	Text2D(std::string tx, const Vector2D& pos) : Text2D(tx, pos, Vector2D(64,16)) {}
+	Text2D(std::string tx, const Vector2D& pos) : Text2D(tx, pos, Vector2D(256,16)) {}
 
 	Text2D(std::string tx, const Vector2D& pos, const Vector2D& dimensions) {
 		text = guienv->addStaticText(charToWchar(tx.c_str()), irr::core::recti(irr::core::vector2di(pos.x, pos.y), irr::core::vector2di(pos.x + dimensions.x, pos.y + dimensions.y)));
@@ -28,9 +28,7 @@ public:
 
 	wchar_t* charToWchar(const char* str) {
 		irr::core::stringw wideStr = irr::core::stringw(str);
-		wchar_t* wcharBuffer = new wchar_t[wideStr.size() + 1];
-		wcscpy(wcharBuffer, wideStr.c_str());
-		return wcharBuffer;
+		return const_cast<wchar_t*>(wideStr.c_str());
 	}
 
 	std::string getText() {
@@ -190,11 +188,20 @@ public:
 		if (text)
 			other.text->addChild(text);
 	}
+
+	bool getDrawBorder() {
+		return text ? text->isDrawBorderEnabled() : false;
+	}
+
+	void setDrawBorder(bool enable) {
+		if (text)
+			text->setDrawBorder(enable);
+	}
 };
 
 void bindText2D() {
 	sol::usertype<Text2D> bind_type = lua->new_usertype<Text2D>("Text2D",
-		sol::constructors <Text2D(), Text2D(const Text2D& other), Text2D(std::string tx), Text2D(std::string tx, const Vector2D& pos), Text2D(std::string tx, const Vector2D & pos, const Vector2D& dimensions)>(),
+		sol::constructors <Text2D(), Text2D(const Text2D & other), Text2D(std::string tx), Text2D(std::string tx, const Vector2D & pos), Text2D(std::string tx, const Vector2D & pos, const Vector2D & dimensions)>(),
 
 		"position", sol::property(&Text2D::getPosition, &Text2D::setPosition),
 		"visible", sol::property(&Text2D::getVisible, &Text2D::setVisible),
@@ -204,7 +211,8 @@ void bindText2D() {
 		"backgroundOpacity", sol::property(&Text2D::getBackgroundOpacity, &Text2D::setBackgroundOpacity),
 		"textColor", sol::property(&Text2D::getTextColor, &Text2D::setTextColor),
 		"textOpacity", sol::property(&Text2D::getTextOpacity, &Text2D::setTextOpacity),
-		"text", sol::property(&Text2D::getText, &Text2D::setText)
+		"text", sol::property(&Text2D::getText, &Text2D::setText),
+		"drawBorder", sol::property(&Text2D::getDrawBorder, &Text2D::setDrawBorder)
 	);
 
 	bind_type["destroy"] = &Text2D::destroy;
@@ -213,5 +221,6 @@ void bindText2D() {
 	bind_type["toFront"] = &Text2D::bringToFront;
 	bind_type["toBack"] = &Text2D::sendToBack;
 	bind_type["setBorderAlignment"] = &Text2D::setBorderAlignment;
+	bind_type["setTextAlignment"] = &Text2D::setTextAlignment;
 	bind_type["setParent"] = &Text2D::setParent;
 }

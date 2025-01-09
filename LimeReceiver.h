@@ -42,6 +42,7 @@ public:
     LimeReceiver()
     {
         keys.fill(false);
+        keysRepeat.fill(false);
     }
 
     virtual bool OnEvent(const SEvent& event) override
@@ -52,10 +53,14 @@ public:
             keys[event.KeyInput.Key] = event.KeyInput.PressedDown;
 
             if (event.KeyInput.PressedDown) {
-                callLuaFunction("Input", "OnKeyPressed", static_cast<irr::EKEY_CODE>(event.KeyInput.Key));
+                if (!keysRepeat[event.KeyInput.Key]) {
+                    callLuaFunction("Input", "OnKeyPressed", static_cast<irr::EKEY_CODE>(event.KeyInput.Key));
+                    keysRepeat[event.KeyInput.Key] = true;
+                }
             }
             else {
                 callLuaFunction("Input", "OnKeyReleased", static_cast<irr::EKEY_CODE>(event.KeyInput.Key));
+                keysRepeat[event.KeyInput.Key] = false;
             }
         }
 
@@ -160,6 +165,7 @@ public:
 
 private:
     std::array<bool, KEY_KEY_CODES_COUNT> keys;
+    std::array<bool, KEY_KEY_CODES_COUNT> keysRepeat;
     SEvent::SJoystickEvent JoystickState;
 
     template<typename... Args>
