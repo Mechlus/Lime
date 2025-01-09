@@ -175,6 +175,7 @@
     <ClInclude Include="Save.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="StaticMesh.h" />
+    <ClInclude Include="Text2D.h" />
     <ClInclude Include="Text3D.h" />
     <ClInclude Include="TextArea.h" />
     <ClInclude Include="TextElement.h" />

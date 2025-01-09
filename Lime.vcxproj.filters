@@ -137,6 +137,9 @@
     <ClInclude Include="Image2D.h">
       <Filter>Source Files\Scene2D</Filter>
     </ClInclude>
+    <ClInclude Include="Text2D.h">
+      <Filter>Source Files\Scene2D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Lime.rc">

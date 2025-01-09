@@ -92,6 +92,10 @@ namespace Warden {
 		return false;
 	}
 
+	Vector2D getWindowSize() {
+		return driver ? Vector2D(driver->getScreenSize().Width, driver->getScreenSize().Height) : Vector2D();
+	}
+
 	// set window position
 	void setWindowPosition(Vector2D& position, irr::IrrlichtDevice* device) {
 		if (device) {
@@ -559,6 +563,7 @@ void bindWarden(sol::table application, sol::table world, sol::table sound, sol:
 	application["SetCaption"] = &Warden::setTitle;
 	application["GetCaption"] = &Warden::getTitle;
 	application["SetWindowPosition"] = &Warden::setWindowPosition;
+	application["GetWindowSize"] = &Warden::getWindowSize;
 	application["SetWindowSize"] = &Warden::setWindowSize;
 	application["GetMonitorSize"] = &Warden::getMonitorSize;
 	application["EndApplication"] = &Warden::endApplication;

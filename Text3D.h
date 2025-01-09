@@ -133,15 +133,17 @@ public:
 			std::wstring wideText(myText.begin(), myText.end());
 			text->remove();
 
+			bool found = false;
 			irr::gui::IGUIFont* f = guienv->getBuiltInFont();
 			auto it = fontCache.find(fontName);
 			if (it != fontCache.end()) {
 				f = it->second;
+				found = true;
 			}
 
 			text = smgr->addTextSceneNode(f, wideText.c_str(), color, par, pos);
 			text->grab();
-			return true;
+			return found;
 		}
 		return false;
 	}
