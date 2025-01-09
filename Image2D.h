@@ -23,6 +23,10 @@ public:
 		img = guienv->addImage(tex.texture, irr::core::vector2di(pos.x, pos.y));
 	}
 
+	Image2D(const Texture& tex, const Vector2D& pos, const Vector2D& dimensions) : Image2D(tex, pos) {
+		setSize(dimensions);
+	}
+
 	Image2D(const Image2D& other) {
 		img = other.img;
 	}
@@ -123,15 +127,15 @@ public:
 			img->setUseAlphaChannel(enable);
 	}
 
-	void addChild(const Image2D& other) {
+	void setParent(const Image2D& other) {
 		if (img)
-			img->addChild(other.img);
+			other.img->addChild(img);
 	}
 };
 
 void bindImage2D() {
 	sol::usertype<Image2D> bind_type = lua->new_usertype<Image2D>("Image2D",
-		sol::constructors <Image2D(const Texture& tex), Image2D(const Texture& tex, const Vector2D& pos), Image2D(const Image2D& other)>(),
+		sol::constructors <Image2D(const Texture& tex), Image2D(const Texture& tex, const Vector2D& pos), Image2D(const Texture& tex, const Vector2D& pos, const Vector2D& dimensions), Image2D(const Image2D& other)>(),
 
 		"position", sol::property(&Image2D::getPosition, &Image2D::setPosition),
 		"visible", sol::property(&Image2D::getVisible, &Image2D::setVisible),
@@ -147,5 +151,5 @@ void bindImage2D() {
 	bind_type["toFront"] = &Image2D::bringToFront;
 	bind_type["toBack"] = &Image2D::sendToBack;
 	bind_type["setBorderAlignment"] = &Image2D::setBorderAlignment;
-	bind_type["addChild"] = &Image2D::addChild;
+	bind_type["setParent"] = &Image2D::setParent;
 }

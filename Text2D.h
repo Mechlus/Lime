@@ -22,11 +22,28 @@ public:
 		text = guienv->addStaticText(charToWchar(tx.c_str()), irr::core::recti(irr::core::vector2di(pos.x, pos.y), irr::core::vector2di(pos.x + dimensions.x, pos.y + dimensions.y)));
 	}
 
+	Text2D(const Text2D& other) {
+		text = other.text;
+	}
+
 	wchar_t* charToWchar(const char* str) {
 		irr::core::stringw wideStr = irr::core::stringw(str);
 		wchar_t* wcharBuffer = new wchar_t[wideStr.size() + 1];
 		wcscpy(wcharBuffer, wideStr.c_str());
 		return wcharBuffer;
+	}
+
+	std::string getText() {
+		if (text) {
+			irr::core::stringw wideStr(text->getText());
+			irr::core::stringc narrowStr(wideStr);
+			return narrowStr.c_str();
+		}
+	}
+
+	void setText(std::string tx) {
+		if (text)
+			text->setText(charToWchar(tx.c_str()));
 	}
 
 	void destroy() {
@@ -117,8 +134,10 @@ public:
 	}
 
 	void setBackgroundOpacity(int op) {
-		if (text)
+		if (text) {
+			text->setDrawBackground(op == 0 ? false : true);
 			text->setBackgroundColor(irr::video::SColor(op, text->getBackgroundColor().getRed(), text->getBackgroundColor().getGreen(), text->getBackgroundColor().getBlue()));
+		}
 	}
 
 	Vector3D getTextColor() {
@@ -155,12 +174,44 @@ public:
 		}
 		return false;
 	}
+
+	Vector2D getPosition() {
+		if (text)
+			return Vector2D(text->getRelativePosition().UpperLeftCorner.X, text->getRelativePosition().UpperLeftCorner.Y);
+		return Vector2D();
+	}
+
+	void setPosition(const Vector2D& pos) {
+		if (text)
+			text->setRelativePosition(irr::core::position2di(pos.x, pos.y));
+	}
+
+	void setParent(const Text2D& other) {
+		if (text)
+			other.text->addChild(text);
+	}
 };
 
 void bindText2D() {
 	sol::usertype<Text2D> bind_type = lua->new_usertype<Text2D>("Text2D",
-		sol::constructors <>()
+		sol::constructors <Text2D(), Text2D(const Text2D& other), Text2D(std::string tx), Text2D(std::string tx, const Vector2D& pos), Text2D(std::string tx, const Vector2D & pos, const Vector2D& dimensions)>(),
 
-
+		"position", sol::property(&Text2D::getPosition, &Text2D::setPosition),
+		"visible", sol::property(&Text2D::getVisible, &Text2D::setVisible),
+		"size", sol::property(&Text2D::getSize, &Text2D::setSize),
+		"wrap", sol::property(&Text2D::getWrap, &Text2D::setWrap),
+		"backgroundColor", sol::property(&Text2D::getBackgroundColor, &Text2D::setBackgroundColor),
+		"backgroundOpacity", sol::property(&Text2D::getBackgroundOpacity, &Text2D::setBackgroundOpacity),
+		"textColor", sol::property(&Text2D::getTextColor, &Text2D::setTextColor),
+		"textOpacity", sol::property(&Text2D::getTextOpacity, &Text2D::setTextOpacity),
+		"text", sol::property(&Text2D::getText, &Text2D::setText)
 	);
+
+	bind_type["destroy"] = &Text2D::destroy;
+	bind_type["setFont"] = &Text2D::setFont;
+	bind_type["setMaxSize"] = &Text2D::setMaxSize;
+	bind_type["toFront"] = &Text2D::bringToFront;
+	bind_type["toBack"] = &Text2D::sendToBack;
+	bind_type["setBorderAlignment"] = &Text2D::setBorderAlignment;
+	bind_type["setParent"] = &Text2D::setParent;
 }
