@@ -42,7 +42,7 @@ public:
 	}
 };
 
-void bindTexture() {
+inline void bindTexture() {
 	sol::usertype<Texture> bind_type = lua->new_usertype<Texture>("Texture",
 		sol::constructors<Texture(), Texture(std::string imgpath)>()
 	);

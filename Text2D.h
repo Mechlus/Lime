@@ -3,7 +3,7 @@
 #include "irrlicht.h"
 #include "IrrManagers.h"
 #include "Vector2D.h"
-#include "Texture.h"
+#include "Image2D.h"
 #include <string>
 #include <vector>
 
@@ -185,9 +185,10 @@ public:
 			text->setRelativePosition(irr::core::position2di(pos.x, pos.y));
 	}
 
-	void setParent(const Text2D& other) {
-		if (text)
-			other.text->addChild(text);
+	void setParent(const Image2D& other) {
+		if (text) {
+			other.img->addChild(text);
+		}
 	}
 
 	bool getDrawBorder() {

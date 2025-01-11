@@ -9,9 +9,10 @@
 
 class Image2D
 {
-	irr::gui::IGUIImage* img;
 
 public:
+	irr::gui::IGUIImage* img;
+
 	Image2D() {
 	}
 
@@ -133,7 +134,7 @@ public:
 	}
 };
 
-void bindImage2D() {
+inline void bindImage2D() {
 	sol::usertype<Image2D> bind_type = lua->new_usertype<Image2D>("Image2D",
 		sol::constructors <Image2D(const Texture& tex), Image2D(const Texture& tex, const Vector2D& pos), Image2D(const Texture& tex, const Vector2D& pos, const Vector2D& dimensions), Image2D(const Image2D& other)>(),
 

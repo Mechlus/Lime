@@ -57,6 +57,9 @@
     <ClCompile Include="os.cpp">
       <Filter>Source Files\Scene2D\Deprecated\TextArea</Filter>
     </ClCompile>
+    <ClCompile Include="EditBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DebugConsole.h">
@@ -142,6 +145,9 @@
     </ClInclude>
     <ClInclude Include="DebugVisual.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EditBox.h">
+      <Filter>Source Files\Scene2D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

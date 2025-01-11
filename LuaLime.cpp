@@ -12,6 +12,7 @@
 #include "WaterMesh.h"
 #include "Image2D.h"
 #include "Text2D.h"
+#include "EditBox.h"
 #include "Warden.h"
 
 #include <sol/sol.hpp>
@@ -44,6 +45,7 @@ int LuaLime::initLua(irr::scene::ISceneManager* smgr, irr::video::IVideoDriver* 
 	bindWater();
 	bindImage2D();
 	bindText2D();
+	bindEditBox();
 
 	return 0;
 }
