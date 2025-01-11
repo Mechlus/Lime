@@ -80,6 +80,11 @@ namespace Warden {
 		*/
 	}
 
+	void setVerticalSync(bool enable) {
+		if (irrHandler)
+			irrHandler->vSync = enable;
+	}
+
 	void setShadows(bool enable) {
 		if (irrHandler)
 			irrHandler->stencil = enable;
@@ -130,7 +135,7 @@ namespace Warden {
 	// Get/set frame rate
 	int getFrameRate() {
 		if (device && irrHandler)
-			return irrHandler->m_frameLimit;
+			return irrHandler->fps;
 		return 0;
 	}
 
@@ -623,6 +628,7 @@ void bindWarden(sol::table application, sol::table world, sol::table sound, sol:
 	application["SetShowConsole"] = &Warden::showConsole;
 	application["SetWriteConsole"] = &Warden::writeConsoleOutput;
 	application["RecreateDevice"] = &Warden::recreateDevice;
+	application["SetVSync"] = &Warden::setVerticalSync;
 	
 	// world
 	world["GetFrameRate"] = &Warden::getFrameRate;

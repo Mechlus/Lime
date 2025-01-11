@@ -10,6 +10,8 @@
 class IrrHandling
 {
 private:
+	int lastTime = 0;
+	int frameCount = 0;
 public:
 	void setDriver(irr::video::E_DRIVER_TYPE type);
 	void initScene();
@@ -20,6 +22,7 @@ public:
 	void end();
 	void appLoop();
 	bool writeTextureToFile(irr::video::ITexture* texture, const irr::core::stringw& name);
+	void updateFPS();
 	int m_frameLimit = 60;
 	float dt;
 
@@ -31,6 +34,7 @@ public:
 	int stencil = false;
 	int posX = 0;
 	int posY = 0;
+	int fps = 0;
 	irr::scene::ISceneNode* skydome = nullptr;
 	irr::video::SColor backgroundColor = (255, 100, 101, 140);
 };

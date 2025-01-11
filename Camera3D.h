@@ -38,7 +38,7 @@ public:
 
 		// Forward
 		cam->addChild(forwardChild);
-		forwardChild->setPosition(irr::core::vector3df(0,0,100));
+		forwardChild->setPosition(irr::core::vector3df(0,0,1));
 
 		// Up
 		cam->addChild(upChild);
@@ -115,11 +115,11 @@ public:
 	}
 
 	float getFOV() {
-		return camera->getFOV();
+		return camera->getFOV() * irr::core::RADTODEG;
 	}
 
 	void setFOV(float val) {
-		camera->setFOV(val);
+		camera->setFOV(irr::core::DEGTORAD * val);
 	}
 
 	bool getVisible() {

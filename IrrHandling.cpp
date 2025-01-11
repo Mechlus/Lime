@@ -50,6 +50,7 @@ void IrrHandling::initScene()
 	dConsole.doOutput = false;
 	posX = 0;
 	posY = 0;
+	fps = 0;
 
 	window.curWidth = width;
 	window.curHeight = height;
@@ -159,7 +160,6 @@ void IrrHandling::appLoop() {
 		}
 	}
 
-	int lastfps = -1;
 	u32 then = device->getTimer()->getTime();
 
 	f32 const frameDur = 1000.f / m_frameLimit;
@@ -168,18 +168,6 @@ void IrrHandling::appLoop() {
 		const u32 now = device->getTimer()->getTime();
 		dt = (now - then) / 16.667f;
 		then = now;
-
-		// Set debug window caption
-		if (dConsole.enabled) {
-			stringw tmp(L"Lime Debugger [");
-			tmp += driver->getName();
-			tmp += L"] fps: ";
-			tmp += lastfps;
-			tmp += " | mem: ";
-			tmp += getMemUsed();
-			tmp += " MB";
-			SetConsoleTitle(tmp.c_str());
-		}
 
 		// Call update in main
 		if ((*lua)["Lime"]["OnUpdate"].get_type() == sol::type::function) {
@@ -191,19 +179,34 @@ void IrrHandling::appLoop() {
 			}
 		}
 
-		if (mainCamera)
+		if (mainCamera) {
+			mainCamera->updateAbsolutePosition();
+			mainCameraForward->updateAbsolutePosition();
 			mainCamera->setTarget(mainCameraForward->getAbsolutePosition());
+		}
 
 		driver->beginScene(true, true, backgroundColor);
 		smgr->drawAll();
 		guienv->drawAll();
 		driver->endScene();
 
-		lastfps = driver->getFPS();
+		updateFPS();
 
-		u32 frameTime = device->getTimer()->getTime() - now;
+		// Set debug window caption
+		if (dConsole.enabled) {
+			stringw tmp(L"Lime Debugger [");
+			tmp += driver->getName();
+			tmp += L"] fps: ";
+			tmp += fps;
+			tmp += " | mem: ";
+			tmp += getMemUsed();
+			tmp += " MB";
+			SetConsoleTitle(tmp.c_str());
+		}
+
+		f32 frameTime = device->getTimer()->getTime() - now;
 		if (frameTime < frameDur)
-			device->sleep(frameDur - frameTime);
+			device->sleep((frameDur - frameTime)/2.0);
 	}
 
 	// Call end in main
@@ -238,4 +241,18 @@ bool IrrHandling::writeTextureToFile(irr::video::ITexture* texture, const irr::c
 	image->drop();
 
 	return true;
+}
+
+void IrrHandling::updateFPS() {
+	u32 currentTime = device->getTimer()->getTime();
+
+	// Increment the frame counter
+	++frameCount;
+
+	// Calculate FPS once every second
+	if (currentTime - lastTime >= 1000) {
+		fps = frameCount / ((currentTime - lastTime) / 1000.0f);
+		lastTime = currentTime;
+		frameCount = 0;
+	}
 }

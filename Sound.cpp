@@ -39,7 +39,7 @@ void SoundManager::play3DSoundOnChannel(int channel, const std::string& filePath
 {
     channel = validChannel(channel);
     stopChannel(channel);
-    channels[channel] = sound->play3D(filePath.c_str(), vec3df(static_cast<u32>(src.x), static_cast<u32>(src.y), static_cast<u32>(src.z)), loop, false, true);
+    channels[channel] = sound->play3D(filePath.c_str(), vec3df(static_cast<f32>(src.x), static_cast<f32>(src.y), static_cast<f32>(src.z)), loop, false, true);
 }
 
 void SoundManager::stopChannel(int channel)
@@ -85,8 +85,8 @@ void SoundManager::preloadSound()
 
 void SoundManager::setListenerPosition(Vector3D pos, Vector3D forward)
 {
-    sound->setListenerPosition(vec3df(static_cast<u32>(pos.x), static_cast<u32>(pos.y), static_cast<u32>(pos.z)),
-        vec3df(static_cast<u32>(forward.x), static_cast<u32>(forward.y), static_cast<u32>(forward.z)));
+    sound->setListenerPosition(vec3df(static_cast<f32>(pos.x), static_cast<f32>(pos.y), static_cast<f32>(pos.z)),
+        vec3df(static_cast<f32>(forward.x), static_cast<f32>(forward.y), static_cast<f32>(forward.z)));
 }
 
 bool SoundManager::isChannelFree(int channel)
