@@ -191,9 +191,8 @@ void IrrHandling::appLoop() {
 			}
 		}
 
-		if (mainCamera) {
+		if (mainCamera)
 			mainCamera->setTarget(mainCameraForward->getAbsolutePosition());
-		}
 
 		driver->beginScene(true, true, backgroundColor);
 		smgr->drawAll();
@@ -203,9 +202,8 @@ void IrrHandling::appLoop() {
 		lastfps = driver->getFPS();
 
 		u32 frameTime = device->getTimer()->getTime() - now;
-		if (frameTime < frameDur) {
+		if (frameTime < frameDur)
 			device->sleep(frameDur - frameTime);
-		}
 	}
 
 	// Call end in main
@@ -218,4 +216,26 @@ void IrrHandling::appLoop() {
 		}
 	}
 	end();
+}
+
+bool IrrHandling::writeTextureToFile(irr::video::ITexture* texture, const irr::core::stringw& name)
+{
+	if (!texture)
+		return false;
+
+	void* data = texture->lock(irr::video::ETLM_READ_ONLY);
+	if (!data)
+		return false;
+
+	irr::video::IImage* image = driver->createImageFromData(texture->getColorFormat(), texture->getSize(), data, false);
+	texture->unlock();
+
+	if (!image)
+		return false;
+
+	driver->writeImageToFile(image, name.c_str(), 99);
+
+	image->drop();
+
+	return true;
 }

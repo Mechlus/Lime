@@ -4,6 +4,9 @@
 #include "IrrManagers.h"
 #include "LuaLime.h"
 #include "Vector2D.h"
+#include "Texture.h"
+#include "Camera3D.h"
+#include "DebugVisual.h"
 #include "Sound.h"
 
 typedef unsigned int u32;
@@ -229,7 +232,7 @@ namespace Warden {
 		return false;
 	}
 
-	sol::table fireRaypick(Vector3D start, Vector3D end) {
+	sol::table fireRaypick(Vector3D start, Vector3D end, float debugLifetime) {
 		scene::ISceneCollisionManager* collisionManager = smgr->getSceneCollisionManager();
 		core::line3d<f32> ray(core::vector3df(start.x, start.y, start.z), core::vector3df(end.x, end.y, end.z));
 
@@ -254,6 +257,14 @@ namespace Warden {
 			result["normal"] = Vector3D(0,1,0);
 			result["materialID"] = -1;
 			result["hitPosition"] = end;
+		}
+
+		if (debugLifetime > 0) {
+			DebugSceneNode* d = new DebugSceneNode(mainCamera, smgr, 0, DebugType::RAY_PICK);
+			d->raypick_start = start;
+			d->raypick_end = pickedNode ? Vector3D(hitPosition.X, hitPosition.Y, hitPosition.Z) : end;
+			d->raypick_hit = pickedNode ? true : false;
+			d->raypick_life = debugLifetime;
 		}
 
 		return result;
@@ -531,6 +542,43 @@ namespace Warden {
 		return Vector2D(screen.X, screen.Y);
 	}
 
+	Texture renderCameraOutput(const Camera3D& c, const Vector2D& size, bool renderGUI) {
+		irr::video::ITexture* tx = 0;
+
+		irr::scene::ICameraSceneNode* cur = c.camera;
+		if (!cur)
+			cur = mainCamera;
+
+		if (device && cur && driver->queryFeature(video::EVDF_RENDER_TO_TARGET)) {
+			tx = driver->addRenderTargetTexture(core::dimension2d<u32>(size.x, size.y), "RTT1");
+
+			driver->beginScene(true, true, irrHandler->backgroundColor);
+
+			driver->setRenderTarget(tx, true, true, irrHandler->backgroundColor);
+			smgr->setActiveCamera(cur);
+			smgr->drawAll();
+
+			if (renderGUI)
+				guienv->drawAll();
+			driver->endScene();
+
+			smgr->setActiveCamera(mainCamera);
+			driver->setRenderTarget(0, false, false, irrHandler->backgroundColor);
+			/*
+			driver->beginScene(true, true, irrHandler->backgroundColor);
+			smgr->drawAll();
+			guienv->drawAll();
+			driver->endScene();
+			*/
+		}
+
+		Texture tex = Texture();
+		tex.texture = tx;
+		tex.path = "Render Target Texture";
+
+		return tex;
+	}
+
 	// 2D
 	void setBilinearFiltering(bool enable) {
 		if (device) {
@@ -596,6 +644,7 @@ void bindWarden(sol::table application, sol::table world, sol::table sound, sol:
 	world["SetAmbientColor"] = &Warden::setAmbientColor;
 	world["ConvertToScreenPosition"] = &Warden::toScreenPosition;
 	world["SetShadows"] = &Warden::setShadows;
+	world["GetRenderTexture"] = &Warden::renderCameraOutput;
 
 	// gui/2D images/text
 	gui["ImportFont"] = &Warden::embedFont;

@@ -162,6 +162,7 @@
     <ClInclude Include="Camera3D.h" />
     <ClInclude Include="CGUIFont.h" />
     <ClInclude Include="DebugConsole.h" />
+    <ClInclude Include="DebugVisual.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="Image2D.h" />
     <ClInclude Include="IrrHandling.h" />

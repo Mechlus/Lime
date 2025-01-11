@@ -140,6 +140,9 @@
     <ClInclude Include="Text2D.h">
       <Filter>Source Files\Scene2D</Filter>
     </ClInclude>
+    <ClInclude Include="DebugVisual.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Lime.rc">

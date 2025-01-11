@@ -2,6 +2,7 @@
 
 #include "irrlicht.h"
 #include "IrrManagers.h"
+#include "DebugVisual.h"
 #include "Material.h"
 #include "Vector2D.h"
 #include "Vector3D.h"
@@ -15,22 +16,17 @@ public:
 	irr::scene::ISceneNode* forwardChild;
 	irr::scene::ISceneNode* upChild;
 	irr::scene::ISceneNode* leftChild;
+	DebugSceneNode* d;
 
 	Camera3D() {
 		camera = createCamera();
 		camera->grab();
-
-		mainCamera = camera;
-		mainCameraForward = forwardChild;
 	}
 
 	Camera3D(const Camera3D& other) {
 		destroy();
 		camera = other.camera;
 		camera->grab();
-
-		mainCamera = camera;
-		mainCameraForward = forwardChild;
 	}
 
 	irr::scene::ICameraSceneNode* createCamera() {
@@ -52,6 +48,11 @@ public:
 		cam->addChild(leftChild);
 		leftChild->setPosition(irr::core::vector3df(-1, 0, 0));
 
+		if (mainCamera)
+			smgr->setActiveCamera(mainCamera);
+		else
+			smgr->setActiveCamera(cam);
+
 		return cam;
 	}
 
@@ -62,6 +63,7 @@ public:
 		forwardChild->remove();
 		upChild->remove();
 		leftChild->remove();
+		d->remove();
 		camera->remove();
 		camera = nullptr;
 	}
@@ -154,6 +156,9 @@ public:
 		if (!camera->isVisible())
 			return;
 		smgr->setActiveCamera(camera);
+
+		mainCamera = camera;
+		mainCameraForward = forwardChild;
 	}
 
 	/*
@@ -185,6 +190,19 @@ public:
 	void setOrtho(bool val) {
 		// TO-DO
 	}
+
+	bool getDebug() {
+		return (camera && d);
+	}
+
+	void setDebug(bool visible) {
+		if (camera) {
+			if (visible && !d)
+				d = new DebugSceneNode(camera, smgr, 0, DebugType::CAMERA);
+			else if (!visible && d)
+				d->remove();
+		}
+	}
 };
 
 void bindCamera3D() {
@@ -195,7 +213,8 @@ void bindCamera3D() {
 		"viewPlanes", sol::property(&Camera3D::getPlanes, &Camera3D::setPlanes),
 		"fieldOfView", sol::property(&Camera3D::getFOV, &Camera3D::setFOV),
 		"visible", sol::property(&Camera3D::getVisible, &Camera3D::setVisible),
-		"aspectRatio", sol::property(&Camera3D::getAspect, &Camera3D::setAspect)
+		"aspectRatio", sol::property(&Camera3D::getAspect, &Camera3D::setAspect),
+		"debug", sol::property(&Camera3D::getDebug, &Camera3D::setDebug)
 		//,"target", sol::property(&Camera3D::getTarget, &Camera3D::setTarget)
 	);
 

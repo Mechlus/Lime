@@ -19,6 +19,7 @@ public:
 	int getMemUsed();
 	void end();
 	void appLoop();
+	bool writeTextureToFile(irr::video::ITexture* texture, const irr::core::stringw& name);
 	int m_frameLimit = 60;
 	float dt;
 
