@@ -222,7 +222,7 @@ inline void bindEditBox() {
 		"textOpacity", sol::property(&EditBox::getTextOpacity, &EditBox::setTextOpacity),
 		"text", sol::property(&EditBox::getText, &EditBox::setText),
 		"drawBorder", sol::property(&EditBox::getDrawBorder, &EditBox::setDrawBorder),
-		"focused", sol::property(&EditBox::getIsEnabled, &EditBox::setIsEnabled),
+		"enabled", sol::property(&EditBox::getIsEnabled, &EditBox::setIsEnabled),
 		"password", sol::property(&EditBox::getIsPassword, &EditBox::setIsPassword),
 		"multiLine", sol::property(&EditBox::getMultiLine, &EditBox::setMultiLine),
 		"autoScroll", sol::property(&EditBox::getAutoScroll, &EditBox::setAutoScroll)
