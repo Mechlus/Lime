@@ -94,6 +94,9 @@ public:
 
 		mesh->drop();
 
+		if (irrHandler->defaultExclude)
+			effects->excludeNodeFromLightingCalculations(meshNode);
+
 		return true;
 	}
 
@@ -141,70 +144,10 @@ public:
 
 	bool loadMaterial(const Material& material, int slot) {
 		if (!meshNode || slot < 0 || slot >= meshNode->getMaterialCount()) return false;
-		/*
-		materials[slot] = material.mat;
-		meshNode->getMaterial(slot) = materials[slot];
-		*/
 
-		meshNode->getMaterial(slot).MaterialType = material.mat.MaterialType;
-
-		meshNode->getMaterial(slot).FogEnable = material.mat.FogEnable;
-
-		meshNode->getMaterial(slot).BackfaceCulling = material.mat.BackfaceCulling;
-
-		meshNode->getMaterial(slot).FrontfaceCulling = material.mat.FrontfaceCulling;
-
-		meshNode->getMaterial(slot).AntiAliasing = material.mat.AntiAliasing;
-
-		meshNode->getMaterial(slot).Wireframe = material.mat.Wireframe;
-
-		meshNode->getMaterial(slot).DiffuseColor = material.mat.DiffuseColor;
-
-		meshNode->getMaterial(slot).SpecularColor = material.mat.SpecularColor;
-
-		meshNode->getMaterial(slot).EmissiveColor = material.mat.EmissiveColor;
-
-		meshNode->getMaterial(slot).GouraudShading = material.mat.GouraudShading;
-
-		meshNode->getMaterial(slot).ZBuffer = material.mat.ZBuffer;
-
-		meshNode->getMaterial(slot).ZWriteEnable = material.mat.ZWriteEnable;
-
-		meshNode->getMaterial(slot).PointCloud = material.mat.PointCloud;
-
-		meshNode->getMaterial(slot).setFlag(E_MATERIAL_FLAG::EMF_BILINEAR_FILTER, material.mat.getFlag(E_MATERIAL_FLAG::EMF_BILINEAR_FILTER));
-		meshNode->getMaterial(slot).setFlag(E_MATERIAL_FLAG::EMF_TRILINEAR_FILTER, material.mat.getFlag(E_MATERIAL_FLAG::EMF_TRILINEAR_FILTER));
-		meshNode->getMaterial(slot).setFlag(E_MATERIAL_FLAG::EMF_ANISOTROPIC_FILTER, material.mat.getFlag(E_MATERIAL_FLAG::EMF_ANISOTROPIC_FILTER));
-
-		meshNode->getMaterial(slot).setFlag(E_MATERIAL_FLAG::EMF_LIGHTING, material.mat.getFlag(E_MATERIAL_FLAG::EMF_LIGHTING));
-
-		meshNode->getMaterial(slot).setFlag(E_MATERIAL_FLAG::EMF_USE_MIP_MAPS, material.mat.getFlag(E_MATERIAL_FLAG::EMF_USE_MIP_MAPS));
-
-		meshNode->getMaterial(slot).ID = material.mat.ID;
-
-		meshNode->getMaterial(slot).Shininess = material.mat.Shininess;
-
-		// Texture matrix operations
-		for (int i = 0; i < 2; i++) {
-			irr::core::matrix4 matT = meshNode->getMaterial(slot).getTextureMatrix(i);
-			auto& otherT = material.mat.getTextureMatrix(i);
-			matT.setTextureTranslate(otherT.getTranslation().X, otherT.getTranslation().Y);
-			matT.setTextureScale(otherT.getScale().X, otherT.getScale().Y);
-			meshNode->getMaterial(slot).setTextureMatrix(i, matT);
-
-			meshNode->getMaterial(slot).TextureLayer[i].TextureWrapU = material.mat.TextureLayer[i].TextureWrapU;
-			meshNode->getMaterial(slot).TextureLayer[i].TextureWrapV = material.mat.TextureLayer[i].TextureWrapV;
-
-			meshNode->getMaterial(slot).setTextureMatrix(i, matT);
-		}
-
-
-		for (int i = 0; i < 2; i++)
-			meshNode->getMaterial(slot).setTexture(i, material.mat.getTexture(i));
+		meshNode->getMaterial(slot) = material.mat;
 
 		return true;
-
-		// Works for the first load, but then when you load the material again it will not take changes
 	}
 
 	StaticMesh* getParent() {
@@ -238,6 +181,11 @@ public:
 			meshNode->setTriangleSelector(nullptr);
 			collisionEnabled = false;
 		}
+	}
+
+	void exclude() {
+		if (meshNode)
+			effects->excludeNodeFromLightingCalculations(meshNode);
 	}
 
 	bool getVisibility() const {
@@ -444,7 +392,6 @@ void bindStaticMesh() {
 		"position", sol::property(&StaticMesh::getPosition, &StaticMesh::setPosition),
 		"rotation", sol::property(&StaticMesh::getRotation, &StaticMesh::setRotation),
 		"scale", sol::property(&StaticMesh::getScale, &StaticMesh::setScale),
-		//"parent", sol::property(&StaticMesh::getParent, &StaticMesh::setParent),
 		"ID", sol::property(&StaticMesh::getID, &StaticMesh::setID),
 		"frame", sol::property(&StaticMesh::getFrame, &StaticMesh::setFrame),
 		"debug", sol::property(&StaticMesh::getDebug, &StaticMesh::setDebug),
@@ -468,4 +415,5 @@ void bindStaticMesh() {
 	bind_type["getBoundingBox"] = &StaticMesh::getBoundingBox;
 	bind_type["toPlanarMapping"] = &StaticMesh::makePlanarMapping;
 	bind_type["setHardwareMappingHint"] = &StaticMesh::setHardwareHint;
+	bind_type["ignoreLighting"] = &StaticMesh::exclude;
 }

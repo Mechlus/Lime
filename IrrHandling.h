@@ -26,6 +26,8 @@ public:
 	void updateFPS();
 	int m_frameLimit = 60;
 	float dt;
+	bool didEnd = false;
+	bool defaultExclude = false;
 
 	irr::video::E_DRIVER_TYPE driverType = irr::video::EDT_DIRECT3D9;
 	int width = 640;

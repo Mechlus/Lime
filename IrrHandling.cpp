@@ -132,14 +132,18 @@ int IrrHandling::getMemUsed() {
 }
 
 void IrrHandling::end() {
-	if (device) {
-		device->drop();
-	}
+	if (!didEnd) {
+		dConsole.sendMsg("Ending application...", 0);
 
-	dConsole.sendMsg("Ending application...", 0);
+		if (dConsole.doOutput) { // write console output to output.txt if enabled
+			dConsole.writeOutput();
+		}
 
-	if (dConsole.doOutput) { // write console output to output.txt if enabled
-		dConsole.writeOutput();
+		if (device) {
+			device->closeDevice();
+		}
+
+		didEnd = true;
 	}
 }
 
@@ -271,7 +275,8 @@ void IrrHandling::appLoop() {
 			dConsole.sendMsg(std::string(err.what()).c_str(), 1);
 		}
 	}
-	end();
+	if (!didEnd)
+		end();
 }
 
 bool IrrHandling::writeTextureToFile(irr::video::ITexture* texture, const irr::core::stringw& name)

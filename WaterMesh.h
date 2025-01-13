@@ -21,6 +21,7 @@ public:
 	irr::core::vector2df texRepeat;
 	irr::video::SMaterial material;
 	irr::scene::IMesh* rawMesh;
+	bool shadows = false;
 
 	Water(float h, float s, float l, const Vector2D& ts, const Vector2D& tc, const Vector2D& tr, const Material& m) {
 		height = h; // 2
@@ -92,6 +93,23 @@ public:
 
 	}
 
+	bool getShadows() {
+		return water ? shadows : false;
+	}
+
+	void setShadows(bool enable) {
+		if (water) {
+			if (enable && !shadows) {
+				effects->addShadowToNode(water, irrHandler->defaultShadowFiltering);
+				return;
+			}
+			else if (shadows && !enable) {
+				effects->removeShadowFromNode(water);
+				return;
+			}
+		}
+	}
+
 	void refreshMesh() {
 		// Wave height, speed, and length
 		irr::core::vector3df pos = water ? water->getPosition() : irr::core::vector3df();
@@ -101,6 +119,8 @@ public:
 		if (water)
 			water->remove();
 		water = smgr->addWaterSurfaceSceneNode(rawMesh, height, speed, length, 0, 0, pos, rot, scale);
+		if (irrHandler->defaultExclude)
+			effects->excludeNodeFromLightingCalculations(water);
 	}
 
 	void createRaw() {
@@ -251,6 +271,11 @@ public:
 		}
 		water->setParent(nullptr);
 	}
+
+	void exclude() {
+		if (water)
+			effects->excludeNodeFromLightingCalculations(water);
+	}
 };
 
 void bindWater() {
@@ -263,10 +288,12 @@ void bindWater() {
 		"visible", sol::property(&Water::getVisibility, &Water::setVisibility),
 		"height", sol::property(&Water::getHeight, &Water::setHeight),
 		"speed", sol::property(&Water::getSpeed, &Water::setSpeed),
-		"length", sol::property(&Water::getLength, &Water::setLength)
+		"length", sol::property(&Water::getLength, &Water::setLength),
+		"shadows", sol::property(&Water::getShadows, &Water::setShadows)
 	);
 
 	bind_type["destroy"] = &Water::destroy;
 	bind_type["loadMaterial"] = &Water::loadMaterial;
 	bind_type["setParent"] = &Water::setParent;
+	bind_type["ignoreLighting"] = &Water::exclude;
 }

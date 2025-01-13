@@ -31,6 +31,8 @@ public:
 		setColor(col);
 		setPosition(pos);
 		text->grab();
+
+		effects->excludeNodeFromLightingCalculations(text);
 	}
 
 	Text3D() : Text3D("Text", Vector3D(), Vector3D(255,255,255), 255, "") {}

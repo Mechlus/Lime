@@ -160,7 +160,7 @@ namespace Warden {
 
 	// Exit application
 	void endApplication() {
-		if (irrHandler)
+		if (device && irrHandler)
 			irrHandler->end();
 	}
 
@@ -422,6 +422,11 @@ namespace Warden {
 	void setAmbientColor(const Vector3D& color) {
 		//smgr->setAmbientLight(video::SColorf(static_cast<u32>(color.x) / 255.0f, static_cast<u32>(color.y) / 255.0f, static_cast<u32>(color.z) / 255.0f, 1.0f));
 		effects->setAmbientColor(SColor(255, static_cast<u32>(color.x), static_cast<u32>(color.y), static_cast<u32>(color.z)));
+	}
+
+	void defaultExclude(bool enable) {
+		if (device && effects)
+			irrHandler->defaultExclude = enable;
 	}
 
 	// Sound
@@ -704,6 +709,9 @@ void bindWarden(sol::table application, sol::table world, sol::table sound, sol:
 	world["GetRenderTexture"] = &Warden::renderCameraOutput;
 	world["Clear"] = &Warden::clearScene;
 	world["AddPostProcessingEffect"] = &Warden::addPPX;
+	world["SetDefaultShadowFiltering"] = &Warden::setDefaultShadowFiltering;
+	world["SetDefaultShadowResolution"] = &Warden::setDefaultShadowResolution;
+	world["SetDefaultLightingExclusion"] = &Warden::defaultExclude;
 
 	// gui/2D images/text
 	gui["ImportFont"] = &Warden::embedFont;
