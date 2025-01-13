@@ -6,6 +6,7 @@
 #include <string>
 #include "DebugConsole.h"
 #include "LuaLime.h"
+#include "XEffects.h"
 
 class IrrHandling
 {
@@ -35,6 +36,11 @@ public:
 	int posX = 0;
 	int posY = 0;
 	int fps = 0;
+
+	// XEffects
+	E_FILTER_TYPE defaultShadowFiltering = E_FILTER_TYPE::EFT_8PCF;
+	int defaultShadowResolution = 1024;
+
 	irr::scene::ISceneNode* skydome = nullptr;
 	irr::video::SColor backgroundColor = (255, 100, 101, 140);
 };

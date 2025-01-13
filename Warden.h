@@ -181,6 +181,7 @@ namespace Warden {
 	void setBackgroundColor(Vector3D& color) {
 		if (driver && irrHandler) {
 			irrHandler->backgroundColor = irr::video::SColor(255, color.x, color.y, color.z);
+			effects->setClearColour(irrHandler->backgroundColor);
 		}
 	}
 
@@ -419,7 +420,8 @@ namespace Warden {
 
 	// Shadows
 	void setAmbientColor(const Vector3D& color) {
-		smgr->setAmbientLight(video::SColorf(static_cast<u32>(color.x) / 255.0f, static_cast<u32>(color.y) / 255.0f, static_cast<u32>(color.z) / 255.0f, 1.0f));
+		//smgr->setAmbientLight(video::SColorf(static_cast<u32>(color.x) / 255.0f, static_cast<u32>(color.y) / 255.0f, static_cast<u32>(color.z) / 255.0f, 1.0f));
+		effects->setAmbientColor(SColor(255, static_cast<u32>(color.x), static_cast<u32>(color.y), static_cast<u32>(color.z)));
 	}
 
 	// Sound
@@ -584,6 +586,55 @@ namespace Warden {
 		return tex;
 	}
 
+	void clearScene(bool includeModels) {
+		if (smgr && device) {
+			smgr->clear();
+			if (includeModels)
+				smgr->getMeshCache()->clear();
+		}
+	}
+
+	void clearGUI() {
+		if (guienv && device)
+			guienv->clear();
+	}
+
+	void addPPX(std::string path) { // NEW
+		if (effects)
+			effects->addPostProcessingEffectFromFile(path.c_str());
+	}
+
+	void setDefaultShadowFiltering(int i) { // NEW
+		if (irrHandler)
+			irrHandler->defaultShadowFiltering = (E_FILTER_TYPE)i;
+	}
+
+	void setDefaultShadowResolution(int i) { // NEW
+		switch (i) {
+		case 0:
+			i = 256;
+			break;
+		case 1:
+			i = 512;
+			break;
+		case 2:
+			i = 1024;
+			break;
+		case 3:
+			i = 2048;
+			break;
+		case 4:
+			i = 4096;
+			break;
+		default:
+			i = 512;
+			break;
+		}
+
+		if (irrHandler)
+			irrHandler->defaultShadowResolution = i;
+	}
+
 	// 2D
 	void setBilinearFiltering(bool enable) {
 		if (device) {
@@ -651,6 +702,8 @@ void bindWarden(sol::table application, sol::table world, sol::table sound, sol:
 	world["ConvertToScreenPosition"] = &Warden::toScreenPosition;
 	world["SetShadows"] = &Warden::setShadows;
 	world["GetRenderTexture"] = &Warden::renderCameraOutput;
+	world["Clear"] = &Warden::clearScene;
+	world["AddPostProcessingEffect"] = &Warden::addPPX;
 
 	// gui/2D images/text
 	gui["ImportFont"] = &Warden::embedFont;
@@ -660,6 +713,7 @@ void bindWarden(sol::table application, sol::table world, sol::table sound, sol:
 	gui["SetAnisotropicFiltering"] = &Warden::setAnisotropicFiltering;
 	gui["SetTrilinearFiltering"] = &Warden::setTrilinearFiltering;
 	gui["SetAntiAliasing"] = &Warden::setAntiAliasing;
+	gui["Clear"] = &Warden::clearGUI;
 
 	// sound
 	sound["PlaySound2D"] = &Warden::play2DSound;

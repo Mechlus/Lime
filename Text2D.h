@@ -38,6 +38,7 @@ public:
 			irr::core::stringc narrowStr(wideStr);
 			return narrowStr.c_str();
 		}
+		return "";
 	}
 
 	void setText(std::string tx) {

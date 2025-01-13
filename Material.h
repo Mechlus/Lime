@@ -76,7 +76,7 @@ public:
     }
 
     void setLighting(bool i) {
-        mat.Lighting = i;
+        //mat.Lighting = i; Deprecated for xEffects
     }
 
     Vector3D getDiffuseColor() {

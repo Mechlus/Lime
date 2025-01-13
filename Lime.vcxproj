@@ -148,8 +148,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CGUIFont.cpp" />
+    <ClCompile Include="CShaderPre.cpp" />
     <ClCompile Include="DebugConsole.cpp" />
     <ClCompile Include="EditBox.cpp" />
+    <ClCompile Include="EffectHandler.cpp" />
     <ClCompile Include="IrrHandling.cpp" />
     <ClCompile Include="Lime.cpp" />
     <ClCompile Include="Line.cpp" />
@@ -162,9 +164,14 @@
     <ClInclude Include="Billboard.h" />
     <ClInclude Include="Camera3D.h" />
     <ClInclude Include="CGUIFont.h" />
+    <ClInclude Include="CScreenQuad.h" />
+    <ClInclude Include="CShaderPre.h" />
     <ClInclude Include="DebugConsole.h" />
     <ClInclude Include="DebugVisual.h" />
     <ClInclude Include="EditBox.h" />
+    <ClInclude Include="EffectCB.h" />
+    <ClInclude Include="EffectHandler.h" />
+    <ClInclude Include="EffectShaders.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="Image2D.h" />
     <ClInclude Include="IrrHandling.h" />
@@ -188,6 +195,7 @@
     <ClInclude Include="Vector3D.h" />
     <ClInclude Include="Warden.h" />
     <ClInclude Include="WaterMesh.h" />
+    <ClInclude Include="XEffects.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Lime.rc" />

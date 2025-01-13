@@ -28,6 +28,9 @@
     <Filter Include="Source Files\Scene2D\Deprecated\TextArea">
       <UniqueIdentifier>{6569ff38-9827-4012-a5c2-3888bf0bb9bf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\xEffects">
+      <UniqueIdentifier>{1089de6d-5eb6-43d1-87f9-b08f566dd854}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Lime.cpp">
@@ -59,6 +62,12 @@
     </ClCompile>
     <ClCompile Include="EditBox.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectHandler.cpp">
+      <Filter>Source Files\xEffects</Filter>
+    </ClCompile>
+    <ClCompile Include="CShaderPre.cpp">
+      <Filter>Source Files\xEffects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -148,6 +157,24 @@
     </ClInclude>
     <ClInclude Include="EditBox.h">
       <Filter>Source Files\Scene2D</Filter>
+    </ClInclude>
+    <ClInclude Include="XEffects.h">
+      <Filter>Source Files\xEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectShaders.h">
+      <Filter>Source Files\xEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectCB.h">
+      <Filter>Source Files\xEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectHandler.h">
+      <Filter>Source Files\xEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="CScreenQuad.h">
+      <Filter>Source Files\xEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="CShaderPre.h">
+      <Filter>Source Files\xEffects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

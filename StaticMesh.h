@@ -9,16 +9,20 @@
 #include <string>
 #include <vector>
 
+using namespace irr;
+using namespace video;
+
 class StaticMesh
 {
 public:
 	irr::scene::IAnimatedMeshSceneNode* meshNode;
 	std::string meshPath = "";
-	std::vector<irr::video::SMaterial> materials;
+	//std::vector<irr::video::SMaterial> materials;
 	irr::scene::ITriangleSelector* selector = 0;
 	bool collisionEnabled = false;
 	irr::video::SColor vColor;
 	int opacity = 255;
+	bool shadows = false;
 
 	StaticMesh() : meshNode(nullptr) {}
 
@@ -29,7 +33,7 @@ public:
 	StaticMesh(const StaticMesh& other) {
 		meshNode->drop();
 		meshNode = other.meshNode;
-		materials = other.materials;
+		//materials = other.materials;
 		meshPath = other.meshPath;
 
 		if (collisionEnabled != other.collisionEnabled)
@@ -40,10 +44,12 @@ public:
 
 	StaticMesh(irr::scene::IAnimatedMeshSceneNode* node) : meshNode(node) {
 		if (meshNode) {
+			/*
 			materials.clear();
 			for (int i = 0; i < meshNode->getMaterialCount(); ++i) {
 				materials.push_back(meshNode->getMaterial(i));
 			}
+			*/
 		}
 	}
 
@@ -85,16 +91,27 @@ public:
 		if (!meshNode) return false;
 
 		meshNode->grab();
-		materials.clear();
-		for (int i = 0; i < meshNode->getMaterialCount(); ++i) {
-			materials.push_back(meshNode->getMaterial(i));
-		}
-
-		meshNode->addShadowVolumeSceneNode();
 
 		mesh->drop();
 
 		return true;
+	}
+
+	bool getShadows() {
+		return meshNode ? shadows : false;
+	}
+
+	void setShadows(bool enable) {
+		if (meshNode) {
+			if (enable && !shadows) {
+				effects->addShadowToNode(meshNode, irrHandler->defaultShadowFiltering);
+				return;
+			}
+			else if (shadows && !enable) {
+				effects->removeShadowFromNode(meshNode);
+				return;
+			}
+		}
 	}
 
 	unsigned int getVertexCount() const {
@@ -118,15 +135,76 @@ public:
 			meshNode->remove();
 			meshNode = nullptr;
 			meshPath.clear();
-			materials.clear();
+			//materials.clear();
 		}
 	}
 
 	bool loadMaterial(const Material& material, int slot) {
-		if (!meshNode || slot < 0 || slot >= materials.size()) return false;
+		if (!meshNode || slot < 0 || slot >= meshNode->getMaterialCount()) return false;
+		/*
 		materials[slot] = material.mat;
 		meshNode->getMaterial(slot) = materials[slot];
+		*/
+
+		meshNode->getMaterial(slot).MaterialType = material.mat.MaterialType;
+
+		meshNode->getMaterial(slot).FogEnable = material.mat.FogEnable;
+
+		meshNode->getMaterial(slot).BackfaceCulling = material.mat.BackfaceCulling;
+
+		meshNode->getMaterial(slot).FrontfaceCulling = material.mat.FrontfaceCulling;
+
+		meshNode->getMaterial(slot).AntiAliasing = material.mat.AntiAliasing;
+
+		meshNode->getMaterial(slot).Wireframe = material.mat.Wireframe;
+
+		meshNode->getMaterial(slot).DiffuseColor = material.mat.DiffuseColor;
+
+		meshNode->getMaterial(slot).SpecularColor = material.mat.SpecularColor;
+
+		meshNode->getMaterial(slot).EmissiveColor = material.mat.EmissiveColor;
+
+		meshNode->getMaterial(slot).GouraudShading = material.mat.GouraudShading;
+
+		meshNode->getMaterial(slot).ZBuffer = material.mat.ZBuffer;
+
+		meshNode->getMaterial(slot).ZWriteEnable = material.mat.ZWriteEnable;
+
+		meshNode->getMaterial(slot).PointCloud = material.mat.PointCloud;
+
+		meshNode->getMaterial(slot).setFlag(E_MATERIAL_FLAG::EMF_BILINEAR_FILTER, material.mat.getFlag(E_MATERIAL_FLAG::EMF_BILINEAR_FILTER));
+		meshNode->getMaterial(slot).setFlag(E_MATERIAL_FLAG::EMF_TRILINEAR_FILTER, material.mat.getFlag(E_MATERIAL_FLAG::EMF_TRILINEAR_FILTER));
+		meshNode->getMaterial(slot).setFlag(E_MATERIAL_FLAG::EMF_ANISOTROPIC_FILTER, material.mat.getFlag(E_MATERIAL_FLAG::EMF_ANISOTROPIC_FILTER));
+
+		meshNode->getMaterial(slot).setFlag(E_MATERIAL_FLAG::EMF_LIGHTING, material.mat.getFlag(E_MATERIAL_FLAG::EMF_LIGHTING));
+
+		meshNode->getMaterial(slot).setFlag(E_MATERIAL_FLAG::EMF_USE_MIP_MAPS, material.mat.getFlag(E_MATERIAL_FLAG::EMF_USE_MIP_MAPS));
+
+		meshNode->getMaterial(slot).ID = material.mat.ID;
+
+		meshNode->getMaterial(slot).Shininess = material.mat.Shininess;
+
+		// Texture matrix operations
+		for (int i = 0; i < 2; i++) {
+			irr::core::matrix4 matT = meshNode->getMaterial(slot).getTextureMatrix(i);
+			auto& otherT = material.mat.getTextureMatrix(i);
+			matT.setTextureTranslate(otherT.getTranslation().X, otherT.getTranslation().Y);
+			matT.setTextureScale(otherT.getScale().X, otherT.getScale().Y);
+			meshNode->getMaterial(slot).setTextureMatrix(i, matT);
+
+			meshNode->getMaterial(slot).TextureLayer[i].TextureWrapU = material.mat.TextureLayer[i].TextureWrapU;
+			meshNode->getMaterial(slot).TextureLayer[i].TextureWrapV = material.mat.TextureLayer[i].TextureWrapV;
+
+			meshNode->getMaterial(slot).setTextureMatrix(i, matT);
+		}
+
+
+		for (int i = 0; i < 2; i++)
+			meshNode->getMaterial(slot).setTexture(i, material.mat.getTexture(i));
+
 		return true;
+
+		// Works for the first load, but then when you load the material again it will not take changes
 	}
 
 	StaticMesh* getParent() {
@@ -371,7 +449,8 @@ void bindStaticMesh() {
 		"frame", sol::property(&StaticMesh::getFrame, &StaticMesh::setFrame),
 		"debug", sol::property(&StaticMesh::getDebug, &StaticMesh::setDebug),
 		"vertexColor", sol::property(&StaticMesh::getVColor, &StaticMesh::setVColor),
-		"vertexAlpha", sol::property(&StaticMesh::getOpacity, &StaticMesh::setOpacity)
+		"vertexAlpha", sol::property(&StaticMesh::getOpacity, &StaticMesh::setOpacity),
+		"shadows", sol::property(&StaticMesh::getShadows, &StaticMesh::setShadows)
 	);
 
 	bind_type["load"] = &StaticMesh::loadMesh;
