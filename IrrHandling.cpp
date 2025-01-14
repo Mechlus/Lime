@@ -168,14 +168,11 @@ void IrrHandling::appLoop() {
 
 	f32 const frameDur = 1000.f / m_frameLimit;
 
-	// XEFFECTS RAW CODE
-	ILightSceneNode* light = smgr->addLightSceneNode();
-	light->addAnimator(smgr->createFlyCircleAnimator(vector3df(5, 20, 5), 38));
-	effects->addShadowLight(SShadowLight(defaultShadowResolution, vector3df(0, 0, 0), vector3df(5, 0, 5),
-		SColor(0, 255, 0, 0), 20.0f, 60.0f, 30.0f * DEGTORAD));
-
 	if (false)
 	{
+		effects->addShadowLight(SShadowLight(1024, vector3df(-15, 30, -15), vector3df(5, 0, 5),
+			SColor(255, 255, 255, 255), 20.0f, 60.0f, 30.0f * DEGTORAD));
+
 		IMeshSceneNode* room = smgr->addMeshSceneNode(smgr->getMesh("./content/ShadRoom.b3d")->getMesh(0));
 		room->setScale(vector3df(3.0f, 2.0f, 3.0f));
 		room->setPosition(vector3df(4.5f, 0.5f, 4.0f));
@@ -187,9 +184,6 @@ void IrrHandling::appLoop() {
 		// It will use the default shadow mode, ESM_BOTH, which allows it to
 		// both cast and receive shadows.
 		effects->addShadowToNode(room, E_FILTER_TYPE::EFT_16PCF);
-
-		// Set a global ambient color. A very dark gray.
-		effects->setAmbientColor(SColor(255, 32, 32, 32));
 
 		// Load the dwarf mesh.
 		IAnimatedMesh* dwarfmesh = smgr->getMesh("./content/dwarf.x");
@@ -238,9 +232,6 @@ void IrrHandling::appLoop() {
 			mainCamera->setTarget(mainCameraForward->getAbsolutePosition());
 		}
 
-		effects->getShadowLight(0).setPosition(light->getPosition());
-		effects->getShadowLight(0).setTarget(vector3df(5, 0, 5));
-
 		driver->beginScene(true, true, SColor(0x0));
 		//smgr->drawAll();
 		effects->update();
@@ -263,7 +254,7 @@ void IrrHandling::appLoop() {
 
 		f32 frameTime = device->getTimer()->getTime() - now;
 		if (frameTime < frameDur)
-			device->sleep((frameDur - frameTime)/2.0);
+			device->sleep((frameDur - frameTime) / 2.0);
 	}
 
 	// Call end in main

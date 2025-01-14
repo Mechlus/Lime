@@ -568,6 +568,7 @@ namespace Warden {
 
 			driver->setRenderTarget(tx, true, true, irrHandler->backgroundColor);
 			smgr->setActiveCamera(cur);
+			//effects->update(); Doesn't actually draw anything but the background
 			smgr->drawAll();
 
 			if (renderGUI)
@@ -604,17 +605,17 @@ namespace Warden {
 			guienv->clear();
 	}
 
-	void addPPX(std::string path) { // NEW
+	void addPPX(std::string path) {
 		if (effects)
 			effects->addPostProcessingEffectFromFile(path.c_str());
 	}
 
-	void setDefaultShadowFiltering(int i) { // NEW
+	void setDefaultShadowFiltering(int i) {
 		if (irrHandler)
 			irrHandler->defaultShadowFiltering = (E_FILTER_TYPE)i;
 	}
 
-	void setDefaultShadowResolution(int i) { // NEW
+	void setDefaultShadowResolution(int i) {
 		switch (i) {
 		case 0:
 			i = 256;

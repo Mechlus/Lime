@@ -14,7 +14,7 @@ using namespace video;
 enum class DebugType {
     CAMERA = 0,
     RAY_PICK,
-    CUSTOM
+    LIGHT
 };
 
 class DebugSceneNode : public ISceneNode {
@@ -36,6 +36,9 @@ public:
             break;
         case DebugType::RAY_PICK:
             renderRayPickDebug();
+            break;
+        case DebugType::LIGHT:
+            renderLightDebug();
             break;
         }
     }
@@ -122,6 +125,30 @@ private:
 
         if (raypick_life <= 0)
             this->remove();
+    }
+
+    void renderLightDebug() {
+        SMaterial m;
+        m.Lighting = false;
+        driver->setMaterial(m);
+        driver->setTransform(video::ETS_WORLD, core::matrix4());
+
+        float boxSize = 0.125;
+
+        vector3df nodePosition = getAbsolutePosition();
+
+        const aabbox3d<f32> box(
+            nodePosition - vector3df(boxSize, boxSize, boxSize),
+            nodePosition + vector3df(boxSize, boxSize, boxSize)
+        );
+
+        driver->draw3DBox(box, SColor(255, 255, 255, 0));
+
+        vector3df start = nodePosition;
+        vector3df direction = getParent()->getRotation().rotationToDirection();
+        vector3df end = nodePosition + direction * 1;
+
+        driver->draw3DLine(start, end, SColor(255, 255, 255, 0));
     }
 
 };

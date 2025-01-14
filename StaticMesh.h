@@ -31,9 +31,7 @@ public:
 	}
 
 	StaticMesh(const StaticMesh& other) {
-		meshNode->drop();
 		meshNode = other.meshNode;
-		//materials = other.materials;
 		meshPath = other.meshPath;
 
 		if (collisionEnabled != other.collisionEnabled)
@@ -54,7 +52,7 @@ public:
 	}
 
 	~StaticMesh() {
-		deload();
+		//deload();
 	}
 
 	std::string getMesh() const {
@@ -70,7 +68,6 @@ public:
 	}
 
 	bool fullLoadMesh(const std::string& filePath, bool doTangents) {
-		bool fbx = core::hasFileExtension(filePath.c_str(), "fbx");
 		irr::scene::IAnimatedMesh* mesh = nullptr;
 
 		if (!doTangents)
@@ -91,6 +88,9 @@ public:
 		if (!meshNode) return false;
 
 		meshNode->grab();
+
+		for (u32 i = 0; i < meshNode->getMaterialCount(); ++i)
+			meshNode->getMaterial(i).Lighting = false;
 
 		mesh->drop();
 
@@ -146,6 +146,9 @@ public:
 		if (!meshNode || slot < 0 || slot >= meshNode->getMaterialCount()) return false;
 
 		meshNode->getMaterial(slot) = material.mat;
+		meshNode->getMaterial(slot).Lighting = false;
+
+		//meshNode->getMaterial(slot).setTexture(0, material.mat.getTexture(0));
 
 		return true;
 	}
