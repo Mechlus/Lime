@@ -566,23 +566,14 @@ namespace Warden {
 
 			driver->beginScene(true, true, irrHandler->backgroundColor);
 
-			driver->setRenderTarget(tx, true, true, irrHandler->backgroundColor);
 			smgr->setActiveCamera(cur);
-			//effects->update(); Doesn't actually draw anything but the background
-			smgr->drawAll();
+			effects->update(tx);
 
 			if (renderGUI)
 				guienv->drawAll();
 			driver->endScene();
 
 			smgr->setActiveCamera(mainCamera);
-			driver->setRenderTarget(0, false, false, irrHandler->backgroundColor);
-			/*
-			driver->beginScene(true, true, irrHandler->backgroundColor);
-			smgr->drawAll();
-			guienv->drawAll();
-			driver->endScene();
-			*/
 		}
 
 		Texture tex = Texture();

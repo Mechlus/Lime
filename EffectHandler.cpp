@@ -11,7 +11,6 @@ using namespace scene;
 using namespace video;
 using namespace core;
 
-
 EffectHandler::EffectHandler(IrrlichtDevice* dev, const irr::core::dimension2du& screenRTTSize,
 	const bool useVSMShadows, const bool useRoundSpotLights, const bool use32BitDepthBuffers)
 : device(dev), smgr(dev->getSceneManager()), driver(dev->getVideoDriver()),
@@ -239,7 +238,7 @@ void EffectHandler::update(irr::video::ITexture* outputTarget)
 	if(shadowsUnsupported || smgr->getActiveCamera() == 0)
 		return;
 	
-	if(!ShadowNodeArray.empty() && !LightList.empty())
+	if(!ShadowNodeArray.empty() && lightLinks.head)
 	{
 		driver->setRenderTarget(ScreenQuad.rt[0], true, true, AmbientColour);
 
@@ -250,6 +249,7 @@ void EffectHandler::update(irr::video::ITexture* outputTarget)
 
 		const u32 ShadowNodeArraySize = ShadowNodeArray.size();
 		const u32 LightListSize = LightList.size();
+		
 		for(u32 l = 0;l < LightListSize;++l)
 		{
 			// Set max distance constant for depth shader.

@@ -59,6 +59,10 @@ struct SShadowLight
 			projMat.buildProjectionMatrixPerspectiveFovLH(fov, 1.0f, nearValue, farValue);
 	}
 
+	SShadowLight() {
+		// default
+	}
+
 	/// Sets the light's position.
 	void setPosition(const irr::core::vector3df& position)
 	{
@@ -174,10 +178,95 @@ class DepthShaderCB;
 class ShadowShaderCB;
 class ScreenQuadCB;
 
+struct Node {
+
+private:
+public:
+	SShadowLight light;
+	EffectHandler::SShadowNode shadow;
+	Node* prev = nullptr;
+	Node* next = nullptr;
+	int id = 0;
+
+	Node() {
+		id = effects->getUpdateNextID();
+	}
+
+	~Node() {
+		if (prev)
+			prev->next = next;
+		if (next)
+			next->prev = prev;
+	}
+};
+
+struct LinkedList {
+private:
+public:
+	int size = 0;
+	Node* head;
+	Node* recent;
+
+	void addNode(Node n) {
+		size++;
+		if (!head) {
+			head = &n;
+			recent = head;
+			return;
+		}
+		if (recent) {
+			recent->next = &n;
+			n.prev = recent;
+		}
+	}
+
+	void removeNode(int id) {
+		size--;
+		if (!head)
+			return;
+		Node* cur = head;
+
+		while (cur) {
+			if (cur->id = id) {
+				if (cur == recent)
+					recent = cur->prev;
+				cur->~Node();
+				return;
+			}
+			cur = cur->next;
+		}
+	}
+
+	void clear() {
+		size = 0;
+		Node* cur = head;
+
+		while (cur && cur->next) {
+			cur = cur->next;
+		}
+
+		while (cur) {
+			Node* newPrev = cur->prev;
+			cur->~Node();
+
+			cur = newPrev;
+		}
+	}
+};
+
 /// Main effect handling class, use this to apply shadows and effects.
 class EffectHandler
 {
 public:
+
+	LinkedList lightLinks;
+	LinkedList shadowLinks;
+	int globalNextID = 0;
+
+	int getUpdateNextID() {
+		globalNextID++;
+		return globalNextID;
+	}
 
 	/*	EffectHandler constructor. Initializes the EffectHandler.
 
@@ -200,6 +289,10 @@ public:
 	void addShadowLight(const SShadowLight& shadowLight)
 	{
 		LightList.push_back(shadowLight);
+
+		Node n;
+		n.light = shadowLight;
+		lightLinks.addNode(n);
 	}
 
 	/// Retrieves a reference to a shadow light. You may get the max amount from getShadowLightCount.
@@ -212,6 +305,10 @@ public:
 	const irr::u32 getShadowLightCount() const
 	{
 		return LightList.size();
+	}
+
+	int getLightAmount() {
+		return lightLinks.size;
 	}
 
 	/// Retrieves the shadow map texture for the specified square shadow map resolution.
@@ -257,6 +354,17 @@ public:
 	{
 		SShadowNode tmpShadowNode = {node, ESM_EXCLUDE, EFT_NONE};
 		ShadowNodeArray.push_back(tmpShadowNode);
+	}
+
+	void removeLight(int id) {
+		Node* cur = lightLinks.head;
+		while (cur) {
+			if (cur->id) {
+				cur->~Node();
+				return;
+			}
+			cur = cur->next;
+		}
 	}
 
 	/// Updates the effects handler. This must be done between IVideoDriver::beginScene and IVideoDriver::endScene.
@@ -419,8 +527,6 @@ public:
 	/// Returns the device that this EffectHandler was initialized with.
 	irr::IrrlichtDevice* getIrrlichtDevice() {return device;}
 
-private:
-
 	struct SShadowNode
 	{
 		bool operator < (const SShadowNode& other) const
@@ -433,6 +539,8 @@ private:
 		E_SHADOW_MODE shadowMode;
 		E_FILTER_TYPE filterType;
 	};
+
+private:
 
 	struct SPostProcessingPair
 	{

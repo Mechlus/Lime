@@ -226,7 +226,8 @@ public:
 
 	void loadMaterial(const Material& m) {
 		if (water) {
-			material = m.mat;
+			water->getMaterial(0) = m.mat;
+			water->getMaterial(0).Lighting = false;
 			createRaw();
 		}
 	}
