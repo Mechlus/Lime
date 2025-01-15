@@ -38,6 +38,7 @@ public:
 	int posX = 0;
 	int posY = 0;
 	int fps = 0;
+	int curLight = 0; // CHANGE
 
 	// XEffects
 	E_FILTER_TYPE defaultShadowFiltering = E_FILTER_TYPE::EFT_8PCF;

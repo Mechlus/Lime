@@ -38,7 +38,8 @@ public:
 		SShadowLight s = SShadowLight(irrHandler->defaultShadowResolution, holder->getPosition(), target->getAbsolutePosition(),
 						 c, viewPlanes.x, viewPlanes.y, fov * DEGTORAD, directional);
 		effects->addShadowLight(s);
-		index = 0;
+		index = irrHandler->curLight;
+		irrHandler->curLight += 1;
 
 		updateTarget();
 	}

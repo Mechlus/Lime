@@ -40,27 +40,23 @@ struct SShadowLight
 	/// a camera, this would be similar to setting the camera's field of view. The last
 	/// parameter is whether the light is directional or not, if it is, an orthogonal
 	/// projection matrix will be created instead of a perspective one.
-	SShadowLight(	const irr::u32 shadowMapResolution,
-					const irr::core::vector3df& position, 
-					const irr::core::vector3df& target,
-					irr::video::SColorf lightColour = irr::video::SColor(0xffffffff), 
-					irr::f32 nearValue = 10.0, irr::f32 farValue = 100.0,
-					irr::f32 fov = 90.0 * irr::core::DEGTORAD64, bool directional = false)
-					:	pos(position), tar(target), farPlane(directional ? 1.0f : farValue), diffuseColour(lightColour), 
-						mapRes(shadowMapResolution)
+	SShadowLight(const irr::u32 shadowMapResolution,
+		const irr::core::vector3df& position,
+		const irr::core::vector3df& target,
+		irr::video::SColorf lightColour = irr::video::SColor(0xffffffff),
+		irr::f32 nearValue = 10.0, irr::f32 farValue = 100.0,
+		irr::f32 fov = 90.0 * irr::core::DEGTORAD64, bool directional = false)
+		: pos(position), tar(target), farPlane(directional ? 1.0f : farValue), diffuseColour(lightColour),
+		mapRes(shadowMapResolution)
 	{
 		nearValue = nearValue <= 0.0f ? 0.1f : nearValue;
 
 		updateViewMatrix();
-		
-		if(directional)
+
+		if (directional)
 			projMat.buildProjectionMatrixOrthoLH(fov, fov, nearValue, farValue);
 		else
 			projMat.buildProjectionMatrixPerspectiveFovLH(fov, 1.0f, nearValue, farValue);
-	}
-
-	SShadowLight() {
-		// default
 	}
 
 	/// Sets the light's position.
@@ -129,7 +125,7 @@ struct SShadowLight
 	}
 
 	/// Sets the light's color.
-	void setLightColor(const irr::video::SColorf& lightColour) 
+	void setLightColor(const irr::video::SColorf& lightColour)
 	{
 		diffuseColour = lightColour;
 	}
@@ -152,7 +148,7 @@ private:
 	{
 		viewMat.buildCameraLookAtMatrixLH(pos, tar,
 			(pos - tar).dotProduct(irr::core::vector3df(1.0f, 0.0f, 1.0f)) == 0.0f ?
-			irr::core::vector3df(0.0f, 0.0f, 1.0f) : irr::core::vector3df(0.0f, 1.0f, 0.0f)); 
+			irr::core::vector3df(0.0f, 0.0f, 1.0f) : irr::core::vector3df(0.0f, 1.0f, 0.0f));
 	}
 
 	irr::video::SColorf diffuseColour;
@@ -178,95 +174,10 @@ class DepthShaderCB;
 class ShadowShaderCB;
 class ScreenQuadCB;
 
-struct Node {
-
-private:
-public:
-	SShadowLight light;
-	EffectHandler::SShadowNode shadow;
-	Node* prev = nullptr;
-	Node* next = nullptr;
-	int id = 0;
-
-	Node() {
-		id = effects->getUpdateNextID();
-	}
-
-	~Node() {
-		if (prev)
-			prev->next = next;
-		if (next)
-			next->prev = prev;
-	}
-};
-
-struct LinkedList {
-private:
-public:
-	int size = 0;
-	Node* head;
-	Node* recent;
-
-	void addNode(Node n) {
-		size++;
-		if (!head) {
-			head = &n;
-			recent = head;
-			return;
-		}
-		if (recent) {
-			recent->next = &n;
-			n.prev = recent;
-		}
-	}
-
-	void removeNode(int id) {
-		size--;
-		if (!head)
-			return;
-		Node* cur = head;
-
-		while (cur) {
-			if (cur->id = id) {
-				if (cur == recent)
-					recent = cur->prev;
-				cur->~Node();
-				return;
-			}
-			cur = cur->next;
-		}
-	}
-
-	void clear() {
-		size = 0;
-		Node* cur = head;
-
-		while (cur && cur->next) {
-			cur = cur->next;
-		}
-
-		while (cur) {
-			Node* newPrev = cur->prev;
-			cur->~Node();
-
-			cur = newPrev;
-		}
-	}
-};
-
 /// Main effect handling class, use this to apply shadows and effects.
 class EffectHandler
 {
 public:
-
-	LinkedList lightLinks;
-	LinkedList shadowLinks;
-	int globalNextID = 0;
-
-	int getUpdateNextID() {
-		globalNextID++;
-		return globalNextID;
-	}
 
 	/*	EffectHandler constructor. Initializes the EffectHandler.
 
@@ -277,11 +188,11 @@ public:
 		useRoundSpotlights: Shadow lights will have a soft round spot light mask. Default is false.
 		use32BitDepthBuffers: XEffects will use 32-bit depth buffers if this is true, otherwise 16-bit. Default is false.
 	*/
-	EffectHandler(irr::IrrlichtDevice* irrlichtDevice, 
+	EffectHandler(irr::IrrlichtDevice* irrlichtDevice,
 		const irr::core::dimension2du& screenRTTSize = irr::core::dimension2du(0, 0),
 		const bool useVSMShadows = false, const bool useRoundSpotLights = false,
 		const bool use32BitDepthBuffers = false);
-	
+
 	/// Destructor.
 	~EffectHandler();
 
@@ -289,10 +200,6 @@ public:
 	void addShadowLight(const SShadowLight& shadowLight)
 	{
 		LightList.push_back(shadowLight);
-
-		Node n;
-		n.light = shadowLight;
-		lightLinks.addNode(n);
 	}
 
 	/// Retrieves a reference to a shadow light. You may get the max amount from getShadowLightCount.
@@ -305,10 +212,6 @@ public:
 	const irr::u32 getShadowLightCount() const
 	{
 		return LightList.size();
-	}
-
-	int getLightAmount() {
-		return lightLinks.size;
 	}
 
 	/// Retrieves the shadow map texture for the specified square shadow map resolution.
@@ -327,11 +230,11 @@ public:
 	/// This function is now unrelated to shadow mapping. It simply adds a node to the screen space depth map render, for use
 	/// with post processing effects that require screen depth info. If you want the functionality of the old method (A node that
 	/// only casts but does not recieve shadows, use addShadowToNode with the ESM_CAST shadow mode.
-	void addNodeToDepthPass(irr::scene::ISceneNode *node);
+	void addNodeToDepthPass(irr::scene::ISceneNode* node);
 
 	/// This function is now unrelated to shadow mapping. It simply removes a node to the screen space depth map render, for use
 	/// with post processing effects that require screen depth info.
-	void removeNodeFromDepthPass(irr::scene::ISceneNode *node);
+	void removeNodeFromDepthPass(irr::scene::ISceneNode* node);
 
 	/// Enables/disables an additional pass before applying post processing effects (If there are any) which records screen depth info
 	/// to the depth buffer for use with post processing effects that require screen depth info, such as SSAO or DOF. For nodes to be
@@ -341,10 +244,10 @@ public:
 	/// Removes shadows from a scene node.
 	void removeShadowFromNode(irr::scene::ISceneNode* node)
 	{
-		SShadowNode tmpShadowNode = {node, ESM_RECEIVE, EFT_NONE};
+		SShadowNode tmpShadowNode = { node, ESM_RECEIVE, EFT_NONE };
 		irr::s32 i = ShadowNodeArray.binary_search(tmpShadowNode);
 
-		if(i != -1)
+		if (i != -1)
 			ShadowNodeArray.erase(i);
 	}
 
@@ -352,19 +255,8 @@ public:
 	// occur from XEffect's light modulation on this particular scene node.
 	void excludeNodeFromLightingCalculations(irr::scene::ISceneNode* node)
 	{
-		SShadowNode tmpShadowNode = {node, ESM_EXCLUDE, EFT_NONE};
+		SShadowNode tmpShadowNode = { node, ESM_EXCLUDE, EFT_NONE };
 		ShadowNodeArray.push_back(tmpShadowNode);
-	}
-
-	void removeLight(int id) {
-		Node* cur = lightLinks.head;
-		while (cur) {
-			if (cur->id) {
-				cur->~Node();
-				return;
-			}
-			cur = cur->next;
-		}
 	}
 
 	/// Updates the effects handler. This must be done between IVideoDriver::beginScene and IVideoDriver::endScene.
@@ -380,19 +272,19 @@ public:
 	/// ESM_CAST only casts shadows, and is unaffected by shadows or lighting, and ESM_RECEIVE
 	/// only receives but does not cast shadows.
 	void addShadowToNode(irr::scene::ISceneNode* node, E_FILTER_TYPE filterType = EFT_NONE, E_SHADOW_MODE shadowMode = ESM_BOTH);
-	
+
 	/// Returns the device time divided by 100, for use with the shader callbacks.
-	irr::f32 getTime() 
-	{ 
+	irr::f32 getTime()
+	{
 		return device->getTimer()->getTime() / 100.0f;
 	}
-	
+
 	/// Sets the scene clear colour, for when the scene is cleared before smgr->drawAll().
 	void setClearColour(irr::video::SColor ClearCol)
 	{
 		ClearColour = ClearCol;
 	}
-	
+
 	/**
 	A very easy to use post processing function. Simply add a material type to apply to the screen as a post processing
 	effect and it will be applied. You can add as many material types as you desire, and they will be double buffered and
@@ -402,7 +294,7 @@ public:
 	(When using OpenGL, in DirectX uniforms are not required to bind textures).
 	Please note that this will only work in OpenGL on vanilla Irrlicht, DX requires the large RTT patch to be able to create
 	sufficiently sized rendertargets for post processing. (Or you can just remove the engine check for Pow2).
-	
+
 	The structure of the textures is as follows:
 
 	Texture1 - "ColorMapSampler"
@@ -421,10 +313,10 @@ public:
 	If a depth pass has been enabled using enableDepthPass, then this sampler will contain the screen space depth information.
 	For better quality this is encoded to 16bits, and can be decoded like so:
 		Texture.red + (Texture.green / 256.0f);
-	That is by adding the red channel to the green channel which is first divided by 256. 
+	That is by adding the red channel to the green channel which is first divided by 256.
 	The data can still be used without decoding, in 8 bit precision, by just accessing the red component of the texture. Though
 	this is not recommended as 8 bit precision is usually not sufficient for modern post processing effects.
-	
+
 	Texture4 - "UserMapSampler"
 	A custom texture that can be set by the user using setPostProcessingUserTexture(irr::video::ITexture* userTexture).
 
@@ -440,9 +332,9 @@ public:
 		SPostProcessingPair tempPair(MaterialType, 0);
 		irr::s32 i = PostProcessingRoutines.binary_search(tempPair);
 
-		if(i != -1)
+		if (i != -1)
 		{
-			if(PostProcessingRoutines[i].renderCallback)
+			if (PostProcessingRoutines[i].renderCallback)
 				delete PostProcessingRoutines[i].renderCallback;
 
 			PostProcessingRoutines[i].renderCallback = callback;
@@ -455,9 +347,9 @@ public:
 		SPostProcessingPair tempPair(MaterialType, 0);
 		irr::s32 i = PostProcessingRoutines.binary_search(tempPair);
 
-		if(i != -1)
+		if (i != -1)
 		{
-			if(PostProcessingRoutines[i].renderCallback)
+			if (PostProcessingRoutines[i].renderCallback)
 				delete PostProcessingRoutines[i].renderCallback;
 
 			PostProcessingRoutines.erase(i);
@@ -481,7 +373,7 @@ public:
 
 	/// Returns the screen quad scene node. This is not required in any way, but some advanced users may want to adjust
 	/// its material settings accordingly.
-	const CScreenQuad& getScreenQuad() 
+	const CScreenQuad& getScreenQuad()
 	{
 		return ScreenQuad;
 	}
@@ -497,7 +389,7 @@ public:
 	{
 		return smgr;
 	}
-	
+
 	/// This allows the user to specify a custom, fourth texture to be used in the post-processing effects.
 	/// See addPostProcessingEffect for more info.
 	void setPostProcessingUserTexture(irr::video::ITexture* userTexture)
@@ -525,7 +417,9 @@ public:
 	void setScreenRenderTargetResolution(const irr::core::dimension2du& resolution);
 
 	/// Returns the device that this EffectHandler was initialized with.
-	irr::IrrlichtDevice* getIrrlichtDevice() {return device;}
+	irr::IrrlichtDevice* getIrrlichtDevice() { return device; }
+
+private:
 
 	struct SShadowNode
 	{
@@ -540,13 +434,12 @@ public:
 		E_FILTER_TYPE filterType;
 	};
 
-private:
-
 	struct SPostProcessingPair
 	{
 		SPostProcessingPair(const irr::s32 materialTypeIn, ScreenQuadCB* callbackIn,
 			IPostProcessingRenderCallback* renderCallbackIn = 0)
-			: materialType(materialTypeIn), callback(callbackIn), renderCallback(renderCallbackIn) {}
+			: materialType(materialTypeIn), callback(callbackIn), renderCallback(renderCallbackIn) {
+		}
 
 		bool operator < (const SPostProcessingPair& other) const
 		{
@@ -558,14 +451,14 @@ private:
 		irr::s32 materialType;
 	};
 
-	SPostProcessingPair obtainScreenQuadMaterialFromFile(const irr::core::stringc& filename, 
+	SPostProcessingPair obtainScreenQuadMaterialFromFile(const irr::core::stringc& filename,
 		irr::video::E_MATERIAL_TYPE baseMaterial = irr::video::EMT_SOLID);
 
 	irr::IrrlichtDevice* device;
 	irr::video::IVideoDriver* driver;
 	irr::scene::ISceneManager* smgr;
 	irr::core::dimension2du mapRes;
-	
+
 	irr::s32 Depth;
 	irr::s32 DepthT;
 	irr::s32 DepthWiggle;
@@ -578,7 +471,7 @@ private:
 	irr::s32 WhiteWashTAlpha;
 	irr::s32 VSMBlurH;
 	irr::s32 VSMBlurV;
-	
+
 	DepthShaderCB* depthMC;
 	ShadowShaderCB* shadowMC;
 

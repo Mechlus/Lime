@@ -168,49 +168,6 @@ void IrrHandling::appLoop() {
 
 	f32 const frameDur = 1000.f / m_frameLimit;
 
-	if (false)
-	{
-		effects->addShadowLight(SShadowLight(1024, vector3df(-15, 30, -15), vector3df(5, 0, 5),
-			SColor(255, 255, 255, 255), 20.0f, 60.0f, 30.0f * DEGTORAD));
-
-		IMeshSceneNode* room = smgr->addMeshSceneNode(smgr->getMesh("./content/ShadRoom.b3d")->getMesh(0));
-		room->setScale(vector3df(3.0f, 2.0f, 3.0f));
-		room->setPosition(vector3df(4.5f, 0.5f, 4.0f));
-		room->setMaterialTexture(0, driver->getTexture("./content/Wall.png"));
-
-		room->getMaterial(0).Lighting = false;
-
-		// Add the room to the shadow node list, using the chosen filtertype.
-		// It will use the default shadow mode, ESM_BOTH, which allows it to
-		// both cast and receive shadows.
-		effects->addShadowToNode(room, E_FILTER_TYPE::EFT_16PCF);
-
-		// Load the dwarf mesh.
-		IAnimatedMesh* dwarfmesh = smgr->getMesh("./content/dwarf.x");
-
-		// We create 4 dwarves arranged in a grid in a nested loop.
-		for (int g = 0; g < 2; g++)
-		{
-			for (int v = 0; v < 2; v++)
-			{
-				// Add a dwarf animated mesh scene node.
-				IAnimatedMeshSceneNode* dwarf = smgr->addAnimatedMeshSceneNode(dwarfmesh);
-				dwarf->setScale(vector3df(0.05f, 0.05f, 0.05f));
-				dwarf->setPosition(vector3df(g * 4.5f + 1.0f, 0.5f, v * 3.5f + 2.0f));
-
-				// Disable the lighting here too, XEffects overlay will handle it.
-				for (u32 i = 0; i < dwarf->getMaterialCount(); ++i)
-					dwarf->getMaterial(i).Lighting = false;
-
-				dwarf->setAnimationSpeed(20.0f);
-
-				// Apply a shadow to the dwarf, notice we are applying it to all of them
-				// including the ones that have effects applied.
-				effects->addShadowToNode(dwarf, E_FILTER_TYPE::EFT_16PCF);
-			}
-		}
-	}
-
 	while (device->run()) {
 		const u32 now = device->getTimer()->getTime();
 		dt = (now - then) / 16.667f;

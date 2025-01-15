@@ -22,7 +22,7 @@ public:
 	bool collisionEnabled = false;
 	irr::video::SColor vColor;
 	int opacity = 255;
-	bool shadows = false;
+	int shadow = E_SHADOW_MODE::ESM_BOTH;
 
 	StaticMesh() : meshNode(nullptr) {}
 
@@ -100,20 +100,14 @@ public:
 		return true;
 	}
 
-	bool getShadows() {
-		return meshNode ? shadows : false;
+	int getShadows() {
+		return meshNode ? shadow : 0;
 	}
 
-	void setShadows(bool enable) {
+	void setShadows(int i) {
 		if (meshNode) {
-			if (enable && !shadows) {
-				effects->addShadowToNode(meshNode, irrHandler->defaultShadowFiltering);
-				return;
-			}
-			else if (shadows && !enable) {
-				effects->removeShadowFromNode(meshNode);
-				return;
-			}
+			shadow = i;
+			effects->addShadowToNode(meshNode, irrHandler->defaultShadowFiltering, (E_SHADOW_MODE)shadow);
 		}
 	}
 

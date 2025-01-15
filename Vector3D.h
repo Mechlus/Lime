@@ -11,6 +11,7 @@ public:
 
     Vector3D() : x(0), y(0), z(0) {}
     Vector3D(float x, float y, float z) : x(x), y(y), z(z) {}
+    Vector3D(float x) : x(x), y(x), z(x) {}
 
     // add
     Vector3D operator+(const Vector3D& other) const {
@@ -144,7 +145,7 @@ public:
 
 inline void bindVector3D() {
     sol::usertype<Vector3D> bind_type = lua->new_usertype<Vector3D>("Vector3D",
-        sol::constructors<Vector3D(), Vector3D(float, float, float)>(),
+        sol::constructors<Vector3D(), Vector3D(float, float, float), Vector3D(float)>(),
         sol::meta_function::addition, &Vector3D::operator+,
         sol::meta_function::subtraction, &Vector3D::operator-,
         sol::meta_function::multiplication, &Vector3D::operator*,

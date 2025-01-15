@@ -14,6 +14,7 @@ public:
 
 	Vector2D() : x(0), y(0) {}
 	Vector2D(float x, float y) : x(x), y(y) {}
+    Vector2D(float x) : x(x), y(x) {}
 
     // add
     Vector2D operator+(const Vector2D& other) const {
@@ -120,7 +121,7 @@ public:
 
 inline void bindVector2D() {
     sol::usertype<Vector2D> bind_type = lua->new_usertype<Vector2D>("Vector2D",
-        sol::constructors<Vector2D(), Vector2D(float, float)>(),
+        sol::constructors<Vector2D(), Vector2D(float, float), Vector2D(float)>(),
         sol::meta_function::addition, &Vector2D::operator+,
         sol::meta_function::subtraction, &Vector2D::operator-,
         sol::meta_function::multiplication, &Vector2D::operator*,
