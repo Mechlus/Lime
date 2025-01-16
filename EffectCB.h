@@ -54,6 +54,7 @@ public:
 
 		driver->getTransform(video::ETS_WORLD).getInverse(invWorld);
 		vector3df lightPosOS = LightLink;
+
 		invWorld.transformVect(lightPosOS); 
 		services->setVertexShaderConstant("LightPos", reinterpret_cast<f32*>(&lightPosOS.X), 4);
 		

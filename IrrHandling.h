@@ -28,6 +28,7 @@ public:
 	float dt;
 	bool didEnd = false;
 	bool defaultExclude = false;
+	int lights = 0;
 
 	irr::video::E_DRIVER_TYPE driverType = irr::video::EDT_DIRECT3D9;
 	int width = 640;
