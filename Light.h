@@ -37,7 +37,8 @@ public:
 		holder->setPosition(vector3df(pos.x, pos.y, pos.z));
 		SShadowLight s = SShadowLight(irrHandler->defaultShadowResolution, holder->getPosition(), target->getAbsolutePosition(),
 						 c, viewPlanes.x, viewPlanes.y, fov * DEGTORAD, directional);
-		effects->addShadowLight(s);
+		effects->addShadowLight(s, irrHandler->lights);
+		irrHandler->lights++; // reset this value to zero when lights are cleared
 		index = irrHandler->curLight;
 		irrHandler->curLight += 1;
 

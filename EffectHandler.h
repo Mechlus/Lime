@@ -5,6 +5,80 @@
 #include "CShaderPre.h"
 #include "CScreenQuad.h"
 
+/// Shadow Light List
+class LightListNode {
+private:
+public:
+	SShadowLight slight; // Need to initialize?
+	LightListNode* prev = nullptr;
+	LightListNode* next = nullptr;
+	int ID = 0;
+
+	LightListNode(const SShadowLight& s, int d) : slight(s), ID(d) {
+	};
+
+	~LightListNode() {
+	}
+};
+
+class LinkedList {
+private:
+public:
+	LightListNode* head = nullptr;
+	int size = 0;
+	int maxSize = 10;
+
+	LinkedList() {}
+	~LinkedList() {
+		head = nullptr;
+	}
+
+	void addNode(LightListNode* n) {
+		if (size >= maxSize) return;
+
+		if (!head) {
+			head = n;
+			size++;
+			return;
+		}
+
+		LightListNode* cur = head;
+		while (cur->next) {
+			cur = cur->next;
+		}
+		cur->next = n;
+		n->prev = cur;
+		size++;
+	}
+
+	void removeNode(int ID) {
+		if (!head) return;
+
+		LightListNode* cur = head;
+		while (cur) {
+			if (cur->ID == ID) {
+				cur->prev = cur->next;
+				size--;
+				return;
+			}
+			cur = cur->next;
+		}
+	}
+
+	LightListNode* getNode(int ID) {
+		if (!head) return nullptr;
+
+		LightListNode* cur = head;
+		while (cur) {
+			if (cur->ID == ID) {
+				return cur;
+			}
+			cur = cur->next;
+		}
+		return nullptr;
+	}
+};
+
 /// Shadow mode enums, sets whether a node recieves shadows, casts shadows, or both.
 /// If the mode is ESM_CAST, it will not be affected by shadows or lighting.
 enum E_SHADOW_MODE
@@ -197,21 +271,22 @@ public:
 	~EffectHandler();
 
 	/// Adds a shadow light. Check out the shadow light constructor for more information.
-	void addShadowLight(const SShadowLight& shadowLight)
+	void addShadowLight(const SShadowLight& shadowLight, int id)
 	{
-		LightList.push_back(shadowLight);
+		//LightList.push_back(shadowLight);
+		LightNodeList.addNode(&LightListNode(shadowLight, id));
 	}
 
 	/// Retrieves a reference to a shadow light. You may get the max amount from getShadowLightCount.
 	SShadowLight& getShadowLight(irr::u32 index)
 	{
-		return LightList[index];
+		return LightNodeList.getNode(index)->slight;
 	}
 
 	/// Retrieves the current number of shadow lights.
 	const irr::u32 getShadowLightCount() const
 	{
-		return LightList.size();
+		return LightNodeList.size;
 	}
 
 	/// Retrieves the shadow map texture for the specified square shadow map resolution.
@@ -479,9 +554,11 @@ private:
 	irr::video::ITexture* DepthRTT;
 
 	irr::core::array<SPostProcessingPair> PostProcessingRoutines;
-	irr::core::array<SShadowLight> LightList;
+	//irr::core::array<SShadowLight> LightList;
 	irr::core::array<SShadowNode> ShadowNodeArray;
 	irr::core::array<irr::scene::ISceneNode*> DepthPassArray;
+
+	LinkedList LightNodeList;
 
 	irr::core::dimension2du ScreenRTTSize;
 	irr::video::SColor ClearColour;
