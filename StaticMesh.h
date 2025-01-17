@@ -23,6 +23,7 @@ public:
 	irr::video::SColor vColor;
 	int opacity = 255;
 	int shadow = E_SHADOW_MODE::ESM_BOTH;
+	bool hadShadow = false;
 
 	StaticMesh() : meshNode(nullptr) {}
 
@@ -107,7 +108,14 @@ public:
 	void setShadows(int i) {
 		if (meshNode) {
 			shadow = i;
-			effects->addShadowToNode(meshNode, irrHandler->defaultShadowFiltering, (E_SHADOW_MODE)shadow);
+			E_SHADOW_MODE mode = (E_SHADOW_MODE)i;
+			if (!hadShadow && (mode == E_SHADOW_MODE::ESM_BOTH || mode == E_SHADOW_MODE::ESM_CAST)) {
+				effects->addShadowToNode(meshNode, irrHandler->defaultShadowFiltering, (E_SHADOW_MODE)shadow);
+				hadShadow = true;
+			} else if (hadShadow) {
+				effects->removeShadowFromNode(meshNode);
+				hadShadow = false;
+			}
 		}
 	}
 

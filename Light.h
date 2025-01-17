@@ -35,12 +35,13 @@ public:
 
 		SColorf c = SColorf(col.x / 255.0, col.y / 255.0, col.z/255.0, 1.0);
 		holder->setPosition(vector3df(pos.x, pos.y, pos.z));
+
+		index = irrHandler->lights;
+		irrHandler->lights++;
+
 		SShadowLight s = SShadowLight(irrHandler->defaultShadowResolution, holder->getPosition(), target->getAbsolutePosition(),
-						 c, viewPlanes.x, viewPlanes.y, fov * DEGTORAD, directional);
-		effects->addShadowLight(s, irrHandler->lights);
-		irrHandler->lights++; // reset this value to zero when lights are cleared
-		index = irrHandler->curLight;
-		irrHandler->curLight += 1;
+						 c, viewPlanes.x, viewPlanes.y, fov * DEGTORAD, directional, index);
+		effects->addShadowLight(s);
 
 		updateTarget();
 	}
@@ -94,27 +95,36 @@ public:
 	}
 
 	bool getDirectional() {
-		return false;
+		return effects->getShadowLight(index).getDirectional();
 	}
 
 	void setDirectional(bool enable) {
-		// remake light
+		effects->getShadowLight(index).setDirectional(enable);
 	}
 
 	Vector2D getViewPlanes() {
-		return Vector2D();
+		irr::core::vector2df planes = effects->getShadowLight(index).getPlanes();
+		return Vector2D(planes.X, planes.Y);
 	}
 
 	void setViewPlanes(const Vector2D& planes) {
-
+		effects->getShadowLight(index).setNearFar(planes.x, planes.y);
 	}
 
 	float getFOV() {
-		return 0.0;
+		return effects->getShadowLight(index).getFieldOfView();
 	}
 
 	void setFOV(float f) {
+		effects->getShadowLight(index).setFieldOfView(f);
+	}
 
+	bool getActive() {
+		return effects->getShadowLight(index).active;
+	}
+
+	void setActive(bool enable) {
+		effects->getShadowLight(index).active = enable;
 	}
 
 	~Light() {
@@ -122,7 +132,8 @@ public:
 	}
 
 	void destroy() {
-		// Seemingly can't destroy, modify xeffects
+		effects->removeLightNode(index);
+		index = -1;
 	}
 
 	bool getDebug() {
@@ -137,7 +148,6 @@ public:
 				d->remove();
 		}
 	}
-
 };
 
 void bindLight() {
@@ -147,6 +157,12 @@ void bindLight() {
 		"position", sol::property(&Light::getPosition, &Light::setPosition),
 		"rotation", sol::property(&Light::getRotation, &Light::setRotation),
 		"color", sol::property(&Light::getColor, &Light::setColor),
-		"debug", sol::property(&Light::getDebug, &Light::setDebug)
+		"debug", sol::property(&Light::getDebug, &Light::setDebug),
+		"precisionPlanes", sol::property(&Light::getViewPlanes, &Light::setViewPlanes),
+		"fieldOfView", sol::property(&Light::getFOV, &Light::setFOV),
+		"directional", sol::property(&Light::getDirectional, &Light::setDirectional),
+		"active", sol::property(&Light::getActive, &Light::setActive)
 	);
+
+	bind_type["destroy"] = &Light::destroy;
 }

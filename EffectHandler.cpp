@@ -239,7 +239,7 @@ void EffectHandler::update(irr::video::ITexture* outputTarget)
 	if (shadowsUnsupported || smgr->getActiveCamera() == 0)
 		return;
 
-	if (!ShadowNodeArray.empty() && LightNodeList.size != 0)
+	if (!ShadowNodeArray.empty() && !LightList.empty())
 	{
 		driver->setRenderTarget(ScreenQuad.rt[0], true, true, AmbientColour);
 
@@ -249,18 +249,16 @@ void EffectHandler::update(irr::video::ITexture* outputTarget)
 		activeCam->render();
 
 		const u32 ShadowNodeArraySize = ShadowNodeArray.size();
-		//const u32 LightListSize = LightList.size();
-
-		LightListNode* cur = LightNodeList.head;
-		while (cur)
+		const u32 LightListSize = LightList.size();
+		for (u32 l = 0; l < LightListSize; ++l)
 		{
 			// Set max distance constant for depth shader.
-			depthMC->FarLink = cur->slight.getFarValue();
+			depthMC->FarLink = LightList[l].getFarValue();
 
-			driver->setTransform(ETS_VIEW, cur->slight.getViewMatrix());
-			driver->setTransform(ETS_PROJECTION, cur->slight.getProjectionMatrix());
+			driver->setTransform(ETS_VIEW, LightList[l].getViewMatrix());
+			driver->setTransform(ETS_PROJECTION, LightList[l].getProjectionMatrix());
 
-			ITexture* currentShadowMapTexture = getShadowMapTexture(cur->slight.getShadowMapResolution());
+			ITexture* currentShadowMapTexture = getShadowMapTexture(LightList[l].getShadowMapResolution());
 			driver->setRenderTarget(currentShadowMapTexture, true, true, SColor(0xffffffff));
 
 			for (u32 i = 0; i < ShadowNodeArraySize; ++i)
@@ -290,7 +288,7 @@ void EffectHandler::update(irr::video::ITexture* outputTarget)
 			// Blur the shadow map texture if we're using VSM filtering.
 			if (useVSM)
 			{
-				ITexture* currentSecondaryShadowMap = getShadowMapTexture(cur->slight.getShadowMapResolution(), true);
+				ITexture* currentSecondaryShadowMap = getShadowMapTexture(LightList[l].getShadowMapResolution(), true);
 
 				driver->setRenderTarget(currentSecondaryShadowMap, true, true, SColor(0xffffffff));
 				ScreenQuad.getMaterial().setTexture(0, currentShadowMapTexture);
@@ -310,12 +308,16 @@ void EffectHandler::update(irr::video::ITexture* outputTarget)
 			driver->setTransform(ETS_VIEW, activeCam->getViewMatrix());
 			driver->setTransform(ETS_PROJECTION, activeCam->getProjectionMatrix());
 
-			shadowMC->LightColour = cur->slight.getLightColor();
-			shadowMC->LightLink = cur->slight.getPosition();
-			shadowMC->FarLink = cur->slight.getFarValue();
-			shadowMC->ViewLink = cur->slight.getViewMatrix();
-			shadowMC->ProjLink = cur->slight.getProjectionMatrix();
-			shadowMC->MapRes = (f32)cur->slight.getShadowMapResolution();
+			shadowMC->LightColour = LightList[l].getLightColor();
+
+			if (!LightList[l].active)
+				shadowMC->LightColour = irr::video::SColorf(0.0,0.0,0.0,1.0);
+
+			shadowMC->LightLink = LightList[l].getPosition();
+			shadowMC->FarLink = LightList[l].getFarValue();
+			shadowMC->ViewLink = LightList[l].getViewMatrix();
+			shadowMC->ProjLink = LightList[l].getProjectionMatrix();
+			shadowMC->MapRes = (f32)LightList[l].getShadowMapResolution();
 
 			for (u32 i = 0; i < ShadowNodeArraySize; ++i)
 			{
@@ -350,8 +352,6 @@ void EffectHandler::update(irr::video::ITexture* outputTarget)
 			ScreenQuad.getMaterial().MaterialType = (E_MATERIAL_TYPE)Simple;
 
 			ScreenQuad.render(driver);
-
-			cur = cur->next;
 		}
 
 		// Render all the excluded and casting-only nodes.

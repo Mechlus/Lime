@@ -5,80 +5,6 @@
 #include "CShaderPre.h"
 #include "CScreenQuad.h"
 
-/// Shadow Light List
-class LightListNode {
-private:
-public:
-	SShadowLight slight; // Need to initialize?
-	LightListNode* prev = nullptr;
-	LightListNode* next = nullptr;
-	int ID = 0;
-
-	LightListNode(const SShadowLight& s, int d) : slight(s), ID(d) {
-	};
-
-	~LightListNode() {
-	}
-};
-
-class LinkedList {
-private:
-public:
-	LightListNode* head = nullptr;
-	int size = 0;
-	int maxSize = 10;
-
-	LinkedList() {}
-	~LinkedList() {
-		head = nullptr;
-	}
-
-	void addNode(LightListNode* n) {
-		if (size >= maxSize) return;
-
-		if (!head) {
-			head = n;
-			size++;
-			return;
-		}
-
-		LightListNode* cur = head;
-		while (cur->next) {
-			cur = cur->next;
-		}
-		cur->next = n;
-		n->prev = cur;
-		size++;
-	}
-
-	void removeNode(int ID) {
-		if (!head) return;
-
-		LightListNode* cur = head;
-		while (cur) {
-			if (cur->ID == ID) {
-				cur->prev = cur->next;
-				size--;
-				return;
-			}
-			cur = cur->next;
-		}
-	}
-
-	LightListNode* getNode(int ID) {
-		if (!head) return nullptr;
-
-		LightListNode* cur = head;
-		while (cur) {
-			if (cur->ID == ID) {
-				return cur;
-			}
-			cur = cur->next;
-		}
-		return nullptr;
-	}
-};
-
 /// Shadow mode enums, sets whether a node recieves shadows, casts shadows, or both.
 /// If the mode is ESM_CAST, it will not be affected by shadows or lighting.
 enum E_SHADOW_MODE
@@ -119,11 +45,15 @@ struct SShadowLight
 		const irr::core::vector3df& target,
 		irr::video::SColorf lightColour = irr::video::SColor(0xffffffff),
 		irr::f32 nearValue = 10.0, irr::f32 farValue = 100.0,
-		irr::f32 fov = 90.0 * irr::core::DEGTORAD64, bool directional = false)
+		irr::f32 fov = 90.0 * irr::core::DEGTORAD64, bool directional = false, int i = -1)
 		: pos(position), tar(target), farPlane(directional ? 1.0f : farValue), diffuseColour(lightColour),
-		mapRes(shadowMapResolution)
+		mapRes(shadowMapResolution), id(i)
 	{
 		nearValue = nearValue <= 0.0f ? 0.1f : nearValue;
+
+		fieldOfView = fov;
+		nearVal = nearValue;
+		fieldOfView = fov;
 
 		updateViewMatrix();
 
@@ -210,11 +140,58 @@ struct SShadowLight
 		mapRes = shadowMapResolution;
 	}
 
+	irr::f32 getFieldOfView() {
+		return fieldOfView;
+	}
+
+	void setFieldOfView(const irr::f32 fov) {
+		bool changed = fieldOfView != fov;
+		fieldOfView = fov;
+		if (changed)
+			rebuildProj();
+	}
+
+	bool getDirectional() {
+		return dir;
+	}
+
+	irr::core::vector2df getPlanes() {
+		return irr::core::vector2df(nearVal, farPlane);
+	}
+
+	void setDirectional(bool enable) {
+		bool changed = dir != enable;
+		dir = enable;
+		if (changed)
+			rebuildProj();
+	}
+
+	void setNearFar(irr::f32 n, irr::f32 f) {
+		n = n <= 0.0f ? 0.1f : n;
+		bool changedA = farPlane != f;
+		bool changedB = nearVal != n;
+		farPlane = dir ? 1.0f : f;
+		nearVal = n;
+
+		if (changedA || changedB)
+			rebuildProj();
+	}
+
+	void rebuildProj() {
+		if (dir)
+			projMat.buildProjectionMatrixOrthoLH(fieldOfView, fieldOfView, nearVal, farPlane);
+		else
+			projMat.buildProjectionMatrixPerspectiveFovLH(fieldOfView, 1.0f, nearVal, farPlane);
+	}
+
 	/// Gets the shadow map resolution for this light.
 	const irr::u32 getShadowMapResolution() const
 	{
 		return mapRes;
 	}
+
+	irr::u32 id;
+	bool active;
 
 private:
 
@@ -230,6 +207,10 @@ private:
 	irr::f32 farPlane;
 	irr::core::matrix4 viewMat, projMat;
 	irr::u32 mapRes;
+
+	irr::f32 fieldOfView = 90.0;
+	irr::f32 nearVal = 0.1;
+	bool dir = false;
 };
 
 // This is a general interface that can be overidden if you want to perform operations before or after
@@ -271,22 +252,21 @@ public:
 	~EffectHandler();
 
 	/// Adds a shadow light. Check out the shadow light constructor for more information.
-	void addShadowLight(const SShadowLight& shadowLight, int id)
+	void addShadowLight(const SShadowLight& shadowLight)
 	{
-		//LightList.push_back(shadowLight);
-		LightNodeList.addNode(&LightListNode(shadowLight, id));
+		LightList.push_back(shadowLight);
 	}
 
 	/// Retrieves a reference to a shadow light. You may get the max amount from getShadowLightCount.
 	SShadowLight& getShadowLight(irr::u32 index)
 	{
-		return LightNodeList.getNode(index)->slight;
+		return LightList[index];
 	}
 
 	/// Retrieves the current number of shadow lights.
 	const irr::u32 getShadowLightCount() const
 	{
-		return LightNodeList.size;
+		return LightList.size();
 	}
 
 	/// Retrieves the shadow map texture for the specified square shadow map resolution.
@@ -324,6 +304,16 @@ public:
 
 		if (i != -1)
 			ShadowNodeArray.erase(i);
+	}
+
+	void removeLightNode(int index)
+	{
+		for (int i = 0; i < LightList.size(); i++) {
+			if (LightList[i].id == index) {
+				LightList.erase(i);
+				return;
+			}
+		}
 	}
 
 	// Excludes a scene node from lighting calculations, avoiding any side effects that may
@@ -554,11 +544,9 @@ private:
 	irr::video::ITexture* DepthRTT;
 
 	irr::core::array<SPostProcessingPair> PostProcessingRoutines;
-	//irr::core::array<SShadowLight> LightList;
+	irr::core::array<SShadowLight> LightList;
 	irr::core::array<SShadowNode> ShadowNodeArray;
 	irr::core::array<irr::scene::ISceneNode*> DepthPassArray;
-
-	LinkedList LightNodeList;
 
 	irr::core::dimension2du ScreenRTTSize;
 	irr::video::SColor ClearColour;
