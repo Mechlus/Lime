@@ -203,6 +203,12 @@ public:
 				d->remove();
 		}
 	}
+
+	void addToRenderQueue() {
+		if (camera) {
+			irrHandler->AddCameraToQueue(camera, forwardChild, true, false);
+		}
+	}
 };
 
 void bindCamera3D() {
@@ -224,6 +230,7 @@ void bindCamera3D() {
 	bind_type["setUp"] = &Camera3D::setUp;
 	bind_type["setActive"] = &Camera3D::setActive;
 	bind_type["destroy"] = &Camera3D::destroy;
+	bind_type["queue"] = &Camera3D::addToRenderQueue;
 	//bind_type["useTarget"] = &Camera3D::setTargetBind;
 
 	/*

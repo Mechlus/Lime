@@ -655,6 +655,37 @@ namespace Warden {
 		if (device)
 			driver->getMaterial2D().AntiAliasing = (irr::video::E_ANTI_ALIASING_MODE)i;
 	}
+
+	void queueGUI() {
+		irrHandler->AddCameraToQueue(nullptr, nullptr, false, true);
+	}
+	
+	// Preload
+	bool preloadMesh(std::string filePath) {
+		return smgr->getMesh(filePath.c_str()) != nullptr;
+	}
+
+	bool preloadTexture(std::string filePath) {
+		return driver->getTexture(filePath.c_str()) != nullptr;
+	}
+
+	bool unloadMesh(std::string filePath) {
+		irr::scene::IMesh* mesh = smgr->getMesh(filePath.c_str());
+		if (mesh) {
+			smgr->getMeshCache()->removeMesh(mesh);
+			return true;
+		}
+		return false;
+	}
+
+	bool unloadTexture(std::string filePath) {
+		irr::video::ITexture* texture = driver->getTexture(filePath.c_str());
+		if (texture) {
+			driver->removeTexture(texture);
+			return true;
+		}
+		return false;
+	}
 };
 
 void bindWarden(sol::table application, sol::table world, sol::table sound, sol::table gui, sol::table input) {
@@ -704,6 +735,10 @@ void bindWarden(sol::table application, sol::table world, sol::table sound, sol:
 	world["SetDefaultShadowFiltering"] = &Warden::setDefaultShadowFiltering;
 	world["SetDefaultShadowResolution"] = &Warden::setDefaultShadowResolution;
 	world["SetDefaultLightingExclusion"] = &Warden::defaultExclude;
+	world["PreloadMesh"] = &Warden::preloadMesh;
+	world["PreloadTexture"] = &Warden::preloadTexture;
+	world["UnloadMesh"] = &Warden::unloadMesh;
+	world["UnloadTexture"] = &Warden::unloadTexture;
 
 	// gui/2D images/text
 	gui["ImportFont"] = &Warden::embedFont;
@@ -714,6 +749,7 @@ void bindWarden(sol::table application, sol::table world, sol::table sound, sol:
 	gui["SetTrilinearFiltering"] = &Warden::setTrilinearFiltering;
 	gui["SetAntiAliasing"] = &Warden::setAntiAliasing;
 	gui["Clear"] = &Warden::clearGUI;
+	gui["Queue"] = &Warden::queueGUI;
 
 	// sound
 	sound["PlaySound2D"] = &Warden::play2DSound;

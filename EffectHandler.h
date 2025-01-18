@@ -191,7 +191,7 @@ struct SShadowLight
 	}
 
 	irr::u32 id;
-	bool active;
+	bool active = true;
 
 private:
 

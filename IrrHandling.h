@@ -8,6 +8,18 @@
 #include "LuaLime.h"
 #include "XEffects.h"
 
+#include <queue>
+
+struct CameraToQueue {
+public:
+	CameraToQueue(irr::scene::ICameraSceneNode* c, irr::scene::ISceneNode* f, bool d, bool g) : cam(c), forward(f), defaultRendering(d), renderGUI(g) {};
+
+	irr::scene::ICameraSceneNode* cam = nullptr;
+	irr::scene::ISceneNode* forward = nullptr;
+	bool defaultRendering = false;
+	bool renderGUI = false;
+};
+
 class IrrHandling
 {
 private:
@@ -24,10 +36,13 @@ public:
 	void appLoop();
 	bool writeTextureToFile(irr::video::ITexture* texture, const irr::core::stringw& name);
 	void updateFPS();
+	void AddCameraToQueue(irr::scene::ICameraSceneNode* cam, irr::scene::ISceneNode* forward, bool defaultRendering, bool renderGUI);
+	void HandleCameraQueue();
 	int m_frameLimit = 60;
 	float dt;
 	bool didEnd = false;
 	bool defaultExclude = false;
+	bool renderedGUI = false;
 	int lights = 0;
 
 	irr::video::E_DRIVER_TYPE driverType = irr::video::EDT_DIRECT3D9;
@@ -39,6 +54,9 @@ public:
 	int posX = 0;
 	int posY = 0;
 	int fps = 0;
+
+	// Render queue
+	std::queue<CameraToQueue> cameraQueue;
 
 	// XEffects
 	E_FILTER_TYPE defaultShadowFiltering = E_FILTER_TYPE::EFT_8PCF;

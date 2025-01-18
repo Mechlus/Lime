@@ -189,10 +189,11 @@ void IrrHandling::appLoop() {
 			mainCamera->setTarget(mainCameraForward->getAbsolutePosition());
 		}
 
-		driver->beginScene(true, true, SColor(0x0));
-		//smgr->drawAll();
-		effects->update();
-		guienv->drawAll();
+		HandleCameraQueue();
+
+		if (!renderedGUI)
+			guienv->drawAll();
+
 		driver->endScene();
 
 		updateFPS();
@@ -208,6 +209,8 @@ void IrrHandling::appLoop() {
 			tmp += " MB";
 			SetConsoleTitle(tmp.c_str());
 		}
+
+		renderedGUI = false;
 
 		f32 frameTime = device->getTimer()->getTime() - now;
 		if (frameTime < frameDur)
@@ -261,4 +264,42 @@ void IrrHandling::updateFPS() {
 		lastTime = currentTime;
 		frameCount = 0;
 	}
+}
+
+void IrrHandling::AddCameraToQueue(irr::scene::ICameraSceneNode* cam, irr::scene::ISceneNode* forward, bool defaultRendering, bool renderGUI)
+{
+	if (cam != mainCamera)
+		cameraQueue.push(CameraToQueue(cam, forward, defaultRendering, renderGUI));
+}
+
+void IrrHandling::HandleCameraQueue() {
+	driver->beginScene(true, true, SColor(0x0));
+	effects->update();
+
+	effects->setClearColour(irr::video::SColor(0, 0, 0, 0));
+
+	while (!cameraQueue.empty()) {
+		CameraToQueue c = cameraQueue.front();
+
+		if (c.renderGUI && !renderedGUI) {
+			guienv->drawAll();
+			renderedGUI = true;
+		}
+		else {
+			smgr->setActiveCamera(c.cam);
+			c.cam->updateAbsolutePosition();
+			c.forward->updateAbsolutePosition();
+			c.cam->setTarget(c.forward->getAbsolutePosition());
+
+			if (c.defaultRendering) {
+				smgr->drawAll();
+			} else {
+				effects->update();
+			}
+		}
+
+		cameraQueue.pop();
+	}
+
+	smgr->setActiveCamera(mainCamera);
 }
