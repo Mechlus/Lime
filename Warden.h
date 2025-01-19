@@ -238,14 +238,29 @@ namespace Warden {
 		return false;
 	}
 
-	sol::table fireRaypick(Vector3D start, Vector3D end, float debugLifetime) {
+	std::unordered_map<int, bool> tblToMap(sol::table luaTable) {
+		std::unordered_map<int, bool> hashMap;
+
+		for (auto& pair : luaTable) {
+			sol::optional<int> key = pair.first.as<sol::optional<int>>();
+			if (key)
+				hashMap[key.value()] = true;
+		}
+
+		return hashMap;
+	}
+
+	sol::table fireRaypick(Vector3D start, Vector3D end, float debugLifetime, sol::table exclusion = nullptr) {
 		scene::ISceneCollisionManager* collisionManager = smgr->getSceneCollisionManager();
 		core::line3d<f32> ray(core::vector3df(start.x, start.y, start.z), core::vector3df(end.x, end.y, end.z));
+
+		if (exclusion)
+			collisionManager->setExcludeIDs(tblToMap(exclusion));
 
 		core::vector3df hitPosition;
 		core::triangle3df hitTriangle;
 		scene::ISceneNode* pickedNode = collisionManager->getSceneNodeAndCollisionPointFromRay(
-			ray, hitPosition, hitTriangle);
+			ray, hitPosition, hitTriangle, false);
 
 		sol::table result = lua->create_table();
 
@@ -272,6 +287,8 @@ namespace Warden {
 			d->raypick_hit = pickedNode ? true : false;
 			d->raypick_life = debugLifetime;
 		}
+
+		collisionManager->clearExcludeIDs();
 
 		return result;
 	}

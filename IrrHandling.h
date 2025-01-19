@@ -20,6 +20,15 @@ public:
 	bool renderGUI = false;
 };
 
+struct BatchedTransform {
+public:
+	BatchedTransform(int t, irr::scene::ISceneNode* n, irr::core::vector3df v) : type(t), node(n), transform(v) {};
+
+	int type = 0;
+	irr::scene::ISceneNode* node = nullptr;
+	irr::core::vector3df transform = irr::core::vector3df();
+};
+
 class IrrHandling
 {
 private:
@@ -37,6 +46,8 @@ public:
 	bool writeTextureToFile(irr::video::ITexture* texture, const irr::core::stringw& name);
 	void updateFPS();
 	void AddCameraToQueue(irr::scene::ICameraSceneNode* cam, irr::scene::ISceneNode* forward, bool defaultRendering, bool renderGUI);
+	void AddTransformToQueue(int type, irr::scene::ISceneNode* node, irr::core::vector3df transform);
+	void HandleTransformQueue();
 	void HandleCameraQueue();
 	int m_frameLimit = 60;
 	float dt;
@@ -57,6 +68,9 @@ public:
 
 	// Render queue
 	std::queue<CameraToQueue> cameraQueue;
+
+	// Transform queue
+	std::queue<BatchedTransform> transformQueue;
 
 	// XEffects
 	E_FILTER_TYPE defaultShadowFiltering = E_FILTER_TYPE::EFT_8PCF;

@@ -189,6 +189,8 @@ void IrrHandling::appLoop() {
 			mainCamera->setTarget(mainCameraForward->getAbsolutePosition());
 		}
 
+		//HandleTransformQueue();
+
 		HandleCameraQueue();
 
 		if (!renderedGUI)
@@ -270,6 +272,31 @@ void IrrHandling::AddCameraToQueue(irr::scene::ICameraSceneNode* cam, irr::scene
 {
 	if (cam != mainCamera)
 		cameraQueue.push(CameraToQueue(cam, forward, defaultRendering, renderGUI));
+}
+
+void IrrHandling::AddTransformToQueue(int type, irr::scene::ISceneNode* node, irr::core::vector3df transform) {
+	transformQueue.push(BatchedTransform(type, node, transform));
+}
+
+void IrrHandling::HandleTransformQueue() {
+	while (!transformQueue.empty()) {
+		BatchedTransform b = transformQueue.front();
+		irr::scene::ISceneNode* s = b.node;
+
+		switch (b.type) {
+		default:
+			s->setPosition(b.transform);
+			break;
+		case 1: // rotation
+			s->setRotation(b.transform);
+			break;
+		case 2: // scale
+			s->setScale(b.transform);
+			break;
+		}
+
+		transformQueue.pop();
+	}
 }
 
 void IrrHandling::HandleCameraQueue() {

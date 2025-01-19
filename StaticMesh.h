@@ -386,6 +386,12 @@ public:
 			meshManipulator->setVertexColors(meshNode->getMesh(), vColor);
 		}
 	}
+
+	void batchTransformation(int type, const Vector3D& transform) {
+		if (meshNode) {
+			irrHandler->AddTransformToQueue(type, meshNode, irr::core::vector3df(transform.x, transform.y, transform.z));
+		}
+	}
 };
 
 void bindStaticMesh() {
@@ -421,4 +427,5 @@ void bindStaticMesh() {
 	bind_type["toPlanarMapping"] = &StaticMesh::makePlanarMapping;
 	bind_type["setHardwareMappingHint"] = &StaticMesh::setHardwareHint;
 	bind_type["ignoreLighting"] = &StaticMesh::exclude;
+	//bind_type["batchTransformation"] = &StaticMesh::batchTransformation;
 }

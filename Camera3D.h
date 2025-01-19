@@ -14,7 +14,6 @@ class Camera3D {
 public:
 	irr::scene::ICameraSceneNode* camera;
 	irr::scene::ISceneNode* forwardChild;
-	irr::scene::ISceneNode* upChild;
 	irr::scene::ISceneNode* leftChild;
 	DebugSceneNode* d;
 
@@ -32,17 +31,12 @@ public:
 	irr::scene::ICameraSceneNode* createCamera() {
 		// Create empty child nodes to use as reference points for targetting
 		forwardChild = smgr->addEmptySceneNode();
-		upChild = smgr->addEmptySceneNode();
 		leftChild = smgr->addEmptySceneNode();
 		irr::scene::ICameraSceneNode* cam = smgr->addCameraSceneNode();
 
 		// Forward
 		cam->addChild(forwardChild);
 		forwardChild->setPosition(irr::core::vector3df(0,0,1));
-
-		// Up
-		cam->addChild(upChild);
-		upChild->setPosition(irr::core::vector3df(0, 1, 0));
 
 		// Left
 		cam->addChild(leftChild);
@@ -61,7 +55,6 @@ public:
 			smgr->setActiveCamera(nullptr);
 		}
 		forwardChild->remove();
-		upChild->remove();
 		leftChild->remove();
 		d->remove();
 		camera->remove();
@@ -143,13 +136,12 @@ public:
 	}
 
 	Vector3D getUp() {
-		irr::core::vector3df f = upChild->getAbsolutePosition() - camera->getAbsolutePosition();
-		f.normalize();
+		irr::core::vector3df f = camera->getUpVector();
 		return Vector3D(f.X, f.Y, f.Z);
 	}
 
 	void setUp(const Vector3D& up) {
-		upChild->setPosition(irr::core::vector3df(up.x, up.y, up.z));
+		camera->setUpVector(irr::core::vector3df(up.x, up.y, up.z));
 	}
 
 	void setActive() {
@@ -216,6 +208,7 @@ void bindCamera3D() {
 		sol::constructors<Camera3D(), Camera3D(const Camera3D& other)>(),
 		"position", sol::property(&Camera3D::getPosition, &Camera3D::setPosition),
 		"rotation", sol::property(&Camera3D::getRotation, &Camera3D::setRotation),
+		"up", sol::property(&Camera3D::getUp, &Camera3D::setUp),
 		"viewPlanes", sol::property(&Camera3D::getPlanes, &Camera3D::setPlanes),
 		"fieldOfView", sol::property(&Camera3D::getFOV, &Camera3D::setFOV),
 		"visible", sol::property(&Camera3D::getVisible, &Camera3D::setVisible),
@@ -225,9 +218,7 @@ void bindCamera3D() {
 	);
 
 	bind_type["getForward"] = &Camera3D::getForward;
-	bind_type["getUp"] = &Camera3D::getUp;
 	bind_type["getLeft"] = &Camera3D::getLeft;
-	bind_type["setUp"] = &Camera3D::setUp;
 	bind_type["setActive"] = &Camera3D::setActive;
 	bind_type["destroy"] = &Camera3D::destroy;
 	bind_type["queue"] = &Camera3D::addToRenderQueue;
