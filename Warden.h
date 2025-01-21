@@ -254,8 +254,10 @@ namespace Warden {
 		scene::ISceneCollisionManager* collisionManager = smgr->getSceneCollisionManager();
 		core::line3d<f32> ray(core::vector3df(start.x, start.y, start.z), core::vector3df(end.x, end.y, end.z));
 
+		/*
 		if (exclusion)
 			collisionManager->setExcludeIDs(tblToMap(exclusion));
+		*/
 
 		core::vector3df hitPosition;
 		core::triangle3df hitTriangle;
@@ -288,7 +290,7 @@ namespace Warden {
 			d->raypick_life = debugLifetime;
 		}
 
-		collisionManager->clearExcludeIDs();
+		//collisionManager->clearExcludeIDs();
 
 		return result;
 	}
@@ -479,8 +481,8 @@ namespace Warden {
 		soundManager->stopAllSounds();
 	}
 
-	void preloadSound() {
-		soundManager->preloadSound();
+	bool preloadSound(std::string path) {
+		return soundManager->preloadSound(path);
 	}
 
 	void setListenerPosition(Vector3D pos, Vector3D forward) {
@@ -517,6 +519,14 @@ namespace Warden {
 
 	int validChannel(int i) {
 		return soundManager->validChannel(i);
+	}
+
+	void setPlaybackSpeed(int channel, float spd) {
+		soundManager->setPlaybackSpeed(channel, spd);
+	}
+
+	void setPlayPosition(int channel, int ms) {
+		soundManager->setPlayPosition(channel, ms);
 	}
 
 	std::string printChannelList() {
@@ -679,11 +689,17 @@ namespace Warden {
 	
 	// Preload
 	bool preloadMesh(std::string filePath) {
-		return smgr->getMesh(filePath.c_str()) != nullptr;
+		IAnimatedMesh* mesh = smgr->getMesh(filePath.c_str());
+		if (mesh)
+			mesh->grab();
+		return mesh != nullptr;
 	}
 
 	bool preloadTexture(std::string filePath) {
-		return driver->getTexture(filePath.c_str()) != nullptr;
+		ITexture* tex = driver->getTexture(filePath.c_str());
+		if (tex)
+			tex->grab();
+		return tex != nullptr;
 	}
 
 	bool unloadMesh(std::string filePath) {
@@ -785,6 +801,8 @@ void bindWarden(sol::table application, sol::table world, sol::table sound, sol:
 	sound["SetChannelPitch"] = &Warden::setPitch;
 	sound["SetChannelPan"] = &Warden::setPan;
 	sound["GetChannelList"] = &Warden::printChannelList;
+	sound["SetChannelPlaybackSpeed"] = &Warden::setPlaybackSpeed;
+	sound["SetChannelPosition"] = &Warden::setPlayPosition;
 
 	// input
 	input["IsKeyDown"] = &Warden::isKeyDown;

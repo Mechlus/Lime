@@ -152,6 +152,7 @@
     <ClCompile Include="DebugConsole.cpp" />
     <ClCompile Include="EditBox.cpp" />
     <ClCompile Include="EffectHandler.cpp" />
+    <ClCompile Include="Hook.cpp" />
     <ClCompile Include="IrrHandling.cpp" />
     <ClCompile Include="Lime.cpp" />
     <ClCompile Include="Line.cpp" />

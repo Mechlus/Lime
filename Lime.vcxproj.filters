@@ -69,6 +69,9 @@
     <ClCompile Include="CShaderPre.cpp">
       <Filter>Source Files\xEffects</Filter>
     </ClCompile>
+    <ClCompile Include="Hook.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DebugConsole.h">

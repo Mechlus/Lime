@@ -78,9 +78,10 @@ void SoundManager::stopAllSounds()
     }
 }
 
-void SoundManager::preloadSound()
+bool SoundManager::preloadSound(std::string path)
 {
-    //sound->addSoundSourceFromMemory(memorySoundData, memorySoundDataSize, "testsound.wav");
+    ISoundSource* s = sound->addSoundSourceFromFile(path.c_str());
+    return s != nullptr;
 }
 
 void SoundManager::setListenerPosition(Vector3D pos, Vector3D forward)
@@ -137,6 +138,24 @@ void SoundManager::setVolume(int channel, float volume)
     if (channels[channel])
     {
         channels[channel]->setVolume(volume);
+    }
+}
+
+void SoundManager::setPlaybackSpeed(int channel, float spd)
+{
+    channel = validChannel(channel);
+    if (channels[channel])
+    {
+        channels[channel]->setPlaybackSpeed(spd);
+    }
+}
+
+void SoundManager::setPlayPosition(int channel, int time)
+{
+    channel = validChannel(channel);
+    if (channels[channel])
+    {
+        channels[channel]->setPlayPosition(time);
     }
 }
 

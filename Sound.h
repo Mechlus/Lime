@@ -32,13 +32,15 @@ public:
     void pauseChannel(int channel, bool paused);
     void loopChannel(int channel, bool loop);
     void stopAllSounds();
-    void preloadSound();
+    bool preloadSound(std::string path);
     void setListenerPosition(Vector3D pos, Vector3D forward);
     bool isChannelFree(int channel);
     int getNextAvailableChannel();
     void resetChannelFX(int channel);
     void setPitch(int channel, float pitch);
     void setVolume(int channel, float volume);
+    void setPlaybackSpeed(int channel, float spd);
+    void setPlayPosition(int channel, int time);
     void setPan(int channel, float pan);
     void setDistortionEffect(int channel, int effect, bool enable, sol::table params);
     int validChannel(int i);
