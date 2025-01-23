@@ -33,7 +33,10 @@ public:
     void loopChannel(int channel, bool loop);
     void stopAllSounds();
     bool preloadSound(std::string path);
-    void setListenerPosition(Vector3D pos, Vector3D forward);
+    void setDopplerParameters(float dopFactor, float distFactor);
+    void SetChannelVelocity(int channel, const Vector3D& velocity);
+    void setChannelPosition3D(int channel, const Vector3D& pos);
+    void setListenerPosition(const Vector3D& pos, const Vector3D& forward);
     bool isChannelFree(int channel);
     int getNextAvailableChannel();
     void resetChannelFX(int channel);

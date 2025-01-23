@@ -14,7 +14,8 @@ using namespace video;
 enum class DebugType {
     CAMERA = 0,
     RAY_PICK,
-    LIGHT
+    LIGHT,
+    PARTICLE_SYSTEM
 };
 
 class DebugSceneNode : public ISceneNode {
@@ -39,6 +40,9 @@ public:
             break;
         case DebugType::LIGHT:
             renderLightDebug();
+            break;
+        case DebugType::PARTICLE_SYSTEM:
+            renderParticleDebug();
             break;
         }
     }
@@ -149,6 +153,24 @@ private:
         vector3df end = nodePosition + direction * 1;
 
         driver->draw3DLine(start, end, SColor(255, 255, 255, 0));
+    }
+
+    void renderParticleDebug() {
+        SMaterial m;
+        m.Lighting = false;
+        driver->setMaterial(m);
+        driver->setTransform(video::ETS_WORLD, core::matrix4());
+
+        float boxSize = 0.25;
+
+        vector3df nodePosition = getAbsolutePosition();
+
+        const aabbox3d<f32> box(
+            nodePosition - vector3df(boxSize, boxSize, boxSize),
+            nodePosition + vector3df(boxSize, boxSize, boxSize)
+        );
+
+        driver->draw3DBox(box, SColor(255, 160, 30, 240));
     }
 
 };

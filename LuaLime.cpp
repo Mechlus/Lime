@@ -13,6 +13,7 @@
 #include "Image2D.h"
 #include "Text2D.h"
 #include "EditBox.h"
+#include "ParticleSystem.h"
 #include "Warden.h"
 
 #include <sol/sol.hpp>
@@ -46,6 +47,7 @@ int LuaLime::initLua(irr::scene::ISceneManager* smgr, irr::video::IVideoDriver* 
 	bindImage2D();
 	bindText2D();
 	bindEditBox();
+	bindParticleSystem();
 
 	return 0;
 }

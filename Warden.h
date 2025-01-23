@@ -533,6 +533,18 @@ namespace Warden {
 		return soundManager->printChannelList();
 	}
 
+	void setDopplerParameters(float dop, float dist) {
+		soundManager->setDopplerParameters(dop, dist);
+	}
+
+	void setChannelVelocity(int channel, float vel) {
+		soundManager->SetChannelVelocity(channel, vel);
+	}
+
+	void setChannelPosition3D(int channel, const Vector3D& pos) {
+		soundManager->setChannelPosition3D(channel, pos);
+	}
+
 	// Fonts
 	bool embedFont(const std::string& fontPath) {
 		std::string fontName = std::filesystem::path(fontPath).stem().string();
@@ -802,7 +814,10 @@ void bindWarden(sol::table application, sol::table world, sol::table sound, sol:
 	sound["SetChannelPan"] = &Warden::setPan;
 	sound["GetChannelList"] = &Warden::printChannelList;
 	sound["SetChannelPlaybackSpeed"] = &Warden::setPlaybackSpeed;
-	sound["SetChannelPosition"] = &Warden::setPlayPosition;
+	sound["SetChannelPlaybackPosition"] = &Warden::setPlayPosition;
+	sound["SetChannelVelocity"] = &Warden::setChannelVelocity;
+	sound["SetDopplerEffectParameters"] = &Warden::setDopplerParameters;
+	sound["SetChannelPosition3D"] = &Warden::setChannelPosition3D;
 
 	// input
 	input["IsKeyDown"] = &Warden::isKeyDown;

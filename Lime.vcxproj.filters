@@ -69,9 +69,6 @@
     <ClCompile Include="CShaderPre.cpp">
       <Filter>Source Files\xEffects</Filter>
     </ClCompile>
-    <ClCompile Include="Hook.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DebugConsole.h">
@@ -178,6 +175,9 @@
     </ClInclude>
     <ClInclude Include="CShaderPre.h">
       <Filter>Source Files\xEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleSystem.h">
+      <Filter>Source Files\Scene3D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

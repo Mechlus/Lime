@@ -84,7 +84,25 @@ bool SoundManager::preloadSound(std::string path)
     return s != nullptr;
 }
 
-void SoundManager::setListenerPosition(Vector3D pos, Vector3D forward)
+void SoundManager::setDopplerParameters(float dopFactor, float distFactor) {
+    sound->setDopplerEffectParameters(dopFactor, distFactor);
+}
+
+void SoundManager::SetChannelVelocity(int channel, const Vector3D& velocity) {
+    channel = validChannel(channel);
+    if (channels[channel]) {
+        channels[channel]->setVelocity(vec3df(static_cast<f32>(velocity.x), static_cast<f32>(velocity.y), static_cast<f32>(velocity.z)));
+    }
+}
+
+void SoundManager::setChannelPosition3D(int channel, const Vector3D& pos) {
+    channel = validChannel(channel);
+    if (channels[channel]) {
+        channels[channel]->setPosition(vec3df(static_cast<f32>(pos.x), static_cast<f32>(pos.y), static_cast<f32>(pos.z)));
+    }
+}
+
+void SoundManager::setListenerPosition(const Vector3D& pos, const Vector3D& forward)
 {
     sound->setListenerPosition(vec3df(static_cast<f32>(pos.x), static_cast<f32>(pos.y), static_cast<f32>(pos.z)),
         vec3df(static_cast<f32>(forward.x), static_cast<f32>(forward.y), static_cast<f32>(forward.z)));

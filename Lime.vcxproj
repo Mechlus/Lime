@@ -152,7 +152,6 @@
     <ClCompile Include="DebugConsole.cpp" />
     <ClCompile Include="EditBox.cpp" />
     <ClCompile Include="EffectHandler.cpp" />
-    <ClCompile Include="Hook.cpp" />
     <ClCompile Include="IrrHandling.cpp" />
     <ClCompile Include="Lime.cpp" />
     <ClCompile Include="Line.cpp" />
@@ -183,6 +182,7 @@
     <ClInclude Include="LuaLime.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="os.h" />
+    <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Save.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="StaticMesh.h" />
