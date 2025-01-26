@@ -4,6 +4,7 @@
 #include "Sound.h"
 
 #include <filesystem>
+#include <windows.h>
 namespace fs = std::filesystem;
 
 using namespace irr;
@@ -79,6 +80,17 @@ void IrrHandling::initScene()
 	soundManager = new SoundManager();
 
 	device = irr::createDevice(driverType, dimension2d<u32>(width, height), 16, false, stencil, vSync, receiver);
+
+	irr::video::SExposedVideoData d = device->getVideoDriver()->getExposedVideoData();
+	switch (driverType) {
+	case irr::video::E_DRIVER_TYPE::EDT_DIRECT3D8:
+		SetCapture(reinterpret_cast<HWND>(d.D3D8.HWnd));
+		break;
+	case irr::video::E_DRIVER_TYPE::EDT_DIRECT3D9:
+		SetCapture(reinterpret_cast<HWND>(d.D3D9.HWnd));
+	case irr::video::E_DRIVER_TYPE::EDT_OPENGL:
+		SetCapture(reinterpret_cast<HWND>(d.OpenGLWin32.HWnd));
+	}
 
 	device->setWindowCaption(L"Lime Application");
 

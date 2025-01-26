@@ -4,11 +4,35 @@
 #include "LuaLime.h"
 #include "Vector2D.h"
 
+class ImageCallbackPair {
+public:
+    ImageCallbackPair(irr::gui::IGUIButton* b, sol::function f) : button(b), callback(f) {
+    }
+
+    irr::gui::IGUIButton* button;
+    sol::function callback;
+};
+
 using namespace irr;
 
 class LimeReceiver : public IEventReceiver
 {
 public:
+    std::vector<ImageCallbackPair> imageCallbackArray;
+
+    void removeImg(irr::gui::IGUIButton* b) {
+        imageCallbackArray.erase(
+            std::remove_if(
+                imageCallbackArray.begin(),
+                imageCallbackArray.end(),
+                [b](const ImageCallbackPair& pair) {
+                    return pair.button == b;
+                }
+            ),
+            imageCallbackArray.end()
+        );
+    }
+
     struct SMouseState
     {
         core::position2di Position;
@@ -122,6 +146,15 @@ public:
             }
 
             ControllerState.Buttons = JoystickState.ButtonStates;
+        }
+
+        if (event.GUIEvent.EventType == irr::gui::EGET_BUTTON_CLICKED) {
+            irr::gui::IGUIButton* clickedButton = static_cast<irr::gui::IGUIButton*>(event.GUIEvent.Caller);
+            for (const auto& pair : imageCallbackArray) {
+                if (pair.button == clickedButton && pair.callback) {
+                    pair.callback();
+                }
+            }
         }
 
         return false;

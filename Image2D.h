@@ -11,7 +11,10 @@ class Image2D
 {
 
 public:
-	irr::gui::IGUIImage* img;
+	irr::gui::IGUIImage* img = nullptr;
+	irr::gui::IGUIButton* button = nullptr;
+	bool clickable = false;
+	sol::function onClick;
 
 	Image2D() {
 	}
@@ -30,6 +33,53 @@ public:
 
 	Image2D(const Image2D& other) {
 		img = other.img;
+	}
+
+	bool getClickable() {
+		return img ? button != nullptr : false;
+	}
+
+	bool getHovered() {
+		if (!img)
+			return false;
+
+		irr::core::position2di mousePos = device->getCursorControl()->getPosition();
+		irr::core::recti rect(
+			img->getAbsoluteClippingRect().UpperLeftCorner,
+			img->getAbsoluteClippingRect().LowerRightCorner
+		);
+		return rect.isPointInside(mousePos);
+	}
+
+	void setHovered(bool x) {
+		// Ignore
+	}
+
+	void setClickable(sol::function f) {
+		if (!img)
+			return;
+		if (f && !button) {
+			clickable = true;
+			updateButton();
+			receiver->imageCallbackArray.push_back(ImageCallbackPair(button, f));
+		}
+		else if (!f && button) {
+			receiver->removeImg(button);
+			button->remove();
+			clickable = false;
+		}
+	}
+
+	void updateButton() {
+		if (!clickable)
+			return;
+
+		if (!button) {
+			irr::core::recti r = img->getRelativePosition();
+			button = guienv->addButton(irr::core::recti(0, 0, r.LowerRightCorner.X - r.UpperLeftCorner.X, r.LowerRightCorner.Y - r.UpperLeftCorner.Y), img);
+			button->setDrawBorder(false);
+			button->setUseAlphaChannel(true);
+		}
 	}
 
 	bool getVisible() {
@@ -143,7 +193,8 @@ inline void bindImage2D() {
 		"size", sol::property(&Image2D::getSize, &Image2D::setSize),
 		"enabled", sol::property(&Image2D::getEnabled, &Image2D::setEnabled),
 		"useAlpha", sol::property(&Image2D::getUseAlpha, &Image2D::setUseAlpha),
-		"scaleToFit", sol::property(&Image2D::scalesToFit, &Image2D::setScalesToFit)
+		"scaleToFit", sol::property(&Image2D::scalesToFit, &Image2D::setScalesToFit),
+		"hovered", sol::property(&Image2D::getHovered, &Image2D::setHovered)
 	);
 
 	bind_type["destroy"] = &Image2D::destroy;
@@ -153,4 +204,5 @@ inline void bindImage2D() {
 	bind_type["toBack"] = &Image2D::sendToBack;
 	bind_type["setBorderAlignment"] = &Image2D::setBorderAlignment;
 	bind_type["setParent"] = &Image2D::setParent;
+	bind_type["fireOnClick"] = &Image2D::setClickable;
 }
