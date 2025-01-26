@@ -74,12 +74,12 @@ public:
 		if (!clickable)
 			return;
 
-		if (!button) {
-			irr::core::recti r = img->getRelativePosition();
-			button = guienv->addButton(irr::core::recti(0, 0, r.LowerRightCorner.X - r.UpperLeftCorner.X, r.LowerRightCorner.Y - r.UpperLeftCorner.Y), img);
-			button->setDrawBorder(false);
-			button->setUseAlphaChannel(true);
-		}
+		irr::core::recti r = img->getRelativePosition();
+		if (button)
+			receiver->removeImg(button);
+		button = guienv->addButton(irr::core::recti(0, 0, r.LowerRightCorner.X - r.UpperLeftCorner.X, r.LowerRightCorner.Y - r.UpperLeftCorner.Y), img);
+		button->setDrawBorder(false);
+		button->setUseAlphaChannel(true);
 	}
 
 	Vector3D getColor() {
@@ -134,6 +134,8 @@ public:
 			r.LowerRightCorner.X = r.UpperLeftCorner.X + size.x;
 			r.LowerRightCorner.Y = r.UpperLeftCorner.Y + size.y;
 			img->setRelativePosition(r);
+			if (button)
+				updateButton();
 		}
 	}
 
