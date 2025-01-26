@@ -84,7 +84,7 @@ public:
     }
 
     void setDiffuseColor(Vector3D& color) {
-        mat.DiffuseColor.set(1, color.x / 255.0f, color.y / 255.0f, color.z / 255.0f);
+        mat.DiffuseColor.set(mat.DiffuseColor.getAlpha(), color.x, color.y, color.z);
     }
 
     Vector3D getAmbientColor() {
@@ -92,7 +92,7 @@ public:
     }
 
     void setAmbientColor(Vector3D& color) {
-        mat.AmbientColor.set(1, color.x/255.0f, color.y/255.0f, color.z/255.0f);
+        mat.AmbientColor.set(mat.AmbientColor.getAlpha(), color.x, color.y, color.z);
     }
 
     Vector3D getEmissiveColor() {
@@ -100,7 +100,7 @@ public:
     }
 
     void setEmissiveColor(Vector3D& color) {
-        mat.EmissiveColor.set(1, color.x / 255.0f, color.y / 255.0f, color.z / 255.0f);
+        mat.EmissiveColor.set(mat.EmissiveColor.getAlpha(), color.x, color.y, color.z);
     }
 
     Vector3D getSpecularColor() {
@@ -108,7 +108,7 @@ public:
     }
 
     void setSpecularColor(Vector3D& color) {
-        mat.SpecularColor.set(1, color.x / 255.0f, color.y / 255.0f, color.z / 255.0f);
+        mat.SpecularColor.set(mat.SpecularColor.getAlpha(), color.x, color.y, color.z);
     }
 
     bool getGourad() {

@@ -82,6 +82,24 @@ public:
 		}
 	}
 
+	Vector3D getColor() {
+		return img ? Vector3D(img->getColor().getRed(), img->getColor().getGreen(), img->getColor().getBlue()) : Vector3D();
+	}
+
+	void setColor(Vector3D& color) {
+		if (img)
+			img->setColor(irr::video::SColor(img->getColor().getAlpha(), color.x, color.y, color.z));
+	}
+
+	int getOpacity() {
+		return img ? img->getColor().getAlpha() : 0;
+	}
+
+	void setOpacity(int o) {
+		if (img)
+			img->setColor(irr::video::SColor(o, img->getColor().getRed(), img->getColor().getGreen(), img->getColor().getBlue()));
+	}
+
 	bool getVisible() {
 		return img ? img->isVisible() : false;
 	}
@@ -194,7 +212,9 @@ inline void bindImage2D() {
 		"enabled", sol::property(&Image2D::getEnabled, &Image2D::setEnabled),
 		"useAlpha", sol::property(&Image2D::getUseAlpha, &Image2D::setUseAlpha),
 		"scaleToFit", sol::property(&Image2D::scalesToFit, &Image2D::setScalesToFit),
-		"hovered", sol::property(&Image2D::getHovered, &Image2D::setHovered)
+		"hovered", sol::property(&Image2D::getHovered, &Image2D::setHovered),
+		"color", sol::property(&Image2D::getColor, &Image2D::setColor),
+		"opacity", sol::property(&Image2D::getOpacity, &Image2D::setOpacity)
 	);
 
 	bind_type["destroy"] = &Image2D::destroy;

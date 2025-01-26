@@ -81,17 +81,6 @@ void IrrHandling::initScene()
 
 	device = irr::createDevice(driverType, dimension2d<u32>(width, height), 16, false, stencil, vSync, receiver);
 
-	irr::video::SExposedVideoData d = device->getVideoDriver()->getExposedVideoData();
-	switch (driverType) {
-	case irr::video::E_DRIVER_TYPE::EDT_DIRECT3D8:
-		SetCapture(reinterpret_cast<HWND>(d.D3D8.HWnd));
-		break;
-	case irr::video::E_DRIVER_TYPE::EDT_DIRECT3D9:
-		SetCapture(reinterpret_cast<HWND>(d.D3D9.HWnd));
-	case irr::video::E_DRIVER_TYPE::EDT_OPENGL:
-		SetCapture(reinterpret_cast<HWND>(d.OpenGLWin32.HWnd));
-	}
-
 	device->setWindowCaption(L"Lime Application");
 
 	driver = device->getVideoDriver();
@@ -100,6 +89,18 @@ void IrrHandling::initScene()
 	guienv = device->getGUIEnvironment();
 
 	appLoop();
+}
+
+void IrrHandling::capture() {
+	switch (driverType) {
+	case irr::video::E_DRIVER_TYPE::EDT_DIRECT3D8:
+		SetCapture(reinterpret_cast<HWND>(device->getVideoDriver()->getExposedVideoData().D3D8.HWnd));
+		break;
+	case irr::video::E_DRIVER_TYPE::EDT_DIRECT3D9:
+		SetCapture(reinterpret_cast<HWND>(device->getVideoDriver()->getExposedVideoData().D3D9.HWnd));
+	case irr::video::E_DRIVER_TYPE::EDT_OPENGL:
+		SetCapture(reinterpret_cast<HWND>(device->getVideoDriver()->getExposedVideoData().OpenGLWin32.HWnd));
+	}
 }
 
 void IrrHandling::makeNewDevice() {
@@ -184,6 +185,8 @@ void IrrHandling::appLoop() {
 		const u32 now = device->getTimer()->getTime();
 		dt = (now - then) / 16.667f;
 		then = now;
+
+		capture();
 
 		// Call update in main
 		if ((*lua)["Lime"]["OnUpdate"].get_type() == sol::type::function) {

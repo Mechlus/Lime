@@ -37,6 +37,7 @@ private:
 public:
 	void setDriver(irr::video::E_DRIVER_TYPE type);
 	void initScene();
+	void capture();
 	void makeNewDevice();
 	void doFullscreen();
 	void doWindowed();
