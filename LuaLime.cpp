@@ -14,7 +14,9 @@
 #include "Text2D.h"
 #include "EditBox.h"
 #include "ParticleSystem.h"
+#include "Trail.h"
 #include "Warden.h"
+#include "Empty.h"
 
 #include <sol/sol.hpp>
 #include <sstream>
@@ -48,6 +50,8 @@ int LuaLime::initLua(irr::scene::ISceneManager* smgr, irr::video::IVideoDriver* 
 	bindText2D();
 	bindEditBox();
 	bindParticleSystem();
+	bindTrail();
+	bindEmpty();
 
 	return 0;
 }

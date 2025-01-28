@@ -155,23 +155,6 @@ public:
 		return true;
 	}
 
-	StaticMesh* getParent() {
-		return nullptr;
-		if (meshNode && meshNode->getParent() && meshNode->getParent()->getType() == irr::scene::ESNT_ANIMATED_MESH) {
-			auto parentNode = static_cast<irr::scene::IAnimatedMeshSceneNode*>(meshNode->getParent());
-			return new StaticMesh{ parentNode }; // probably don't do this
-		}
-		return nullptr;
-	}
-
-	void setParent(StaticMesh* parent) {
-		if (meshNode && parent && parent->meshNode) {
-			meshNode->setParent(parent->meshNode);
-			return;
-		}
-		meshNode->setParent(nullptr);
-	}
-
 	bool getCollision() const {
 		return meshNode ? collisionEnabled : false;
 	}
@@ -332,19 +315,15 @@ public:
 		}
 	}
 
-	sol::table getBoundingBox(int i) {
+	sol::table getBoundingBox() {
 		sol::table result = lua->create_table();
 		result["min"] = Vector3D();
 		result["max"] = Vector3D();
 
-		irr::scene::IAnimatedMesh* mesh = meshNode->getMesh();
-		if (mesh) {
-			scene::IMeshBuffer* buffer = mesh->getMeshBuffer(i);
-			if (buffer) {
-				core::aabbox3d<f32> bb = buffer->getBoundingBox();
-				result["min"] = Vector3D(bb.MinEdge.X, bb.MinEdge.Y, bb.MinEdge.Z);
-				result["max"] = Vector3D(bb.MaxEdge.X, bb.MaxEdge.Y, bb.MaxEdge.Z);
-			}
+		if (meshNode) {
+			core::aabbox3d<f32> bb = meshNode->getTransformedBoundingBox();
+			result["min"] = Vector3D(bb.MinEdge.X, bb.MinEdge.Y, bb.MinEdge.Z);
+			result["max"] = Vector3D(bb.MaxEdge.X, bb.MaxEdge.Y, bb.MaxEdge.Z);
 		}
 
 		return result;
@@ -408,7 +387,7 @@ void bindStaticMesh() {
 		"debug", sol::property(&StaticMesh::getDebug, &StaticMesh::setDebug),
 		"vertexColor", sol::property(&StaticMesh::getVColor, &StaticMesh::setVColor),
 		"vertexAlpha", sol::property(&StaticMesh::getOpacity, &StaticMesh::setOpacity),
-		"shadows", sol::property(&StaticMesh::getShadows, &StaticMesh::setShadows)
+		"shadows", sol::property(&StaticMesh::getShadows, &StaticMesh::setShadows)	
 	);
 
 	bind_type["load"] = &StaticMesh::loadMesh;
@@ -422,10 +401,8 @@ void bindStaticMesh() {
 	bind_type["getBoneDataByName"] = &StaticMesh::getBoneInfoByName;
 	bind_type["getFrameCount"] = &StaticMesh::getFrameCount;
 	bind_type["normalizeNormals"] = &StaticMesh::normalizeNormals;
-	bind_type["setParent"] = &StaticMesh::setParent;
 	bind_type["getBoundingBox"] = &StaticMesh::getBoundingBox;
 	bind_type["toPlanarMapping"] = &StaticMesh::makePlanarMapping;
 	bind_type["setHardwareMappingHint"] = &StaticMesh::setHardwareHint;
 	bind_type["ignoreLighting"] = &StaticMesh::exclude;
-	//bind_type["batchTransformation"] = &StaticMesh::batchTransformation;
 }

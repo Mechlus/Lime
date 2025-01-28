@@ -21,7 +21,8 @@ public:
 	irr::core::vector2df texRepeat;
 	irr::video::SMaterial material;
 	irr::scene::IMesh* rawMesh;
-	bool shadows = false;
+	int shadow = E_SHADOW_MODE::ESM_BOTH;
+	bool hadShadow = false;
 
 	Water(float h, float s, float l, const Vector2D& ts, const Vector2D& tc, const Vector2D& tr, const Material& m) {
 		height = h; // 2
@@ -93,19 +94,21 @@ public:
 
 	}
 
-	bool getShadows() {
-		return water ? shadows : false;
+	int getShadows() {
+		return water ? shadow : 0;
 	}
 
-	void setShadows(bool enable) {
+	void setShadows(int i) {
 		if (water) {
-			if (enable && !shadows) {
-				effects->addShadowToNode(water, irrHandler->defaultShadowFiltering);
-				return;
+			shadow = i;
+			E_SHADOW_MODE mode = (E_SHADOW_MODE)i;
+			if (!hadShadow && (mode == E_SHADOW_MODE::ESM_BOTH || mode == E_SHADOW_MODE::ESM_CAST)) {
+				effects->addShadowToNode(water, irrHandler->defaultShadowFiltering, (E_SHADOW_MODE)shadow);
+				hadShadow = true;
 			}
-			else if (shadows && !enable) {
+			else if (hadShadow) {
 				effects->removeShadowFromNode(water);
-				return;
+				hadShadow = false;
 			}
 		}
 	}

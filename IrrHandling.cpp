@@ -186,8 +186,6 @@ void IrrHandling::appLoop() {
 		dt = (now - then) / 16.667f;
 		then = now;
 
-		capture();
-
 		// Call update in main
 		if ((*lua)["Lime"]["OnUpdate"].get_type() == sol::type::function) {
 			sol::protected_function_result result = luaOnUpdate(dt);

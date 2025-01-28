@@ -152,6 +152,7 @@
     <ClCompile Include="DebugConsole.cpp" />
     <ClCompile Include="EditBox.cpp" />
     <ClCompile Include="EffectHandler.cpp" />
+    <ClCompile Include="GhostTrailSceneNode.cpp" />
     <ClCompile Include="IrrHandling.cpp" />
     <ClCompile Include="Lime.cpp" />
     <ClCompile Include="Line.cpp" />
@@ -172,6 +173,8 @@
     <ClInclude Include="EffectCB.h" />
     <ClInclude Include="EffectHandler.h" />
     <ClInclude Include="EffectShaders.h" />
+    <ClInclude Include="Empty.h" />
+    <ClInclude Include="GhostTrailSceneNode.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="Image2D.h" />
     <ClInclude Include="IrrHandling.h" />
@@ -181,6 +184,7 @@
     <ClInclude Include="Line.h" />
     <ClInclude Include="LuaLime.h" />
     <ClInclude Include="Material.h" />
+    <ClInclude Include="Objects.h" />
     <ClInclude Include="os.h" />
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Save.h" />
@@ -192,6 +196,7 @@
     <ClInclude Include="TextElement.h" />
     <ClInclude Include="TextLine.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="Trail.h" />
     <ClInclude Include="Vector2D.h" />
     <ClInclude Include="Vector3D.h" />
     <ClInclude Include="Warden.h" />

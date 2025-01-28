@@ -15,7 +15,8 @@ enum class DebugType {
     CAMERA = 0,
     RAY_PICK,
     LIGHT,
-    PARTICLE_SYSTEM
+    PARTICLE_SYSTEM,
+    EMPTY
 };
 
 class DebugSceneNode : public ISceneNode {
@@ -43,6 +44,9 @@ public:
             break;
         case DebugType::PARTICLE_SYSTEM:
             renderParticleDebug();
+            break;
+        case DebugType::EMPTY:
+            renderEmptyDebug();
             break;
         }
     }
@@ -173,4 +177,21 @@ private:
         driver->draw3DBox(box, SColor(255, 160, 30, 240));
     }
 
+    void renderEmptyDebug() {
+        SMaterial m;
+        m.Lighting = false;
+        driver->setMaterial(m);
+        driver->setTransform(video::ETS_WORLD, core::matrix4());
+
+        float boxSize = 0.125;
+
+        vector3df nodePosition = getAbsolutePosition();
+
+        const aabbox3d<f32> box(
+            nodePosition - vector3df(boxSize, boxSize, boxSize),
+            nodePosition + vector3df(boxSize, boxSize, boxSize)
+        );
+
+        driver->draw3DBox(box, SColor(255, 255, 255, 255));
+    }
 };
