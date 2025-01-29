@@ -149,9 +149,6 @@
     <ClInclude Include="IrrManagers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Helper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Camera3D.h">
       <Filter>Source Files\Scene3D</Filter>
     </ClInclude>
@@ -159,9 +156,6 @@
       <Filter>Source Files\Scene3D</Filter>
     </ClInclude>
     <ClInclude Include="Warden.h">
-      <Filter>Source Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Save.h">
       <Filter>Source Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="LimeReceiver.h">

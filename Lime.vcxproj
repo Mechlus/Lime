@@ -191,7 +191,6 @@
     <ClInclude Include="EffectShaders.h" />
     <ClInclude Include="Empty.h" />
     <ClInclude Include="GhostTrailSceneNode.h" />
-    <ClInclude Include="Helper.h" />
     <ClInclude Include="Image2D.h" />
     <ClInclude Include="IrrHandling.h" />
     <ClInclude Include="IrrManagers.h" />
@@ -202,7 +201,6 @@
     <ClInclude Include="Material.h" />
     <ClInclude Include="os.h" />
     <ClInclude Include="ParticleSystem.h" />
-    <ClInclude Include="Save.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="StaticMesh.h" />
     <ClInclude Include="Text2D.h" />
