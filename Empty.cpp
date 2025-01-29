@@ -98,6 +98,8 @@ void bindEmpty() {
 	sol::usertype<Empty> bind_type = lua->new_usertype<Empty>("Empty",
 		sol::constructors<Empty(), Empty(const Vector3D & pos), Empty(const Vector3D & pos, const Vector3D & rot), Empty(const Vector3D & pos, const Vector3D & rot, const Vector3D & scale)>(),
 
+		sol::base_classes, sol::bases<Compatible3D>(),
+
 		"visible", sol::property(&Empty::getVisibility, &Empty::setVisibility),
 		"position", sol::property(&Empty::getPosition, &Empty::setPosition),
 		"rotation", sol::property(&Empty::getRotation, &Empty::setRotation),

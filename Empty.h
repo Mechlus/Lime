@@ -10,10 +10,12 @@
 #include <vector>
 #include "DebugVisual.h"
 
+#include "Compatible3D.h"
+
 using namespace irr;
 using namespace video;
 
-class Empty {
+class Empty : public Compatible3D {
 public:
     irr::scene::ISceneNode* emp = nullptr;
     DebugSceneNode* d = nullptr;
@@ -41,6 +43,8 @@ public:
     sol::table getBoundingBox();
 
     void destroy();
+
+    irr::scene::ISceneNode* getNode() const override { return emp; }
 };
 
 void bindEmpty();

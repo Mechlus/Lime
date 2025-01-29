@@ -180,6 +180,7 @@
     <ClInclude Include="Billboard.h" />
     <ClInclude Include="Camera3D.h" />
     <ClInclude Include="CGUIFont.h" />
+    <ClInclude Include="Compatible3D.h" />
     <ClInclude Include="CScreenQuad.h" />
     <ClInclude Include="CShaderPre.h" />
     <ClInclude Include="DebugConsole.h" />
