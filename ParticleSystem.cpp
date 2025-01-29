@@ -270,17 +270,6 @@ void ParticleSystem::setParticleGlobalBehavior(bool track) {
 		ps->setParticlesAreGlobal(track);
 }
 
-void ParticleSystem::setParent(const StaticMesh& parent) {
-	if (ps) {
-		if (!parent.meshNode) {
-			ps->setParent(nullptr);
-			return;
-		}
-
-		ps->setParent(parent.meshNode);
-	}
-}
-
 bool ParticleSystem::getActive() {
 	return ps ? ps->active : false;
 }
@@ -336,6 +325,8 @@ void ParticleSystem::destroy() {
 void bindParticleSystem() {
 	sol::usertype<ParticleSystem> bind_type = lua->new_usertype<ParticleSystem>("ParticleSystem",
 		sol::constructors <ParticleSystem()>(),
+
+		sol::base_classes, sol::bases<Compatible3D>(),
 
 		"position", sol::property(&ParticleSystem::getPosition, &ParticleSystem::setPosition),
 		"rotation", sol::property(&ParticleSystem::getRotation, &ParticleSystem::setRotation),

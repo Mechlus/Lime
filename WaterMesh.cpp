@@ -172,15 +172,6 @@ void Water::setTexRepeat(const Vector2D& other) {
     texRepeat = irr::core::vector2df(other.x, other.y);
 }
 
-void Water::setParent(StaticMesh* parent) {
-    if (water && parent && parent->meshNode) {
-        water->setParent(parent->meshNode);
-    }
-    else {
-        water->setParent(nullptr);
-    }
-}
-
 void Water::exclude() {
     if (water) effects->excludeNodeFromLightingCalculations(water);
 }
@@ -192,6 +183,8 @@ void bindWater() {
         Water(const Vector2D & ts, const Vector2D & tc, const Vector2D & tr),
         Water(const Material & m),
         Water(sol::table tbl)>(),
+
+        sol::base_classes, sol::bases<Compatible3D>(),
 
         "position", sol::property(&Water::getPosition, &Water::setPosition),
         "rotation", sol::property(&Water::getRotation, &Water::setRotation),

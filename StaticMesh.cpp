@@ -315,6 +315,8 @@ void bindStaticMesh() {
     sol::usertype<StaticMesh> bindType = lua->new_usertype<StaticMesh>("Mesh",
         sol::constructors<StaticMesh(), StaticMesh(const std::string & filePath), StaticMesh(const StaticMesh & other)>(),
 
+        sol::base_classes, sol::bases<Compatible3D>(),
+
         "collision", sol::property(&StaticMesh::getCollision, &StaticMesh::setCollision),
         "visible", sol::property(&StaticMesh::getVisibility, &StaticMesh::setVisibility),
         "position", sol::property(&StaticMesh::getPosition, &StaticMesh::setPosition),

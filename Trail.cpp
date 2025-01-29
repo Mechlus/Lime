@@ -29,14 +29,6 @@ void Trail::destroy() {
 	}
 }
 
-void Trail::setParent(StaticMesh* parent) {
-	if (t && parent && parent->meshNode) {
-		empty->setParent(parent->meshNode);
-		return;
-	}
-	empty->setParent(nullptr);
-}
-
 bool Trail::getVisibility() const {
 	return t ? t->isVisible() : false;
 }
@@ -192,6 +184,8 @@ void Trail::setFixedSize(float s) {
 void bindTrail() {
 	sol::usertype<Trail> bind_type = lua->new_usertype<Trail>("Trail",
 		sol::constructors<Trail()>(),
+
+		sol::base_classes, sol::bases<Compatible3D>(),
 
 		"visible", sol::property(&Trail::getVisibility, &Trail::setVisibility),
 		"position", sol::property(&Trail::getPosition, &Trail::setPosition),

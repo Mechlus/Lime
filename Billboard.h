@@ -8,7 +8,9 @@
 #include "Vector3D.h"
 #include "LuaLime.h"
 
-class Billboard {
+#include "Compatible3D.h"
+
+class Billboard : public Compatible3D {
 public:
     irr::scene::IBillboardSceneNode* bb;
     irr::video::SMaterial myMaterial;
@@ -34,9 +36,9 @@ public:
     bool getVisible();
     void setVisible(bool visible);
 
-    void setParent(StaticMesh* parent);
-
     void destroy();
+
+    irr::scene::ISceneNode* getNode() const override { return bb; }
 };
 
 void bindBillboard();

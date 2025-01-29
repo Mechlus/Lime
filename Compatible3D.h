@@ -17,7 +17,7 @@ public:
     }
 };
 
-void bindCompatible3D() {
+inline void bindCompatible3D() {
     sol::usertype<Compatible3D> bind_type = lua->new_usertype<Compatible3D>("Compatible3D");
     bind_type["setParent"] = &Compatible3D::setParent;
 }

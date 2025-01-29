@@ -9,10 +9,12 @@
 #include <string>
 #include <vector>
 
+#include "Compatible3D.h"
+
 using namespace irr;
 using namespace video;
 
-class StaticMesh {
+class StaticMesh : public Compatible3D {
 public:
     irr::scene::IAnimatedMeshSceneNode* meshNode;
     std::string meshPath;
@@ -83,6 +85,8 @@ public:
 
     Vector3D getVColor();
     void setVColor(const Vector3D& col);
+
+    irr::scene::ISceneNode* getNode() const override { return meshNode; }
 };
 
 void bindStaticMesh();

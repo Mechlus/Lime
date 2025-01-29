@@ -10,7 +10,9 @@
 #include <string>
 #include <vector>
 
-class Light {
+#include "Compatible3D.h"
+
+class Light : public Compatible3D {
 public:
     int index;
     irr::scene::ISceneNode* target;
@@ -49,6 +51,8 @@ public:
 
     bool getDebug();
     void setDebug(bool visible);
+
+    irr::scene::ISceneNode* getNode() const override { return holder; }
 };
 
 void bindLight();

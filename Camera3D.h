@@ -10,7 +10,9 @@
 #include <string>
 #include <vector>
 
-class Camera3D {
+#include "Compatible3D.h"
+
+class Camera3D : public Compatible3D {
 public:
     irr::scene::ICameraSceneNode* camera;
     irr::scene::ISceneNode* forwardChild;
@@ -65,6 +67,8 @@ public:
     void setDebug(bool visible);
 
     void addToRenderQueue();
+
+    irr::scene::ISceneNode* getNode() const override { return camera; }
 };
 
 void bindCamera3D();

@@ -8,7 +8,9 @@
 #include <string>
 #include <vector>
 
-class ParticleSystem {
+#include "Compatible3D.h"
+
+class ParticleSystem : public Compatible3D {
 public:
     irr::scene::IParticleSystemSceneNode* ps;
 
@@ -30,8 +32,6 @@ public:
 
     void setParticleGlobalBehavior(bool track);
 
-    void setParent(const StaticMesh& parent);
-
     bool getActive();
     void setActive(bool active);
 
@@ -46,6 +46,8 @@ public:
     void setVisible(bool enable);
 
     void destroy();
+
+    irr::scene::ISceneNode* getNode() const override { return ps; }
 };
 
 void bindParticleSystem();

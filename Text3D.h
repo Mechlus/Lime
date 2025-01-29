@@ -7,7 +7,9 @@
 #include "Vector3D.h"
 #include <string>
 
-class Text3D {
+#include "Compatible3D.h"
+
+class Text3D : public Compatible3D {
 public:
     irr::scene::ITextSceneNode* text;
     irr::video::SColor color;
@@ -39,9 +41,10 @@ public:
     void updateColor();
 
     bool setFont(const std::string& fontName);
-    void setParent(StaticMesh* parent);
 
     void destroy();
+
+    irr::scene::ISceneNode* getNode() const override { return text; }
 };
 
 void bindText3D();

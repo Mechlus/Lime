@@ -43,14 +43,6 @@ void Text3D::setText(const std::string& tx) {
 	}
 }
 
-void Text3D::setParent(StaticMesh* parent) {
-	if (text && parent && parent->meshNode) {
-		text->setParent(parent->meshNode);
-		return;
-	}
-	text->setParent(nullptr);
-}
-
 bool Text3D::getVisibility() const {
 	if (!text)
 		return false;
@@ -131,6 +123,8 @@ bool Text3D::setFont(const std::string& fontName) {
 void bindText3D() {
 	sol::usertype<Text3D> bind_type = lua->new_usertype<Text3D>("Text3D",
 		sol::constructors < Text3D(const std::string & tx, const std::string & fontName), Text3D(const std::string & tx, const Vector3D & pos, const Vector3D & col, int op), Text3D(const std::string & tx), Text3D(const std::string & tx, const Vector3D & pos), Text3D() >(),
+
+		sol::base_classes, sol::bases<Compatible3D>(),
 
 		"position", sol::property(&Text3D::getPosition, &Text3D::setPosition),
 		"visible", sol::property(&Text3D::getVisibility, &Text3D::setVisibility),

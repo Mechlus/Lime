@@ -8,7 +8,9 @@
 #include "Material.h"
 #include <string>
 
-class Water {
+#include "Compatible3D.h"
+
+class Water : public Compatible3D {
 public:
     irr::scene::ISceneNode* water;
     float height;
@@ -68,9 +70,9 @@ public:
     Vector2D getTexRepeat();
     void setTexRepeat(const Vector2D& other);
 
-    void setParent(StaticMesh* parent);
-
     void exclude();
+
+    irr::scene::ISceneNode* getNode() const override { return water; }
 };
 
 void bindWater();

@@ -18,6 +18,8 @@
 #include "Warden.h"
 #include "Empty.h"
 
+#include "Compatible3D.h"
+
 #include <sol/sol.hpp>
 #include <sstream>
 
@@ -34,6 +36,9 @@ int LuaLime::initLua(irr::scene::ISceneManager* smgr, irr::video::IVideoDriver* 
 
 	// warden
 	bindWarden(application, world, sound, gui, input);
+
+	// comp
+	bindCompatible3D();
 
 	// objs
 	bindVector2D();

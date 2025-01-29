@@ -8,7 +8,9 @@
 #include <string>
 #include <vector>
 
-class Trail {
+#include "Compatible3D.h"
+
+class Trail : public Compatible3D {
 public:
     ghostTrailSceneNode* t;
     irr::scene::ISceneNode* empty;
@@ -23,7 +25,6 @@ public:
 
     void make();
     void destroy();
-    void setParent(StaticMesh* parent);
 
     bool getVisibility() const;
     void setVisibility(bool visible);
@@ -62,6 +63,8 @@ public:
 
     float getFixedSize();
     void setFixedSize(float s);
+
+    irr::scene::ISceneNode* getNode() const override { return empty; }
 };
 
 void bindTrail();

@@ -175,6 +175,9 @@ void Camera3D::addToRenderQueue() {
 void bindCamera3D() {
     sol::usertype<Camera3D> bindType = lua->new_usertype<Camera3D>("Camera",
         sol::constructors<Camera3D(), Camera3D(const Camera3D & other)>(),
+
+        sol::base_classes, sol::bases<Compatible3D>(),
+
         "position", sol::property(&Camera3D::getPosition, &Camera3D::setPosition),
         "rotation", sol::property(&Camera3D::getRotation, &Camera3D::setRotation),
         "up", sol::property(&Camera3D::getUp, &Camera3D::setUp),

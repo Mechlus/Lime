@@ -132,6 +132,8 @@ void bindLight() {
 	sol::usertype<Light> bind_type = lua->new_usertype<Light>("Light",
 		sol::constructors<Light(), Light(const Vector3D & pos, const Vector3D & rot, const Vector3D & col), Light(const Vector3D & pos, const Vector3D & rot, const Vector3D & col, const Vector2D & viewPlanes, float fov, bool directional)>(),
 
+		sol::base_classes, sol::bases<Compatible3D>(),
+
 		"position", sol::property(&Light::getPosition, &Light::setPosition),
 		"rotation", sol::property(&Light::getRotation, &Light::setRotation),
 		"color", sol::property(&Light::getColor, &Light::setColor),

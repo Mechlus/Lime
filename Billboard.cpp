@@ -67,15 +67,6 @@ void Billboard::setVisible(bool visible) {
     }
 }
 
-void Billboard::setParent(StaticMesh* parent) {
-    if (bb && parent->meshNode) {
-        bb->setParent(parent->meshNode);
-    }
-    else {
-        bb->setParent(nullptr);
-    }
-}
-
 void Billboard::destroy() {
     if (bb) {
         bb->remove();
@@ -85,6 +76,8 @@ void Billboard::destroy() {
 void bindBillboard() {
     sol::usertype<Billboard> bindType = lua->new_usertype<Billboard>("Billboard",
         sol::constructors<Billboard(), Billboard(const Billboard & other), Billboard(const Material & material)>(),
+
+        sol::base_classes, sol::bases<Compatible3D>(),
 
         "position", sol::property(&Billboard::getPosition, &Billboard::setPosition),
         "size", sol::property(&Billboard::getSize, &Billboard::setSize),
