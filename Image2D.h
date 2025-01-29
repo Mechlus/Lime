@@ -7,224 +7,61 @@
 #include <string>
 #include <vector>
 
-class Image2D
-{
-
+class Image2D {
 public:
-	irr::gui::IGUIImage* img = nullptr;
-	irr::gui::IGUIButton* button = nullptr;
-	bool clickable = false;
-	sol::function onClick;
+    irr::gui::IGUIImage* img = nullptr;
+    irr::gui::IGUIButton* button = nullptr;
+    bool clickable = false;
+    sol::function onClick;
 
-	Image2D() {
-	}
+    Image2D();
+    Image2D(const Texture& tex);
+    Image2D(const Texture& tex, const Vector2D& pos);
+    Image2D(const Texture& tex, const Vector2D& pos, const Vector2D& dimensions);
+    Image2D(const Image2D& other);
 
-	Image2D(const Texture& tex) {
-		img = guienv->addImage(tex.texture, irr::core::vector2di(0, 0));
-	}
+    bool getClickable();
+    void setHovered();
+    bool getHovered();
+    void setClickable(sol::function f);
 
-	Image2D(const Texture& tex, const Vector2D& pos) {
-		img = guienv->addImage(tex.texture, irr::core::vector2di(pos.x, pos.y));
-	}
+    Vector3D getColor();
+    void setColor(Vector3D& color);
 
-	Image2D(const Texture& tex, const Vector2D& pos, const Vector2D& dimensions) : Image2D(tex, pos) {
-		setSize(dimensions);
-	}
+    int getOpacity();
+    void setOpacity(int o);
 
-	Image2D(const Image2D& other) {
-		img = other.img;
-	}
+    bool getVisible();
+    void setVisible(bool vis);
 
-	bool getClickable() {
-		return img ? button != nullptr : false;
-	}
+    Vector2D getPosition();
+    void setPosition(const Vector2D& pos);
 
-	bool getHovered() {
-		if (!img)
-			return false;
+    Vector2D getSize();
+    void setSize(const Vector2D& size);
 
-		irr::core::position2di mousePos = device->getCursorControl()->getPosition();
-		irr::core::recti rect(
-			img->getAbsoluteClippingRect().UpperLeftCorner,
-			img->getAbsoluteClippingRect().LowerRightCorner
-		);
-		return rect.isPointInside(mousePos);
-	}
+    void setImage(const Texture& tex);
+    void destroy();
 
-	void setHovered(bool x) {
-		// Ignore
-	}
+    void bringToFront();
+    void sendToBack();
 
-	void setClickable(sol::function f) {
-		if (!img)
-			return;
-		if (f && !button) {
-			clickable = true;
-			updateButton();
-			receiver->imageCallbackArray.push_back(ImageCallbackPair(button, f));
-		}
-		else if (!f && button) {
-			receiver->removeImg(button);
-			button->remove();
-			clickable = false;
-		}
-	}
+    bool scalesToFit();
+    void setScalesToFit(bool scale);
 
-	void updateButton() {
-		if (!clickable)
-			return;
+    void setBorderAlignment(int a, int b, int c, int d);
+    void setMaxSize(const Vector2D& max);
 
-		irr::core::recti r = img->getRelativePosition();
-		if (button)
-			receiver->removeImg(button);
-		button = guienv->addButton(irr::core::recti(0, 0, r.LowerRightCorner.X - r.UpperLeftCorner.X, r.LowerRightCorner.Y - r.UpperLeftCorner.Y), img);
-		button->setDrawBorder(false);
-		button->setUseAlphaChannel(true);
-	}
+    bool getEnabled();
+    void setEnabled(bool enable);
 
-	Vector3D getColor() {
-		return img ? Vector3D(img->getColor().getRed(), img->getColor().getGreen(), img->getColor().getBlue()) : Vector3D();
-	}
+    bool getUseAlpha();
+    void setUseAlpha(bool enable);
 
-	void setColor(Vector3D& color) {
-		if (img)
-			img->setColor(irr::video::SColor(img->getColor().getAlpha(), color.x, color.y, color.z));
-	}
+    void setParent(const Image2D& other);
 
-	int getOpacity() {
-		return img ? img->getColor().getAlpha() : 0;
-	}
-
-	void setOpacity(int o) {
-		if (img)
-			img->setColor(irr::video::SColor(o, img->getColor().getRed(), img->getColor().getGreen(), img->getColor().getBlue()));
-	}
-
-	bool getVisible() {
-		return img ? img->isVisible() : false;
-	}
-
-	void setVisible(bool vis) {
-		if (img)
-			img->setVisible(vis);
-	}
-
-	Vector2D getPosition() {
-		if (img)
-			return Vector2D(img->getRelativePosition().UpperLeftCorner.X, img->getRelativePosition().UpperLeftCorner.Y);
-		return Vector2D();
-	}
-
-	void setPosition(const Vector2D& pos) {
-		if (img)
-			img->setRelativePosition(irr::core::position2di(pos.x, pos.y));
-	}
-
-	Vector2D getSize() {
-		if (img) {
-			irr::core::recti r = img->getRelativePosition();
-			return Vector2D(r.LowerRightCorner.X - r.UpperLeftCorner.X, r.LowerRightCorner.Y - r.UpperLeftCorner.Y);
-		}
-		return Vector2D();
-	}
-
-	void setSize(const Vector2D& size) {
-		if (img) {
-			irr::core::recti r = img->getRelativePosition();
-			r.LowerRightCorner.X = r.UpperLeftCorner.X + size.x;
-			r.LowerRightCorner.Y = r.UpperLeftCorner.Y + size.y;
-			img->setRelativePosition(r);
-			if (button)
-				updateButton();
-		}
-	}
-
-	void setImage(const Texture& tex) {
-		if (img)
-			img->setImage(tex.texture);
-	}
-
-	void destroy() {
-		if (img)
-			img->remove();
-	}
-
-	void bringToFront() {
-		if (img)
-			img->bringToFront(img);
-	}
-
-	void sendToBack() {
-		if (img)
-			img->sendToBack(img);
-	}
-
-	bool scalesToFit() {
-		if (img)
-			return img->isImageScaled();
-		return false;
-	}
-
-	void setScalesToFit(bool scale) {
-		if (img)
-			img->setScaleImage(scale);
-	}
-
-	void setBorderAlignment(int a, int b, int c, int d) {
-		if (img)
-			img->setAlignment((irr::gui::EGUI_ALIGNMENT)a, (irr::gui::EGUI_ALIGNMENT)b, (irr::gui::EGUI_ALIGNMENT)c, (irr::gui::EGUI_ALIGNMENT)d);
-	}
-
-	void setMaxSize(const Vector2D& max) {
-		if (img)
-			img->setMaxSize(irr::core::dimension2du(max.x, max.y));
-	}
-
-	bool getEnabled() {
-		return img ? img->isEnabled() : false;
-	}
-
-	void setEnabled(bool enable) {
-		if (img)
-			img->setEnabled(enable);
-	}
-
-	bool getUseAlpha() {
-		return img ? img->isAlphaChannelUsed() : false;
-	}
-
-	void setUseAlpha(bool enable) {
-		if (img)
-			img->setUseAlphaChannel(enable);
-	}
-
-	void setParent(const Image2D& other) {
-		if (img)
-			other.img->addChild(img);
-	}
+private:
+    void updateButton();
 };
 
-inline void bindImage2D() {
-	sol::usertype<Image2D> bind_type = lua->new_usertype<Image2D>("Image2D",
-		sol::constructors <Image2D(const Texture& tex), Image2D(const Texture& tex, const Vector2D& pos), Image2D(const Texture& tex, const Vector2D& pos, const Vector2D& dimensions), Image2D(const Image2D& other)>(),
-
-		"position", sol::property(&Image2D::getPosition, &Image2D::setPosition),
-		"visible", sol::property(&Image2D::getVisible, &Image2D::setVisible),
-		"size", sol::property(&Image2D::getSize, &Image2D::setSize),
-		"enabled", sol::property(&Image2D::getEnabled, &Image2D::setEnabled),
-		"useAlpha", sol::property(&Image2D::getUseAlpha, &Image2D::setUseAlpha),
-		"scaleToFit", sol::property(&Image2D::scalesToFit, &Image2D::setScalesToFit),
-		"hovered", sol::property(&Image2D::getHovered, &Image2D::setHovered),
-		"color", sol::property(&Image2D::getColor, &Image2D::setColor),
-		"opacity", sol::property(&Image2D::getOpacity, &Image2D::setOpacity)
-	);
-
-	bind_type["destroy"] = &Image2D::destroy;
-	bind_type["load"] = &Image2D::setImage;
-	bind_type["setMaxSize"] = &Image2D::setMaxSize;
-	bind_type["toFront"] = &Image2D::bringToFront;
-	bind_type["toBack"] = &Image2D::sendToBack;
-	bind_type["setBorderAlignment"] = &Image2D::setBorderAlignment;
-	bind_type["setParent"] = &Image2D::setParent;
-	bind_type["fireOnClick"] = &Image2D::setClickable;
-}
+void bindImage2D();

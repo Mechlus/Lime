@@ -63,9 +63,6 @@
     <ClCompile Include="os.cpp">
       <Filter>Source Files\Scene2D\Deprecated\TextArea</Filter>
     </ClCompile>
-    <ClCompile Include="EditBox.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="EffectHandler.cpp">
       <Filter>Source Files\xEffects</Filter>
     </ClCompile>
@@ -74,6 +71,54 @@
     </ClCompile>
     <ClCompile Include="GhostTrailSceneNode.cpp">
       <Filter>Source Files\ExternalSceneNodes</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector2D.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector3D.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticMesh.cpp">
+      <Filter>Source Files\Scene3D</Filter>
+    </ClCompile>
+    <ClCompile Include="WaterMesh.cpp">
+      <Filter>Source Files\Scene3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera3D.cpp">
+      <Filter>Source Files\Scene3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Billboard.cpp">
+      <Filter>Source Files\Scene3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Source Files\Scene3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Trail.cpp">
+      <Filter>Source Files\Scene3D</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleSystem.cpp">
+      <Filter>Source Files\Scene3D</Filter>
+    </ClCompile>
+    <ClCompile Include="EditBox.cpp">
+      <Filter>Source Files\Scene2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Image2D.cpp">
+      <Filter>Source Files\Scene2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Source Files\Scene3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Text2D.cpp">
+      <Filter>Source Files\Scene2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Text3D.cpp">
+      <Filter>Source Files\Scene3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Source Files\Scene3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Empty.cpp">
+      <Filter>Source Files\Scene3D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -189,13 +234,10 @@
       <Filter>Source Files\ExternalSceneNodes</Filter>
     </ClInclude>
     <ClInclude Include="Trail.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files\Scene3D</Filter>
     </ClInclude>
     <ClInclude Include="Empty.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files\Scene3D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

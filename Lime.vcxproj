@@ -147,19 +147,34 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Billboard.cpp" />
+    <ClCompile Include="Camera3D.cpp" />
     <ClCompile Include="CGUIFont.cpp" />
     <ClCompile Include="CShaderPre.cpp" />
     <ClCompile Include="DebugConsole.cpp" />
     <ClCompile Include="EditBox.cpp" />
     <ClCompile Include="EffectHandler.cpp" />
+    <ClCompile Include="Empty.cpp" />
     <ClCompile Include="GhostTrailSceneNode.cpp" />
+    <ClCompile Include="Image2D.cpp" />
     <ClCompile Include="IrrHandling.cpp" />
+    <ClCompile Include="Light.cpp" />
     <ClCompile Include="Lime.cpp" />
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="LuaLime.cpp" />
+    <ClCompile Include="Material.cpp" />
     <ClCompile Include="os.cpp" />
+    <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Sound.cpp" />
+    <ClCompile Include="StaticMesh.cpp" />
+    <ClCompile Include="Text2D.cpp" />
+    <ClCompile Include="Text3D.cpp" />
     <ClCompile Include="TextArea.cpp" />
+    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="Trail.cpp" />
+    <ClCompile Include="Vector2D.cpp" />
+    <ClCompile Include="Vector3D.cpp" />
+    <ClCompile Include="WaterMesh.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Billboard.h" />
@@ -184,7 +199,6 @@
     <ClInclude Include="Line.h" />
     <ClInclude Include="LuaLime.h" />
     <ClInclude Include="Material.h" />
-    <ClInclude Include="Objects.h" />
     <ClInclude Include="os.h" />
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Save.h" />
