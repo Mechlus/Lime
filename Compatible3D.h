@@ -1,5 +1,4 @@
-#ifndef COMPATIBLE3D_H
-#define COMPATIBLE3D_H
+#pragma once
 
 #include <irrlicht.h>
 #include <sol/sol.hpp>
@@ -22,5 +21,3 @@ void bindCompatible3D() {
     sol::usertype<Compatible3D> bind_type = lua->new_usertype<Compatible3D>("Compatible3D");
     bind_type["setParent"] = &Compatible3D::setParent;
 }
-
-#endif // COMPATIBLE3D_H
