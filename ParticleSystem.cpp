@@ -4,7 +4,6 @@ ParticleSystem::ParticleSystem() {
 	ps = smgr->addParticleSystemSceneNode(false);
 
 	effects->excludeNodeFromLightingCalculations(ps);
-	ps->setMaterialFlag(irr::video::EMF_LIGHTING, false);
 }
 
 Vector3D ParticleSystem::getPosition() {
@@ -279,20 +278,9 @@ void ParticleSystem::setActive(bool active) {
 		ps->active = active;
 }
 
-void ParticleSystem::setMaterialTexture(const Texture& tex) {
-	if (ps && tex.texture) {
-		ps->setMaterialTexture(0, tex.texture);
-	}
-}
-
-void ParticleSystem::setMaterialFlag(int i, bool enable) {
+void ParticleSystem::loadMaterial(const Material& mat) {
 	if (ps)
-		ps->setMaterialFlag((irr::video::E_MATERIAL_FLAG)i, enable);
-}
-
-void ParticleSystem::setMaterialType(int i) {
-	if (ps)
-		ps->setMaterialType((irr::video::E_MATERIAL_TYPE)i);
+		ps->getMaterial(0) = mat.mat;
 }
 
 bool ParticleSystem::getDebug() {
@@ -338,11 +326,9 @@ void bindParticleSystem() {
 
 	bind_type["destroy"] = &ParticleSystem::destroy;
 	bind_type["setDoAbsoluteTracking"] = &ParticleSystem::setParticleGlobalBehavior;
-	bind_type["loadTexture"] = &ParticleSystem::setMaterialTexture;
-	bind_type["setMaterialFlag"] = &ParticleSystem::setMaterialFlag;
-	bind_type["setMaterialType"] = &ParticleSystem::setMaterialType;
 	bind_type["setEmitter"] = &ParticleSystem::setEmitter;
 	bind_type["addAffector"] = &ParticleSystem::addAffector;
 	bind_type["clearAffectors"] = &ParticleSystem::removeAffectors;
 	bind_type["clearParticles"] = &ParticleSystem::removeParticles;
+	bind_type["loadMaterial"] = &ParticleSystem::loadMaterial;
 }

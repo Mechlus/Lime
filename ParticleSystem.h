@@ -4,6 +4,7 @@
 #include "IrrManagers.h"
 #include "Vector2D.h"
 #include "StaticMesh.h"
+#include "Material.h"
 #include "Texture.h"
 #include <string>
 #include <vector>
@@ -35,9 +36,7 @@ public:
     bool getActive();
     void setActive(bool active);
 
-    void setMaterialTexture(const Texture& tex);
-    void setMaterialFlag(int i, bool enable);
-    void setMaterialType(int i);
+    void loadMaterial(const Material& mat);
 
     bool getDebug();
     void setDebug(bool visible);
