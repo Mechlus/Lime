@@ -25,7 +25,7 @@ std::string getMainPath(const std::string& searchDirectory) {
 	try {
 		for (const auto& entry : fs::recursive_directory_iterator(searchDirectory)) {
 			if (entry.is_regular_file() && entry.path().filename() == "main.lua") {
-				return entry.path().string(); // Return the full path to main.lua
+				return entry.path().string();
 			}
 		}
 	}
@@ -74,6 +74,7 @@ void IrrHandling::initScene()
 		sol::error err = result;
 		dConsole.sendMsg(std::string(err.what()).c_str(), 1);
 		end();
+		return;
 	}
 
 	if (dConsole.enabled)

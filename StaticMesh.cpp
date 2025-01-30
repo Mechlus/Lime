@@ -137,7 +137,7 @@ bool StaticMesh::loadMaterial(const Material& material, int slot) {
     if (!meshNode || slot < 0 || slot >= meshNode->getMaterialCount()) return false;
 
     meshNode->getMaterial(slot) = material.mat;
-    meshNode->getMaterial(slot).Lighting = false;
+    //meshNode->getMaterial(slot).Lighting = false;
 
     return true;
 }
