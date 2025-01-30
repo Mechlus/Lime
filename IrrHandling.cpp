@@ -68,7 +68,13 @@ void IrrHandling::initScene()
 		end();
 		return;
 	}
-	sol::protected_function_result exec_result = lua->safe_script_file(mainPath);
+	sol::protected_function_result result = lua->safe_script_file(mainPath);
+	if (!result.valid())
+	{
+		sol::error err = result;
+		dConsole.sendMsg(std::string(err.what()).c_str(), 1);
+		end();
+	}
 
 	if (dConsole.enabled)
 		dConsole.makeConsole();
@@ -313,10 +319,14 @@ void IrrHandling::HandleTransformQueue() {
 }
 
 void IrrHandling::HandleCameraQueue() {
-	driver->beginScene(true, true, SColor(0x0));
-	effects->update();
-
-	effects->setClearColour(irr::video::SColor(0, 0, 0, 0));
+	driver->beginScene(true, true, backgroundColor);
+	
+	if (legacyDrawing)
+		smgr->drawAll();
+	else {
+		effects->update();
+		effects->setClearColour(irr::video::SColor(0, 0, 0, 0));
+	}
 
 	while (!cameraQueue.empty()) {
 		CameraToQueue c = cameraQueue.front();

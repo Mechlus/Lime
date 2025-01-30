@@ -271,7 +271,7 @@ void bindMaterial() {
         "wireframe", sol::property(&Material::getWireframe, &Material::setWireframe),
         "lighting", sol::property(&Material::getLighting, &Material::setLighting),
         "diffuseColor", sol::property(&Material::getDiffuseColor, &Material::setDiffuseColor),
-        //"ambientColor", sol::property(&Material::getAmbientColor, &Material::setAmbientColor), Makes all lighting and colors not work?
+        "ambientColor", sol::property(&Material::getAmbientColor, &Material::setAmbientColor),
         "emissiveColor", sol::property(&Material::getEmissiveColor, &Material::setEmissiveColor),
         "specularColor", sol::property(&Material::getSpecularColor, &Material::setSpecularColor),
         "gouradShading", sol::property(&Material::getGourad, &Material::setGourad),

@@ -2,7 +2,7 @@
 #include <filesystem>
 
 StaticMesh::StaticMesh() : meshNode(nullptr), selector(nullptr), collisionEnabled(false),
-vColor(), opacity(255), shadow(ESM_BOTH), hadShadow(false) {
+vColor(), opacity(255), shadow(ESM_EXCLUDE), hadShadow(false) {
 }
 
 StaticMesh::StaticMesh(const std::string& filePath) : StaticMesh() {
@@ -69,6 +69,7 @@ bool StaticMesh::fullLoadMesh(const std::string& filePath, bool doTangents) {
 
 void StaticMesh::deload() {
     if (meshNode) {
+        effects->removeShadowFromNode(meshNode);
         meshNode->remove();
         meshNode = nullptr;
         meshPath.clear();

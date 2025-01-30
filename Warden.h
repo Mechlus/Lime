@@ -185,6 +185,11 @@ namespace Warden {
 		}
 	}
 
+	void setLegacyDrawing(bool enable) {
+		if (irrHandler)
+			irrHandler->legacyDrawing = enable;
+	}
+
 	// Set skydome
 	void setSkydome(Texture& sky) {
 		if (!irrHandler || !device)
@@ -439,7 +444,7 @@ namespace Warden {
 
 	// Shadows
 	void setAmbientColor(const Vector3D& color) {
-		//smgr->setAmbientLight(video::SColorf(static_cast<u32>(color.x) / 255.0f, static_cast<u32>(color.y) / 255.0f, static_cast<u32>(color.z) / 255.0f, 1.0f));
+		smgr->setAmbientLight(video::SColorf(static_cast<u32>(color.x) / 255.0f, static_cast<u32>(color.y) / 255.0f, static_cast<u32>(color.z) / 255.0f, 1.0f));
 		effects->setAmbientColor(SColor(255, static_cast<u32>(color.x), static_cast<u32>(color.y), static_cast<u32>(color.z)));
 	}
 
@@ -784,6 +789,7 @@ void bindWarden(sol::table application, sol::table world, sol::table sound, sol:
 	world["PreloadTexture"] = &Warden::preloadTexture;
 	world["UnloadMesh"] = &Warden::unloadMesh;
 	world["UnloadTexture"] = &Warden::unloadTexture;
+	world["SetLegacyDrawing"] = &Warden::setLegacyDrawing;
 
 	// gui/2D images/text
 	gui["ImportFont"] = &Warden::embedFont;

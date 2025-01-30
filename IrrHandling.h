@@ -56,6 +56,7 @@ public:
 	bool defaultExclude = false;
 	bool renderedGUI = false;
 	int lights = 0;
+	bool legacyDrawing = false;
 
 	irr::video::E_DRIVER_TYPE driverType = irr::video::EDT_DIRECT3D9;
 	int width = 640;
