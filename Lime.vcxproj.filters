@@ -120,6 +120,9 @@
     <ClCompile Include="Empty.cpp">
       <Filter>Source Files\Scene3D</Filter>
     </ClCompile>
+    <ClCompile Include="Sun.cpp">
+      <Filter>Source Files\Scene3D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DebugConsole.h">
@@ -235,6 +238,9 @@
     </ClInclude>
     <ClInclude Include="Compatible3D.h">
       <Filter>Source Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Sun.h">
+      <Filter>Source Files\Scene3D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

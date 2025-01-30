@@ -91,7 +91,7 @@ void IrrHandling::initScene()
 	device->setWindowCaption(L"Lime Application");
 
 	driver = device->getVideoDriver();
-	effects = new EffectHandler(device, driver->getScreenSize(), false, false, false);
+	effects = new EffectHandler(device, driver->getScreenSize(), false, true, false);
 	smgr = device->getSceneManager();
 	guienv = device->getGUIEnvironment();
 

@@ -167,6 +167,7 @@
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="StaticMesh.cpp" />
+    <ClCompile Include="Sun.cpp" />
     <ClCompile Include="Text2D.cpp" />
     <ClCompile Include="Text3D.cpp" />
     <ClCompile Include="TextArea.cpp" />
@@ -203,6 +204,7 @@
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="StaticMesh.h" />
+    <ClInclude Include="Sun.h" />
     <ClInclude Include="Text2D.h" />
     <ClInclude Include="Text3D.h" />
     <ClInclude Include="TextArea.h" />

@@ -448,6 +448,16 @@ namespace Warden {
 		effects->setAmbientColor(SColor(255, static_cast<u32>(color.x), static_cast<u32>(color.y), static_cast<u32>(color.z)));
 	}
 
+	void setShadowColor(const Vector3D& color) {
+		smgr->setShadowColor(video::SColor(static_cast<u32>(color.x), static_cast<u32>(color.y), static_cast<u32>(color.z), smgr->getShadowColor().getAlpha()));
+	}
+
+	void setShadowOpacity(int opacity) {
+		SColor s = smgr->getShadowColor();
+		s.setAlpha(opacity);
+		smgr->setShadowColor(s);
+	}
+
 	void defaultExclude(bool enable) {
 		if (device && effects)
 			irrHandler->defaultExclude = enable;
@@ -790,6 +800,8 @@ void bindWarden(sol::table application, sol::table world, sol::table sound, sol:
 	world["UnloadMesh"] = &Warden::unloadMesh;
 	world["UnloadTexture"] = &Warden::unloadTexture;
 	world["SetLegacyDrawing"] = &Warden::setLegacyDrawing;
+	world["SetShadowColor"] = &Warden::setShadowColor;
+	world["SetShadowOpacity"] = &Warden::setShadowOpacity;
 
 	// gui/2D images/text
 	gui["ImportFont"] = &Warden::embedFont;
