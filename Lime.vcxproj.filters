@@ -31,8 +31,14 @@
     <Filter Include="Source Files\xEffects">
       <UniqueIdentifier>{1089de6d-5eb6-43d1-87f9-b08f566dd854}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\ExternalSceneNodes">
+    <Filter Include="Source Files\Externals">
       <UniqueIdentifier>{f302c982-ccd8-4013-ab19-4250b4360a29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Externals\GhostTrail">
+      <UniqueIdentifier>{5424e058-1cd1-4737-979a-c3dc58255197}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Externals\IrrAsimp">
+      <UniqueIdentifier>{45df0dda-e833-4734-b55c-1f593ed8d25b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -68,9 +74,6 @@
     </ClCompile>
     <ClCompile Include="CShaderPre.cpp">
       <Filter>Source Files\xEffects</Filter>
-    </ClCompile>
-    <ClCompile Include="GhostTrailSceneNode.cpp">
-      <Filter>Source Files\ExternalSceneNodes</Filter>
     </ClCompile>
     <ClCompile Include="Vector2D.cpp">
       <Filter>Source Files\Core</Filter>
@@ -122,6 +125,21 @@
     </ClCompile>
     <ClCompile Include="Sun.cpp">
       <Filter>Source Files\Scene3D</Filter>
+    </ClCompile>
+    <ClCompile Include="GhostTrailSceneNode.cpp">
+      <Filter>Source Files\Externals\GhostTrail</Filter>
+    </ClCompile>
+    <ClCompile Include="IrrAssimp.cpp">
+      <Filter>Source Files\Externals\IrrAsimp</Filter>
+    </ClCompile>
+    <ClCompile Include="IrrAssimpExport.cpp">
+      <Filter>Source Files\Externals\IrrAsimp</Filter>
+    </ClCompile>
+    <ClCompile Include="IrrAssimpImport.cpp">
+      <Filter>Source Files\Externals\IrrAsimp</Filter>
+    </ClCompile>
+    <ClCompile Include="IrrAssimpUtils.cpp">
+      <Filter>Source Files\Externals\IrrAsimp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -227,9 +245,6 @@
     <ClInclude Include="ParticleSystem.h">
       <Filter>Source Files\Scene3D</Filter>
     </ClInclude>
-    <ClInclude Include="GhostTrailSceneNode.h">
-      <Filter>Source Files\ExternalSceneNodes</Filter>
-    </ClInclude>
     <ClInclude Include="Trail.h">
       <Filter>Source Files\Scene3D</Filter>
     </ClInclude>
@@ -241,6 +256,21 @@
     </ClInclude>
     <ClInclude Include="Sun.h">
       <Filter>Source Files\Scene3D</Filter>
+    </ClInclude>
+    <ClInclude Include="GhostTrailSceneNode.h">
+      <Filter>Source Files\Externals\GhostTrail</Filter>
+    </ClInclude>
+    <ClInclude Include="IrrAssimp.h">
+      <Filter>Source Files\Externals\IrrAsimp</Filter>
+    </ClInclude>
+    <ClInclude Include="IrrAssimpExport.h">
+      <Filter>Source Files\Externals\IrrAsimp</Filter>
+    </ClInclude>
+    <ClInclude Include="IrrAssimpImport.h">
+      <Filter>Source Files\Externals\IrrAsimp</Filter>
+    </ClInclude>
+    <ClInclude Include="IrrAssimpUtils.h">
+      <Filter>Source Files\Externals\IrrAsimp</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

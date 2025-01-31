@@ -7,6 +7,7 @@
 #include "DebugConsole.h"
 #include "LuaLime.h"
 #include "XEffects.h"
+//#include "IrrAssimp.h"
 
 #include <queue>
 

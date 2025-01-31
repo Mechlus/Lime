@@ -8,6 +8,10 @@ D:\Irrlicht\Lime\EffectHandler.cpp;D:\Irrlicht\Lime\Lime\x64\Release\EffectHandl
 D:\Irrlicht\Lime\Empty.cpp;D:\Irrlicht\Lime\Lime\x64\Release\Empty.obj
 D:\Irrlicht\Lime\GhostTrailSceneNode.cpp;D:\Irrlicht\Lime\Lime\x64\Release\GhostTrailSceneNode.obj
 D:\Irrlicht\Lime\Image2D.cpp;D:\Irrlicht\Lime\Lime\x64\Release\Image2D.obj
+D:\Irrlicht\Lime\IrrAssimp.cpp;D:\Irrlicht\Lime\Lime\x64\Release\IrrAssimp.obj
+D:\Irrlicht\Lime\IrrAssimpExport.cpp;D:\Irrlicht\Lime\Lime\x64\Release\IrrAssimpExport.obj
+D:\Irrlicht\Lime\IrrAssimpImport.cpp;D:\Irrlicht\Lime\Lime\x64\Release\IrrAssimpImport.obj
+D:\Irrlicht\Lime\IrrAssimpUtils.cpp;D:\Irrlicht\Lime\Lime\x64\Release\IrrAssimpUtils.obj
 D:\Irrlicht\Lime\IrrHandling.cpp;D:\Irrlicht\Lime\Lime\x64\Release\IrrHandling.obj
 D:\Irrlicht\Lime\Light.cpp;D:\Irrlicht\Lime\Lime\x64\Release\Light.obj
 D:\Irrlicht\Lime\Lime.cpp;D:\Irrlicht\Lime\Lime\x64\Release\Lime.obj

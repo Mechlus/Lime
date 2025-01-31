@@ -134,7 +134,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\irrlicht-1.8.5\include;..\luajit\src;..\sol2\include;..\irrKlang-1.6.0\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\irrlicht-1.8.5\include;..\luajit\src;..\sol2\include;..\irrKlang-1.6.0\include;..\assimp_x64-windows\include;</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -142,7 +142,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>..\irrlicht-1.8.5\lib\Win64-visualStudio;..\luajit\src;..\irrKlang-1.6.0\lib\Winx64-visualStudio;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\irrlicht-1.8.5\lib\Win64-visualStudio;..\luajit\src;..\irrKlang-1.6.0\lib\Winx64-visualStudio;..\assimp_x64-windows\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -157,6 +157,10 @@
     <ClCompile Include="Empty.cpp" />
     <ClCompile Include="GhostTrailSceneNode.cpp" />
     <ClCompile Include="Image2D.cpp" />
+    <ClCompile Include="IrrAssimp.cpp" />
+    <ClCompile Include="IrrAssimpExport.cpp" />
+    <ClCompile Include="IrrAssimpImport.cpp" />
+    <ClCompile Include="IrrAssimpUtils.cpp" />
     <ClCompile Include="IrrHandling.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Lime.cpp" />
@@ -193,6 +197,10 @@
     <ClInclude Include="Empty.h" />
     <ClInclude Include="GhostTrailSceneNode.h" />
     <ClInclude Include="Image2D.h" />
+    <ClInclude Include="IrrAssimp.h" />
+    <ClInclude Include="IrrAssimpExport.h" />
+    <ClInclude Include="IrrAssimpImport.h" />
+    <ClInclude Include="IrrAssimpUtils.h" />
     <ClInclude Include="IrrHandling.h" />
     <ClInclude Include="IrrManagers.h" />
     <ClInclude Include="Light.h" />
