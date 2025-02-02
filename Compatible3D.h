@@ -15,9 +15,18 @@ public:
 
         node->setParent(*parent ? (*parent)->getNode() : nullptr);
     }
+
+    Vector3D getAbsPos() {
+        irr::scene::ISceneNode* node = getNode();
+        if (!node) return Vector3D();
+
+        irr::core::vector3df pos = node->getAbsolutePosition();
+        return Vector3D(pos.X, pos.Y, pos.Z);
+    }
 };
 
 inline void bindCompatible3D() {
     sol::usertype<Compatible3D> bind_type = lua->new_usertype<Compatible3D>("Compatible3D");
     bind_type["setParent"] = &Compatible3D::setParent;
+    bind_type["getAbsolutePosition"] = &Compatible3D::getAbsPos;
 }

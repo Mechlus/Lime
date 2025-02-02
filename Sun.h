@@ -13,12 +13,10 @@
 
 class Sun : public Compatible3D {
 public:
-    int index;
-    irr::scene::ISceneNode* target;
-    irr::scene::ISceneNode* holder;
+    irr::scene::ILightSceneNode* light = 0;
     DebugSceneNode* d;
 
-    irr::scene::ISceneNode* getNode() const override { return holder; }
+    irr::scene::ISceneNode* getNode() const override { return light; }
 };
 
 void bindSun();

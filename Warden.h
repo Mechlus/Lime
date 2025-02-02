@@ -836,6 +836,7 @@ void bindWarden(sol::table application, sol::table world, sol::table sound, sol:
 	sound["SetChannelVelocity"] = &Warden::setChannelVelocity;
 	sound["SetDopplerEffectParameters"] = &Warden::setDopplerParameters;
 	sound["SetChannelPosition3D"] = &Warden::setChannelPosition3D;
+	sound["IsChannelActive"] = &Warden::isChannelFree;
 
 	// input
 	input["IsKeyDown"] = &Warden::isKeyDown;
