@@ -12,50 +12,89 @@ using namespace video;
 
 inline void genSphere(vector3df center, std::vector<S3DVertex>& vertices, std::vector<u16>& indices,
     float radius, float height, u32 rings, u32 sectors, SColor col) {
+
     float const R = 1.0f / (rings - 1);
     float const S = 1.0f / (sectors - 1);
     float halfHeight = height * 0.5f;
     u32 baseIndex = vertices.size();
 
-    for (u32 r = 0; r < rings / 2; ++r) {
+    // Generate Top Hemisphere
+    for (u32 r = 0; r <= rings / 2; ++r) {
+        float v = float(r) / (rings / 2);
+        float phi = v * M_PI_2;
         for (u32 s = 0; s < sectors; ++s) {
-            float y = -sin(-M_PI_2 + M_PI * r * R);
-            float x = cos(2 * M_PI * s * S) * sin(M_PI * r * R);
-            float z = sin(2 * M_PI * s * S) * sin(M_PI * r * R);
+            float u = float(s) / (sectors - 1);
+            float theta = u * 2.0f * M_PI;
+
+            float x = cos(theta) * sin(phi);
+            float y = cos(phi);
+            float z = sin(theta) * sin(phi);
 
             vector3df position = vector3df(x * radius, (y * radius) + halfHeight, z * radius) + center;
-            vertices.push_back(S3DVertex(position, vector3df(x, y, z), col, vector2df(s * S, r * R)));
+            vertices.push_back(S3DVertex(position, vector3df(x, y, z), col, vector2df(u, v)));
         }
     }
 
-    for (u32 r = 0; r <= 1; ++r) {
+    // Generate Cylinder
+    u32 cylinderStart = vertices.size();
+    for (u32 r = 0; r < 2; ++r) {
+        float y = (r == 0) ? halfHeight : -halfHeight;
         for (u32 s = 0; s < sectors; ++s) {
-            float y = (r == 0) ? halfHeight : -halfHeight;
-            float x = cos(2 * M_PI * s * S) * radius;
-            float z = sin(2 * M_PI * s * S) * radius;
+            float theta = float(s) / (sectors - 1) * 2.0f * M_PI;
+            float x = cos(theta) * radius;
+            float z = sin(theta) * radius;
 
             vector3df position = vector3df(x, y, z) + center;
-            vertices.push_back(S3DVertex(position, vector3df(x, 0, z), col, vector2df(s * S, r * R)));
+            vertices.push_back(S3DVertex(position, vector3df(x, 0, z), col, vector2df(float(s) / sectors, float(r))));
+        }
+    }
+
+    // Generate Bottom Hemisphere
+    u32 bottomStart = vertices.size();
+    for (u32 r = 0; r <= rings / 2; ++r) {
+        float v = float(r) / (rings / 2);
+        float phi = M_PI_2 + v * M_PI_2;
+        for (u32 s = 0; s < sectors; ++s) {
+            float u = float(s) / (sectors - 1);
+            float theta = u * 2.0f * M_PI;
+
+            float x = cos(theta) * sin(phi);
+            float y = cos(phi);
+            float z = sin(theta) * sin(phi);
+
+            vector3df position = vector3df(x * radius, (y * radius) - halfHeight, z * radius) + center;
+            vertices.push_back(S3DVertex(position, vector3df(x, y, z), col, vector2df(u, v)));
+        }
+    }
+
+    // Generate Index Data
+    for (u32 r = 0; r < rings / 2; ++r) {
+        for (u32 s = 0; s < sectors - 1; ++s) {
+            u16 i1 = baseIndex + r * sectors + s;
+            u16 i2 = baseIndex + r * sectors + (s + 1);
+            u16 i3 = baseIndex + (r + 1) * sectors + s;
+
+            indices.push_back(i1); indices.push_back(i2);
+            indices.push_back(i1); indices.push_back(i3);
+        }
+    }
+
+    for (u32 r = 0; r < 1; ++r) {
+        for (u32 s = 0; s < sectors - 1; ++s) {
+            u16 i1 = cylinderStart + r * sectors + s;
+            u16 i2 = cylinderStart + r * sectors + (s + 1);
+            u16 i3 = cylinderStart + (r + 1) * sectors + s;
+
+            indices.push_back(i1); indices.push_back(i2);
+            indices.push_back(i1); indices.push_back(i3);
         }
     }
 
     for (u32 r = 0; r < rings / 2; ++r) {
-        for (u32 s = 0; s < sectors; ++s) {
-            float y = sin(-M_PI_2 + M_PI * r * R);
-            float x = cos(2 * M_PI * s * S) * sin(M_PI * r * R);
-            float z = sin(2 * M_PI * s * S) * sin(M_PI * r * R);
-
-            vector3df position = vector3df(x * radius, (y * radius) - halfHeight, z * radius) + center;
-            vertices.push_back(S3DVertex(position, vector3df(x, y, z), col, vector2df(s * S, r * R)));
-        }
-    }
-
-    u32 ringCount = rings + 2;
-    for (u32 r = 0; r < ringCount - 1; ++r) {
         for (u32 s = 0; s < sectors - 1; ++s) {
-            u16 i1 = baseIndex + r * sectors + s;
-            u16 i2 = baseIndex + r * sectors + (s + 1) % sectors;
-            u16 i3 = baseIndex + (r + 1) * sectors + s;
+            u16 i1 = bottomStart + r * sectors + s;
+            u16 i2 = bottomStart + r * sectors + (s + 1);
+            u16 i3 = bottomStart + (r + 1) * sectors + s;
 
             indices.push_back(i1); indices.push_back(i2);
             indices.push_back(i1); indices.push_back(i3);
