@@ -747,6 +747,17 @@ namespace Warden {
 		return false;
 	}
 
+	void setLightManagementMode(int i) {
+		i = irr::core::clamp<int>(i, 0, 2);
+		if (lightManager)
+			lightManager->setMode(i);
+
+		if (i > 0)
+			smgr->setLightManager(lightManager);
+		else
+			smgr->setLightManager(0);
+	}
+
 	/*
 	// Make into its own class, like adding an aabb check before doing 3D pos check, "active" state, if point along line intersects, point is inside, etc.
 	void drawDebugSphere(const Vector3D& pos, float radius = 5.0f, int rings = 20, int sectors = 20, const Vector3D& col = Vector3D(255), int opacity = 255.0, int life = 0) {
@@ -814,6 +825,7 @@ void bindWarden(sol::table application, sol::table world, sol::table sound, sol:
 	world["SetLegacyDrawing"] = &Warden::setLegacyDrawing;
 	world["SetShadowColor"] = &Warden::setShadowColor;
 	world["SetShadowOpacity"] = &Warden::setShadowOpacity;
+	world["SetLightManagementMode"] = &Warden::setLightManagementMode;
 
 	// gui/2D images/text
 	gui["ImportFont"] = &Warden::embedFont;

@@ -95,7 +95,8 @@ void IrrHandling::initScene()
 	smgr = device->getSceneManager();
 	guienv = device->getGUIEnvironment();
 
-	//smgr->addExternalMeshLoader(new IrrAssimpImport(smgr));
+	lightManager = new CLightManager(smgr);
+	smgr->setLightManager(0);
 
 	appLoop();
 }

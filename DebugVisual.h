@@ -166,7 +166,7 @@ private:
 
         // val1 == is point light
         if (rad > 0.0f && val1 == 1)
-            renderSphere(start, rad, 10, 10, 10, SColor(255, 255, 255, 0));
+            renderSphere(start, rad, 0, 10, 10, SColor(255, 255, 255, 0));
 
     }
 
