@@ -747,6 +747,7 @@ namespace Warden {
 		return false;
 	}
 
+	/*
 	// Make into its own class, like adding an aabb check before doing 3D pos check, "active" state, if point along line intersects, point is inside, etc.
 	void drawDebugSphere(const Vector3D& pos, float radius = 5.0f, int rings = 20, int sectors = 20, const Vector3D& col = Vector3D(255), int opacity = 255.0, int life = 0) {
 		DebugSceneNode* d = new DebugSceneNode(0, smgr, 0, DebugType::SPHERE);
@@ -756,7 +757,7 @@ namespace Warden {
 		d->val2 = sectors;
 		d->col = SColor(opacity, col.x, col.y, col.z);
 		d->raypick_life = life;
-	}
+	}*/
 };
 
 void bindWarden(sol::table application, sol::table world, sol::table sound, sol::table gui, sol::table input) {

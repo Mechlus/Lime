@@ -17,8 +17,7 @@ enum class DebugType {
     RAY_PICK,
     LIGHT,
     PARTICLE_SYSTEM,
-    EMPTY,
-    SPHERE
+    EMPTY
 };
 
 class DebugSceneNode : public ISceneNode {
@@ -49,9 +48,6 @@ public:
             break;
         case DebugType::EMPTY:
             renderEmptyDebug();
-            break;
-        case DebugType::SPHERE:
-            renderSphereDebug();
             break;
         }
     }
@@ -170,7 +166,7 @@ private:
 
         // val1 == is point light
         if (rad > 0.0f && val1 == 1)
-            renderSphere(start, rad, 10, 10, SColor(255, 255, 255, 0));
+            renderSphere(start, rad, 10, 10, 10, SColor(255, 255, 255, 0));
 
     }
 
@@ -209,13 +205,4 @@ private:
 
         driver->draw3DBox(box, SColor(255, 255, 255, 255));
     }
-
-    void renderSphereDebug() {
-        renderSphere(pos, rad, val1, val2, col);
-        raypick_life -= irrHandler->dt;
-
-        if (raypick_life <= 0)
-            this->remove();
-    }
-
 };
