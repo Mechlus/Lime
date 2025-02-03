@@ -17,7 +17,7 @@ public:
     int index;
     irr::scene::ISceneNode* target;
     irr::scene::ISceneNode* holder;
-    DebugSceneNode* d;
+    DebugSceneNode* d = nullptr;
 
     Light();
     Light(const Vector3D& pos, const Vector3D& rot, const Vector3D& col);

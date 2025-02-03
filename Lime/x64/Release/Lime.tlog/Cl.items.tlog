@@ -7,6 +7,7 @@ D:\Irrlicht\Lime\EditBox.cpp;D:\Irrlicht\Lime\Lime\x64\Release\EditBox.obj
 D:\Irrlicht\Lime\EffectHandler.cpp;D:\Irrlicht\Lime\Lime\x64\Release\EffectHandler.obj
 D:\Irrlicht\Lime\Empty.cpp;D:\Irrlicht\Lime\Lime\x64\Release\Empty.obj
 D:\Irrlicht\Lime\GhostTrailSceneNode.cpp;D:\Irrlicht\Lime\Lime\x64\Release\GhostTrailSceneNode.obj
+D:\Irrlicht\Lime\Hitbox.cpp;D:\Irrlicht\Lime\Lime\x64\Release\Hitbox.obj
 D:\Irrlicht\Lime\Image2D.cpp;D:\Irrlicht\Lime\Lime\x64\Release\Image2D.obj
 D:\Irrlicht\Lime\IrrAssimp.cpp;D:\Irrlicht\Lime\Lime\x64\Release\IrrAssimp.obj
 D:\Irrlicht\Lime\IrrAssimpExport.cpp;D:\Irrlicht\Lime\Lime\x64\Release\IrrAssimpExport.obj
@@ -22,7 +23,7 @@ D:\Irrlicht\Lime\os.cpp;D:\Irrlicht\Lime\Lime\x64\Release\os.obj
 D:\Irrlicht\Lime\ParticleSystem.cpp;D:\Irrlicht\Lime\Lime\x64\Release\ParticleSystem.obj
 D:\Irrlicht\Lime\Sound.cpp;D:\Irrlicht\Lime\Lime\x64\Release\Sound.obj
 D:\Irrlicht\Lime\StaticMesh.cpp;D:\Irrlicht\Lime\Lime\x64\Release\StaticMesh.obj
-D:\Irrlicht\Lime\Sun.cpp;D:\Irrlicht\Lime\Lime\x64\Release\Sun.obj
+D:\Irrlicht\Lime\LegacyLight.cpp;D:\Irrlicht\Lime\Lime\x64\Release\LegacyLight.obj
 D:\Irrlicht\Lime\Text2D.cpp;D:\Irrlicht\Lime\Lime\x64\Release\Text2D.obj
 D:\Irrlicht\Lime\Text3D.cpp;D:\Irrlicht\Lime\Lime\x64\Release\Text3D.obj
 D:\Irrlicht\Lime\TextArea.cpp;D:\Irrlicht\Lime\Lime\x64\Release\TextArea.obj

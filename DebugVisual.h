@@ -2,6 +2,7 @@
 
 #include "irrlicht.h"
 #include "IrrManagers.h"
+#include "DrawSphere.h"
 #include <string>
 #include <vector>
 
@@ -16,7 +17,8 @@ enum class DebugType {
     RAY_PICK,
     LIGHT,
     PARTICLE_SYSTEM,
-    EMPTY
+    EMPTY,
+    SPHERE
 };
 
 class DebugSceneNode : public ISceneNode {
@@ -48,6 +50,9 @@ public:
         case DebugType::EMPTY:
             renderEmptyDebug();
             break;
+        case DebugType::SPHERE:
+            renderSphereDebug();
+            break;
         }
     }
 
@@ -78,6 +83,12 @@ public:
     bool raypick_hit;
     float raypick_life;
 
+    float rad;
+    vector3df pos;
+    int val1;
+    int val2;
+    SColor col;
+
 private:
     void renderCameraDebug() {
         float boxSize = 0.25;
@@ -102,7 +113,6 @@ private:
 
         driver->draw3DLine(start, end, SColor(255, 255, 0, 0));
     }
-
 
     void renderRayPickDebug() {
         SMaterial m;
@@ -145,7 +155,7 @@ private:
 
         vector3df nodePosition = getAbsolutePosition();
 
-        const aabbox3d<f32> box(
+        aabbox3d<f32> box(
             nodePosition - vector3df(boxSize, boxSize, boxSize),
             nodePosition + vector3df(boxSize, boxSize, boxSize)
         );
@@ -157,6 +167,11 @@ private:
         vector3df end = nodePosition + direction * 1;
 
         driver->draw3DLine(start, end, SColor(255, 255, 255, 0));
+
+        // val1 == is point light
+        if (rad > 0.0f && val1 == 1)
+            renderSphere(start, rad, 10, 10, SColor(255, 255, 255, 0));
+
     }
 
     void renderParticleDebug() {
@@ -194,4 +209,13 @@ private:
 
         driver->draw3DBox(box, SColor(255, 255, 255, 255));
     }
+
+    void renderSphereDebug() {
+        renderSphere(pos, rad, val1, val2, col);
+        raypick_life -= irrHandler->dt;
+
+        if (raypick_life <= 0)
+            this->remove();
+    }
+
 };

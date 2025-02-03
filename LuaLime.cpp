@@ -17,6 +17,7 @@
 #include "Trail.h"
 #include "Warden.h"
 #include "Empty.h"
+#include "LegacyLight.h"
 
 #include "Compatible3D.h"
 
@@ -57,6 +58,7 @@ int LuaLime::initLua(irr::scene::ISceneManager* smgr, irr::video::IVideoDriver* 
 	bindParticleSystem();
 	bindTrail();
 	bindEmpty();
+	bindLegacyLight();
 
 	return 0;
 }

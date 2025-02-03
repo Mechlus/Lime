@@ -156,6 +156,7 @@
     <ClCompile Include="EffectHandler.cpp" />
     <ClCompile Include="Empty.cpp" />
     <ClCompile Include="GhostTrailSceneNode.cpp" />
+    <ClCompile Include="Hitbox.cpp" />
     <ClCompile Include="Image2D.cpp" />
     <ClCompile Include="IrrAssimp.cpp" />
     <ClCompile Include="IrrAssimpExport.cpp" />
@@ -171,7 +172,7 @@
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="StaticMesh.cpp" />
-    <ClCompile Include="Sun.cpp" />
+    <ClCompile Include="LegacyLight.cpp" />
     <ClCompile Include="Text2D.cpp" />
     <ClCompile Include="Text3D.cpp" />
     <ClCompile Include="TextArea.cpp" />
@@ -190,12 +191,14 @@
     <ClInclude Include="CShaderPre.h" />
     <ClInclude Include="DebugConsole.h" />
     <ClInclude Include="DebugVisual.h" />
+    <ClInclude Include="DrawSphere.h" />
     <ClInclude Include="EditBox.h" />
     <ClInclude Include="EffectCB.h" />
     <ClInclude Include="EffectHandler.h" />
     <ClInclude Include="EffectShaders.h" />
     <ClInclude Include="Empty.h" />
     <ClInclude Include="GhostTrailSceneNode.h" />
+    <ClInclude Include="Hitbox.h" />
     <ClInclude Include="Image2D.h" />
     <ClInclude Include="IrrAssimp.h" />
     <ClInclude Include="IrrAssimpExport.h" />
@@ -212,7 +215,7 @@
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="StaticMesh.h" />
-    <ClInclude Include="Sun.h" />
+    <ClInclude Include="LegacyLight.h" />
     <ClInclude Include="Text2D.h" />
     <ClInclude Include="Text3D.h" />
     <ClInclude Include="TextArea.h" />

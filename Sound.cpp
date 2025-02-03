@@ -32,14 +32,14 @@ void SoundManager::play2DSoundOnChannel(int channel, const std::string& filePath
 {
     channel = validChannel(channel);
     stopChannel(channel);
-    channels[channel] = sound->play2D(filePath.c_str(), loop, false, true);
+    channels[channel] = sound->play2D(filePath.c_str(), loop, false, false, ESM_AUTO_DETECT, true);
 }
 
 void SoundManager::play3DSoundOnChannel(int channel, const std::string& filePath, Vector3D src, bool loop)
 {
     channel = validChannel(channel);
     stopChannel(channel);
-    channels[channel] = sound->play3D(filePath.c_str(), vec3df(static_cast<f32>(src.x), static_cast<f32>(src.y), static_cast<f32>(src.z)), loop, false, true);
+    channels[channel] = sound->play3D(filePath.c_str(), vec3df(static_cast<f32>(src.x), static_cast<f32>(src.y), static_cast<f32>(src.z)), loop, false, true, ESM_AUTO_DETECT, true);
 }
 
 void SoundManager::stopChannel(int channel)
@@ -227,6 +227,8 @@ void SoundManager::setDistortionEffect(int channel, int effect, bool enable, sol
                 if (params["feedback"].valid()) feedback = params["feedback"];
                 if (params["delay"].valid()) delay = params["delay"];
                 fx->enableEchoSoundEffect(wetDry, feedback, delay, delay, 0);
+                if (fx->isEchoSoundEffectEnabled())
+                    dConsole.sendMsg("Lol", 0);
             }
             else
             {

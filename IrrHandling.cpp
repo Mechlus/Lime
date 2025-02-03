@@ -236,9 +236,10 @@ void IrrHandling::appLoop() {
 
 		renderedGUI = false;
 
+		/*
 		f32 frameTime = device->getTimer()->getTime() - now;
 		if (frameTime < frameDur)
-			device->sleep((frameDur - frameTime) / 2.0);
+			device->sleep((frameDur - frameTime) / 2.0);*/
 	}
 
 	// Call end in main

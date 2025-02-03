@@ -123,7 +123,7 @@
     <ClCompile Include="Empty.cpp">
       <Filter>Source Files\Scene3D</Filter>
     </ClCompile>
-    <ClCompile Include="Sun.cpp">
+    <ClCompile Include="LegacyLight.cpp">
       <Filter>Source Files\Scene3D</Filter>
     </ClCompile>
     <ClCompile Include="GhostTrailSceneNode.cpp">
@@ -140,6 +140,9 @@
     </ClCompile>
     <ClCompile Include="IrrAssimpUtils.cpp">
       <Filter>Source Files\Externals\IrrAsimp</Filter>
+    </ClCompile>
+    <ClCompile Include="Hitbox.cpp">
+      <Filter>Source Files\Scene3D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -254,7 +257,7 @@
     <ClInclude Include="Compatible3D.h">
       <Filter>Source Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Sun.h">
+    <ClInclude Include="LegacyLight.h">
       <Filter>Source Files\Scene3D</Filter>
     </ClInclude>
     <ClInclude Include="GhostTrailSceneNode.h">
@@ -271,6 +274,12 @@
     </ClInclude>
     <ClInclude Include="IrrAssimpUtils.h">
       <Filter>Source Files\Externals\IrrAsimp</Filter>
+    </ClInclude>
+    <ClInclude Include="Hitbox.h">
+      <Filter>Source Files\Scene3D</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawSphere.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
