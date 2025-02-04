@@ -11,6 +11,14 @@ LegacyLight::LegacyLight(int type, const Vector3D& pos, const Vector3D& rot, con
 
 LegacyLight::LegacyLight() : LegacyLight(0, Vector3D(), Vector3D(), Vector3D(255)) {}
 
+LegacyLight::LegacyLight(const LegacyLight& other) : LegacyLight(other.light->getLightType(), 
+													 Vector3D(other.light->getPosition().X, other.light->getPosition().Y, other.light->getPosition().Z),
+													 Vector3D(other.light->getRotation().X, other.light->getRotation().Y, other.light->getRotation().Z),
+													 Vector3D(other.light->getLightData().DiffuseColor.getRed(), other.light->getLightData().DiffuseColor.getGreen(), other.light->getLightData().DiffuseColor.getBlue()))
+{
+	
+}
+
 LegacyLight::LegacyLight(int type) : LegacyLight(type, Vector3D(), Vector3D(), Vector3D()) {}
 
 LegacyLight::LegacyLight(const Vector3D& pos) : LegacyLight(0, pos, Vector3D(), Vector3D()) {}
@@ -157,7 +165,7 @@ void LegacyLight::setVisible(bool visible) {
 
 void bindLegacyLight() {
 	sol::usertype<LegacyLight> bind_type = lua->new_usertype<LegacyLight>("LegacyLight",
-		sol::constructors<LegacyLight(), LegacyLight(int type), LegacyLight(const Vector3D& pos), LegacyLight(int type, const Vector3D & pos, const Vector3D & rot, const Vector3D & color)>(),
+		sol::constructors<LegacyLight(), LegacyLight(const LegacyLight& other), LegacyLight(int type), LegacyLight(const Vector3D& pos), LegacyLight(int type, const Vector3D & pos, const Vector3D & rot, const Vector3D & color)>(),
 
 		sol::base_classes, sol::bases<Compatible3D>(),
 

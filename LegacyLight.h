@@ -22,6 +22,7 @@ public:
     LegacyLight(int type);
     LegacyLight(const Vector3D& pos);
     LegacyLight();
+    LegacyLight(const LegacyLight& other);
     Vector3D getPosition();
     void setPosition(const Vector3D& pos);
     Vector3D getRotation();
