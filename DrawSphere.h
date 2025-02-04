@@ -113,14 +113,16 @@ inline void renderSphere(vector3df pos, float rad = 5.0f, float height = 5.0f, u
         EVT_STANDARD, EPT_LINES, EIT_16BIT);
 }
 
-// Capsule Mesh Buffer
-inline SMeshBuffer* genSphere(vector3df center, float radius, float height, u32 rings, u32 sectors, SColor col) {
+// Generate capsule
+inline SMeshBuffer* genCapsule(vector3df center, float radius, float height, u32 rings, u32 sectors) {
     SMeshBuffer* meshBuffer = new SMeshBuffer();
 
     float const R = 1.0f / (rings - 1);
     float const S = 1.0f / (sectors - 1);
     float halfHeight = height * 0.5f;
     u32 baseIndex = meshBuffer->Vertices.size();
+
+    vector3df adjustedCenter = center + vector3df(0, halfHeight, 0);
 
     for (u32 r = 0; r <= rings / 2; ++r) {
         float phi = (float(r) / (rings / 2)) * M_PI_2;
@@ -131,21 +133,21 @@ inline SMeshBuffer* genSphere(vector3df center, float radius, float height, u32 
             float y = cos(phi);
             float z = sin(theta) * sin(phi);
 
-            vector3df position = vector3df(x * radius, (y * radius) + halfHeight, z * radius) + center;
-            meshBuffer->Vertices.push_back(S3DVertex(position, vector3df(x, y, z), col, vector2df(float(s) / sectors, float(r) / rings)));
+            vector3df position = vector3df(x * radius, (y * radius) + height, z * radius) + center;
+            meshBuffer->Vertices.push_back(S3DVertex(position, vector3df(x, y, z), SColor(255, 255, 255, 0), vector2df(float(s) / sectors, float(r) / rings)));
         }
     }
 
     u32 cylinderStart = meshBuffer->Vertices.size();
     for (u32 r = 0; r < 2; ++r) {
-        float y = (r == 0) ? halfHeight : -halfHeight;
+        float y = (r == 0) ? height : 0;
         for (u32 s = 0; s < sectors; ++s) {
             float theta = (float(s) / (sectors - 1)) * 2.0f * M_PI;
             float x = cos(theta) * radius;
             float z = sin(theta) * radius;
 
             vector3df position = vector3df(x, y, z) + center;
-            meshBuffer->Vertices.push_back(S3DVertex(position, vector3df(x, 0, z), col, vector2df(float(s) / sectors, float(r))));
+            meshBuffer->Vertices.push_back(S3DVertex(position, vector3df(x, 0, z), SColor(255, 255, 255, 0), vector2df(float(s) / sectors, float(r))));
         }
     }
 
@@ -159,8 +161,8 @@ inline SMeshBuffer* genSphere(vector3df center, float radius, float height, u32 
             float y = cos(phi);
             float z = sin(theta) * sin(phi);
 
-            vector3df position = vector3df(x * radius, (y * radius) - halfHeight, z * radius) + center;
-            meshBuffer->Vertices.push_back(S3DVertex(position, vector3df(x, y, z), col, vector2df(float(s) / sectors, float(r) / rings)));
+            vector3df position = vector3df(x * radius, (y * radius), z * radius) + center;
+            meshBuffer->Vertices.push_back(S3DVertex(position, vector3df(x, y, z), SColor(255,255,255,0), vector2df(float(s) / sectors, float(r) / rings)));
         }
     }
 
@@ -169,9 +171,14 @@ inline SMeshBuffer* genSphere(vector3df center, float radius, float height, u32 
             u16 i1 = baseIndex + r * sectors + s;
             u16 i2 = baseIndex + r * sectors + (s + 1);
             u16 i3 = baseIndex + (r + 1) * sectors + s;
+            u16 i4 = baseIndex + (r + 1) * sectors + (s + 1);
 
             meshBuffer->Indices.push_back(i1);
             meshBuffer->Indices.push_back(i2);
+            meshBuffer->Indices.push_back(i3);
+
+            meshBuffer->Indices.push_back(i2);
+            meshBuffer->Indices.push_back(i4);
             meshBuffer->Indices.push_back(i3);
         }
     }
@@ -181,9 +188,14 @@ inline SMeshBuffer* genSphere(vector3df center, float radius, float height, u32 
             u16 i1 = cylinderStart + r * sectors + s;
             u16 i2 = cylinderStart + r * sectors + (s + 1);
             u16 i3 = cylinderStart + (r + 1) * sectors + s;
+            u16 i4 = cylinderStart + (r + 1) * sectors + (s + 1);
 
             meshBuffer->Indices.push_back(i1);
             meshBuffer->Indices.push_back(i2);
+            meshBuffer->Indices.push_back(i3);
+
+            meshBuffer->Indices.push_back(i2);
+            meshBuffer->Indices.push_back(i4);
             meshBuffer->Indices.push_back(i3);
         }
     }
@@ -193,9 +205,14 @@ inline SMeshBuffer* genSphere(vector3df center, float radius, float height, u32 
             u16 i1 = bottomStart + r * sectors + s;
             u16 i2 = bottomStart + r * sectors + (s + 1);
             u16 i3 = bottomStart + (r + 1) * sectors + s;
+            u16 i4 = bottomStart + (r + 1) * sectors + (s + 1);
 
             meshBuffer->Indices.push_back(i1);
             meshBuffer->Indices.push_back(i2);
+            meshBuffer->Indices.push_back(i3);
+
+            meshBuffer->Indices.push_back(i2);
+            meshBuffer->Indices.push_back(i4);
             meshBuffer->Indices.push_back(i3);
         }
     }
