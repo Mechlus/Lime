@@ -23,10 +23,28 @@ public:
         irr::core::vector3df pos = node->getAbsolutePosition();
         return Vector3D(pos.X, pos.Y, pos.Z);
     }
+
+    Vector3D getAbsRot() {
+        irr::scene::ISceneNode* node = getNode();
+        if (!node) return Vector3D();
+
+        irr::core::vector3df rot = node->getAbsoluteTransformation().getRotationDegrees();
+        return Vector3D(rot.X, rot.Y, rot.Z);
+    }
+
+    Vector3D getAbsScale() {
+        irr::scene::ISceneNode* node = getNode();
+        if (!node) return Vector3D();
+
+        irr::core::vector3df scale = node->getAbsoluteTransformation().getScale();
+        return Vector3D(scale.X, scale.Y, scale.Z);
+    }
 };
 
 inline void bindCompatible3D() {
     sol::usertype<Compatible3D> bind_type = lua->new_usertype<Compatible3D>("Compatible3D");
     bind_type["setParent"] = &Compatible3D::setParent;
     bind_type["getAbsolutePosition"] = &Compatible3D::getAbsPos;
+    bind_type["getAbsoluteRotation"] = &Compatible3D::getAbsRot;
+    bind_type["getAbsoluteScale"] = &Compatible3D::getAbsScale;
 }

@@ -99,7 +99,7 @@ void IrrHandling::initScene()
 	lightManager = new CLightManager(smgr);
 	smgr->setLightManager(0);
 
-	SMeshBuffer* meshBuffer = genCapsule(vector3df(0,0,-10), 5, 10, 5, 10);
+	SMeshBuffer* meshBuffer = genCapsule(vector3df(0,0,-10), 5, 10, 7, 10);
 
 	SMesh* mesh = new SMesh();
 	mesh->addMeshBuffer(meshBuffer);
