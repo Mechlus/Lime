@@ -273,15 +273,19 @@ bool Hitbox::pointInside(const Vector3D& point) {
 	node->getAbsoluteTransformation().transformVect(myBottom);
 	node->getAbsoluteTransformation().transformVect(myTop);
 
-	vector3df head = (myTop - myBottom);
-	float mag = head.getLengthSQ();
-	head.normalize();
+	vector3df myAxis = myTop - myBottom;
+	float segLength = myAxis.getLength();
 
-	vector3df n = p - myBottom;
-	float dot = n.dotProduct(head);
-	dot = core::clamp<float>(dot, 0.0f, mag);
+	if (segLength == 0) return false;
+
+	vector3df myDir = myAxis / segLength;
+
+	float t = (p - myBottom).dotProduct(myDir) / segLength;
+	t = core::clamp<float>(t, 0.0f, 1.0f);
+
+	vector3df closestPoint = myBottom + myDir * (t * segLength);
 	
-	return ((myBottom + head * dot) - p).getLengthSQ() <= radius * radius;
+	return (p - closestPoint).getLengthSQ() <= radius * radius;
 }
 
 void bindHitbox() {
