@@ -227,12 +227,6 @@ bool Hitbox::overlaps(const Hitbox& other) {
 		other.node->getAbsoluteTransformation().transformVect(otherBottom);
 		other.node->getAbsoluteTransformation().transformVect(otherTop);
 
-		// Spheric checks
-		if ((myTop - otherTop).getLengthSQ() <= radSumSQ) return true;
-		if ((myTop - otherBottom).getLengthSQ() <= radSumSQ) return true;
-		if ((myBottom - otherTop).getLengthSQ() <= radSumSQ) return true;
-		if ((myBottom - otherBottom).getLengthSQ() <= radSumSQ) return true;
-
 		// Cylindrical check
 		vector3df myAxis = myTop - myBottom;
 		vector3df otherAxis = otherTop - otherBottom;
@@ -255,6 +249,9 @@ bool Hitbox::overlaps(const Hitbox& other) {
 			myClosest = 0.0f;
 			otherClosest = (axisCrossDot > otherAxisDot ? myAxisPositionDot / axisCrossDot : otherAxisPositionDot / otherAxisDot);
 		}
+
+		myClosest = core::clamp<float>(myClosest, 0.0f, 1.0f);
+		otherClosest = core::clamp<float>(otherClosest, 0.0f, 1.0f);
 
 		vector3df myClosestPoint = myBottom + myAxis * myClosest;
 		vector3df otherClosestPoint = otherBottom + otherAxis * otherClosest;

@@ -1,1 +1,260 @@
-﻿  Lime.vcxproj -> D:\Irrlicht\Lime\x64\Release\Lime.exe
+﻿  Hitbox.cpp
+D:\Irrlicht\Lime\EffectHandler.h(212,21): warning C4305: 'initializing': truncation from 'double' to 'irr::f32'
+  (compiling source file 'Hitbox.cpp')
+  
+D:\Irrlicht\Lime\EffectHandler.h(311,21): warning C4018: '<': signed/unsigned mismatch
+  (compiling source file 'Hitbox.cpp')
+  
+D:\Irrlicht\Lime\LimeReceiver.h(126,108): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+D:\Irrlicht\Lime\LimeReceiver.h(126,108): warning C4244:         with
+D:\Irrlicht\Lime\LimeReceiver.h(126,108): warning C4244:         [
+D:\Irrlicht\Lime\LimeReceiver.h(126,108): warning C4244:             T=irr::s32
+D:\Irrlicht\Lime\LimeReceiver.h(126,108): warning C4244:         ]
+  (compiling source file 'Hitbox.cpp')
+  
+D:\Irrlicht\Lime\LimeReceiver.h(126,85): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+D:\Irrlicht\Lime\LimeReceiver.h(126,85): warning C4244:         with
+D:\Irrlicht\Lime\LimeReceiver.h(126,85): warning C4244:         [
+D:\Irrlicht\Lime\LimeReceiver.h(126,85): warning C4244:             T=irr::s32
+D:\Irrlicht\Lime\LimeReceiver.h(126,85): warning C4244:         ]
+  (compiling source file 'Hitbox.cpp')
+  
+D:\Irrlicht\Lime\LimeReceiver.h(166,80): warning C4244: 'argument': conversion from 'const T' to 'float', possible loss of data
+D:\Irrlicht\Lime\LimeReceiver.h(166,80): warning C4244:         with
+D:\Irrlicht\Lime\LimeReceiver.h(166,80): warning C4244:         [
+D:\Irrlicht\Lime\LimeReceiver.h(166,80): warning C4244:             T=irr::s32
+D:\Irrlicht\Lime\LimeReceiver.h(166,80): warning C4244:         ]
+  (compiling source file 'Hitbox.cpp')
+  
+D:\Irrlicht\Lime\LimeReceiver.h(166,57): warning C4244: 'argument': conversion from 'const T' to 'float', possible loss of data
+D:\Irrlicht\Lime\LimeReceiver.h(166,57): warning C4244:         with
+D:\Irrlicht\Lime\LimeReceiver.h(166,57): warning C4244:         [
+D:\Irrlicht\Lime\LimeReceiver.h(166,57): warning C4244:             T=irr::s32
+D:\Irrlicht\Lime\LimeReceiver.h(166,57): warning C4244:         ]
+  (compiling source file 'Hitbox.cpp')
+  
+D:\Irrlicht\Lime\DrawSphere.h(19,19): warning C4267: 'initializing': conversion from 'size_t' to 'u32', possible loss of data
+  (compiling source file 'Hitbox.cpp')
+  
+D:\Irrlicht\Lime\DrawSphere.h(24,19): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Hitbox.cpp')
+  
+D:\Irrlicht\Lime\DrawSphere.h(27,25): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Hitbox.cpp')
+  
+D:\Irrlicht\Lime\DrawSphere.h(39,23): warning C4267: 'initializing': conversion from 'size_t' to 'u32', possible loss of data
+  (compiling source file 'Hitbox.cpp')
+  
+D:\Irrlicht\Lime\DrawSphere.h(43,25): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Hitbox.cpp')
+  
+D:\Irrlicht\Lime\DrawSphere.h(53,21): warning C4267: 'initializing': conversion from 'size_t' to 'u32', possible loss of data
+  (compiling source file 'Hitbox.cpp')
+  
+D:\Irrlicht\Lime\DrawSphere.h(56,19): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Hitbox.cpp')
+  
+D:\Irrlicht\Lime\DrawSphere.h(59,25): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Hitbox.cpp')
+  
+D:\Irrlicht\Lime\DrawSphere.h(112,40): warning C4267: 'argument': conversion from 'size_t' to 'irr::u32', possible loss of data
+  (compiling source file 'Hitbox.cpp')
+  
+D:\Irrlicht\Lime\DrawSphere.h(111,67): warning C4267: 'argument': conversion from 'size_t' to 'irr::u32', possible loss of data
+  (compiling source file 'Hitbox.cpp')
+  
+D:\Irrlicht\Lime\DrawSphere.h(126,19): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Hitbox.cpp')
+  
+D:\Irrlicht\Lime\DrawSphere.h(128,25): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Hitbox.cpp')
+  
+D:\Irrlicht\Lime\DrawSphere.h(143,25): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Hitbox.cpp')
+  
+D:\Irrlicht\Lime\DrawSphere.h(154,19): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Hitbox.cpp')
+  
+D:\Irrlicht\Lime\DrawSphere.h(156,25): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Hitbox.cpp')
+  
+D:\Irrlicht\Lime\DebugVisual.h(128,27): warning C4305: 'initializing': truncation from 'double' to 'float'
+  (compiling source file 'Hitbox.cpp')
+  
+D:\Irrlicht\Lime\Hitbox.cpp(4,11): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\Irrlicht\Lime\Hitbox.cpp(5,11): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\Visual Studio 2022 Community\VC\Tools\MSVC\14.42.34433\include\xmemory(700,103): warning C4244: 'argument': conversion from '_Ty' to 'int', possible loss of data
+D:\Visual Studio 2022 Community\VC\Tools\MSVC\14.42.34433\include\xmemory(700,103): warning C4244:         with
+D:\Visual Studio 2022 Community\VC\Tools\MSVC\14.42.34433\include\xmemory(700,103): warning C4244:         [
+D:\Visual Studio 2022 Community\VC\Tools\MSVC\14.42.34433\include\xmemory(700,103): warning C4244:             _Ty=irr::f32
+D:\Visual Studio 2022 Community\VC\Tools\MSVC\14.42.34433\include\xmemory(700,103): warning C4244:         ]
+  (compiling source file 'Hitbox.cpp')
+      D:\Visual Studio 2022 Community\VC\Tools\MSVC\14.42.34433\include\xmemory(700,103):
+      the template instantiation context (the oldest one first) is
+          D:\Irrlicht\Lime\Hitbox.cpp(265,41):
+          see reference to function template instantiation 'sol::basic_usertype<Hitbox,sol::reference> sol::state_view::new_usertype<Hitbox,const char(&)[7],sol::constructor_list<Hitbox (void),Hitbox (float,float),Hitbox (const Hitbox &)>,const sol::base_classes_tag&,sol::base_list<Compatible3D>,const char(&)[9],sol::property_wrapper<Vector3D (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(const Vector3D &)>,const char(&)[9],sol::property_wrapper<Vector3D (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(const Vector3D &)>,const char(&)[7],sol::property_wrapper<bool (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(bool)>,const char(&)[6],sol::property_wrapper<bool (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(bool)>,const char(&)[14],sol::property_wrapper<int (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(int)>,const char(&)[10],sol::property_wrapper<bool (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(bool)>,const char(&)[3],sol::property_wrapper<int (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(int)>,const char(&)[7],sol::property_wrapper<float (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(float)>,const char(&)[7],sol::property_wrapper<float (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(float)>,const char(&)[11],sol::property_wrapper<Vector2D (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(const Vector2D &)>>(const char (&)[7],sol::constructor_list<Hitbox (void),Hitbox (float,float),Hitbox (const Hitbox &)> &&,const sol::base_classes_tag &,sol::base_list<Compatible3D> &&,const char (&)[9],sol::property_wrapper<Vector3D (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(const Vector3D &)> &&,const char (&)[9],sol::property_wrapper<Vector3D (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(const Vector3D &)> &&,const char (&)[7],sol::property_wrapper<bool (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(bool)> &&,const char (&)[6],sol::property_wrapper<bool (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(bool)> &&,const char (&)[14],sol::property_wrapper<int (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(int)> &&,const char (&)[10],sol::property_wrapper<bool (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(bool)> &&,const char (&)[3],sol::property_wrapper<int (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(int)> &&,const char (&)[7],sol::property_wrapper<float (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(float)> &&,const char (&)[7],sol::property_wrapper<float (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(float)> &&,const char (&)[11],sol::property_wrapper<Vector2D (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(const Vector2D &)> &&)' being compiled
+          D:\Irrlicht\sol2\include\sol\state_view.hpp(785,18):
+          see reference to function template instantiation 'sol::basic_usertype<Hitbox,sol::reference> sol::basic_table_core<true,sol::reference>::new_usertype<Hitbox,const char(&)[7],_Ty,const sol::base_classes_tag&,sol::base_list<Compatible3D>,const char(&)[9],sol::property_wrapper<Vector3D (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(const Vector3D &)>,const char(&)[9],sol::property_wrapper<Vector3D (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(const Vector3D &)>,const char(&)[7],sol::property_wrapper<bool (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(bool)>,const char(&)[6],sol::property_wrapper<bool (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(bool)>,const char(&)[14],sol::property_wrapper<int (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(int)>,const char(&)[10],sol::property_wrapper<bool (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(bool)>,const char(&)[3],sol::property_wrapper<int (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(int)>,const char(&)[7],sol::property_wrapper<float (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(float)>,const char(&)[7],sol::property_wrapper<float (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(float)>,const char(&)[11],sol::property_wrapper<Vector2D (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(const Vector2D &)>,void>(Key,Arg &&,const sol::base_classes_tag &,sol::base_list<Compatible3D> &&,const char (&)[9],sol::property_wrapper<Vector3D (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(const Vector3D &)> &&,const char (&)[9],sol::property_wrapper<Vector3D (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(const Vector3D &)> &&,const char (&)[7],sol::property_wrapper<bool (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(bool)> &&,const char (&)[6],sol::property_wrapper<bool (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(bool)> &&,const char (&)[14],sol::property_wrapper<int (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(int)> &&,const char (&)[10],sol::property_wrapper<bool (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(bool)> &&,const char (&)[3],sol::property_wrapper<int (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(int)> &&,const char (&)[7],sol::property_wrapper<float (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(float)> &&,const char (&)[7],sol::property_wrapper<float (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(float)> &&,const char (&)[11],sol::property_wrapper<Vector2D (__cdecl Hitbox::* )(void),void (__cdecl Hitbox::* )(const Vector2D &)> &&)' being compiled
+          with
+          [
+              _Ty=sol::constructor_list<Hitbox (void),Hitbox (float,float),Hitbox (const Hitbox &)>,
+              Key=const char (&)[7],
+              Arg=sol::constructor_list<Hitbox (void),Hitbox (float,float),Hitbox (const Hitbox &)>
+          ]
+          D:\Irrlicht\sol2\include\sol\table.hpp(74,7):
+          see reference to function template instantiation 'sol::basic_usertype<Hitbox,sol::reference> &sol::basic_usertype<Hitbox,sol::reference>::set<sol::meta_function,_Ty>(Key &&,Value &&)' being compiled
+          with
+          [
+              _Ty=sol::constructor_list<Hitbox (void),Hitbox (float,float),Hitbox (const Hitbox &)>,
+              Key=sol::meta_function,
+              Value=sol::constructor_list<Hitbox (void),Hitbox (float,float),Hitbox (const Hitbox &)>
+          ]
+          D:\Irrlicht\sol2\include\sol\usertype.hpp(90,9):
+          see reference to function template instantiation 'void sol::u_detail::usertype_storage<Hitbox>::set<_Ty,sol::constructor_list<Hitbox (void),Hitbox (float,float),Hitbox (const Hitbox &)>>(lua_State *,Key &&,Value &&)' being compiled
+          with
+          [
+              _Ty=sol::meta_function,
+              Key=sol::meta_function,
+              Value=sol::constructor_list<Hitbox (void),Hitbox (float,float),Hitbox (const Hitbox &)>
+          ]
+          D:\Irrlicht\sol2\include\sol\usertype_storage.hpp(804,46):
+          see reference to function template instantiation 'void sol::u_detail::usertype_storage_base::set<Hitbox,_Ty,sol::constructor_list<Hitbox (void),Hitbox (float,float),Hitbox (const Hitbox &)>>(lua_State *,Key &&,Value &&)' being compiled
+          with
+          [
+              _Ty=sol::meta_function,
+              Key=sol::meta_function,
+              Value=sol::constructor_list<Hitbox (void),Hitbox (float,float),Hitbox (const Hitbox &)>
+          ]
+          D:\Irrlicht\sol2\include\sol\usertype_storage.hpp(723,77):
+          see reference to function template instantiation 'int sol::u_detail::binding<sol::u_detail::usertype_storage_base::set::KeyU,sol::u_detail::usertype_storage_base::set::ValueU,Hitbox>::call_with_<false,false>(lua_State *,void *)' being compiled
+          D:\Irrlicht\sol2\include\sol\usertype_storage.hpp(90,24):
+          see reference to function template instantiation 'int sol::call_detail::call_wrapped<Hitbox,false,false,0,false,true,sol::constructor_list<Hitbox (void),Hitbox (float,float),Hitbox (const Hitbox &)>&,>(lua_State *,Fx)' being compiled
+          with
+          [
+              Fx=sol::constructor_list<Hitbox (void),Hitbox (float,float),Hitbox (const Hitbox &)> &
+          ]
+          D:\Irrlicht\sol2\include\sol\call.hpp(906,82):
+          see reference to class template instantiation 'sol::call_detail::lua_call_wrapper<Hitbox,sol::call_detail::call_wrapped::uFx,false,false,false,0,true,void>' being compiled
+          D:\Irrlicht\sol2\include\sol\call.hpp(659,15):
+          while compiling class template member function 'int sol::call_detail::lua_call_wrapper<Hitbox,sol::call_detail::call_wrapped::uFx,false,false,false,0,true,void>::call(lua_State *,sol::constructor_list<Hitbox (void),Hitbox (float,float),Hitbox (const Hitbox &)> &)'
+              D:\Irrlicht\sol2\include\sol\call.hpp(907,5):
+              see the first reference to 'sol::call_detail::lua_call_wrapper<Hitbox,sol::call_detail::call_wrapped::uFx,false,false,false,0,true,void>::call' in 'sol::call_detail::call_wrapped'
+          D:\Irrlicht\sol2\include\sol\call.hpp(675,5):
+          see reference to function template instantiation 'int sol::call_detail::construct_match<T,Hitbox(void),Hitbox(float,float),Hitbox(const Hitbox &),sol::call_detail::constructor_match<T,false,true>,>(Match &&,lua_State *,int,int)' being compiled
+          with
+          [
+              T=Hitbox,
+              Match=sol::call_detail::constructor_match<Hitbox,false,true>
+          ]
+          D:\Irrlicht\sol2\include\sol\call.hpp(321,11):
+          see reference to function template instantiation 'int sol::call_detail::overload_match_arity<void(void),void(float,float),void(const Hitbox &),_Ty,>(Match &&,lua_State *,int,int)' being compiled
+          with
+          [
+              _Ty=sol::call_detail::constructor_match<Hitbox,false,true>,
+              Match=sol::call_detail::constructor_match<Hitbox,false,true>
+          ]
+          D:\Irrlicht\sol2\include\sol\call.hpp(302,28):
+          see reference to function template instantiation 'int sol::call_detail::overload_detail::overload_match_arity_single<void(void),void(float,float),void(const Hitbox &),0,1,2,,_Ty,>(sol::types<void (void),void (float,float),void (const Hitbox &)>,std::integer_sequence<size_t,0,1,2>,std::integer_sequence<size_t>,Match &&,lua_State *,int,int)' being compiled
+          with
+          [
+              _Ty=sol::call_detail::constructor_match<Hitbox,false,true>,
+              Match=sol::call_detail::constructor_match<Hitbox,false,true>
+          ]
+          D:\Irrlicht\sol2\include\sol\call.hpp(274,15):
+          see reference to function template instantiation 'int sol::call_detail::overload_detail::overload_match_arity<void(float,float),void(const Hitbox &),1,2,0,_Ty,>(sol::types<void (float,float),void (const Hitbox &)>,std::integer_sequence<size_t,1,2>,std::integer_sequence<size_t,0>,Match &&,lua_State *,int,int)' being compiled
+          with
+          [
+              _Ty=sol::call_detail::constructor_match<Hitbox,false,true>,
+              Match=sol::call_detail::constructor_match<Hitbox,false,true>
+          ]
+          D:\Irrlicht\sol2\include\sol\call.hpp(202,13):
+          see reference to function template instantiation 'int sol::call_detail::constructor_match<T,false,true>::operator ()<void(float,float),1,R,float,float>(sol::types<void (float,float)>,std::integral_constant<size_t,1>,sol::types<R>,sol::types<float,float>,lua_State *,int,int) const' being compiled
+          with
+          [
+              T=Hitbox,
+              R=void
+          ]
+          D:\Irrlicht\sol2\include\sol\call.hpp(138,25):
+          see reference to function template instantiation 'int sol::stack::call_into_lua<false,true,R,,float,float,sol::detail::default_construct&,T*const &>(sol::types<R>,sol::types<float,float>,lua_State *,int,Fx,T *const &)' being compiled
+          with
+          [
+              R=void,
+              T=Hitbox,
+              Fx=sol::detail::default_construct &
+          ]
+          D:\Irrlicht\sol2\include\sol\stack.hpp(271,5):
+          see reference to function template instantiation 'void sol::stack::call<false,R,float,float,sol::detail::default_construct&,T*const &>(sol::types<R>,sol::types<float,float>,lua_State *,int,Fx,T *const &)' being compiled
+          with
+          [
+              R=void,
+              T=Hitbox,
+              Fx=sol::detail::default_construct &
+          ]
+          D:\Irrlicht\sol2\include\sol\stack.hpp(229,19):
+          see reference to function template instantiation 'void sol::stack::stack_detail::call<false,0,1,R,float,float,sol::detail::default_construct&,T*const &>(sol::types<R>,sol::types<float,float>,std::integer_sequence<size_t,0,1>,lua_State *,int,Fx,T *const &)' being compiled
+          with
+          [
+              R=void,
+              T=Hitbox,
+              Fx=sol::detail::default_construct &
+          ]
+          D:\Irrlicht\sol2\include\sol\stack.hpp(199,6):
+          see reference to function template instantiation 'void sol::stack::stack_detail::eval<false,float,float,0,1,sol::argument_handler<sol::types<R,float,float>>&,sol::detail::default_construct&,T*const &>(sol::types<float,float>,std::integer_sequence<size_t,0,1>,lua_State *,int,Handler,sol::stack::record &,Fx,T *const &)' being compiled
+          with
+          [
+              R=void,
+              T=Hitbox,
+              Handler=sol::argument_handler<sol::types<void,float,float>> &,
+              Fx=sol::detail::default_construct &
+          ]
+          D:\Irrlicht\sol2\include\sol\stack.hpp(173,13):
+          see reference to function template instantiation 'void sol::stack::stack_detail::eval<false,R,,1,,sol::argument_handler<sol::types<void,float,float>>&,sol::detail::default_construct&,T*const &,float>(sol::types<R>,std::integer_sequence<size_t,1>,lua_State *,int,Handler,sol::stack::record &,Fx,T *const &,float &&)' being compiled
+          with
+          [
+              R=float,
+              T=Hitbox,
+              Handler=sol::argument_handler<sol::types<void,float,float>> &,
+              Fx=sol::detail::default_construct &
+          ]
+          D:\Irrlicht\sol2\include\sol\stack.hpp(173,13):
+          see reference to function template instantiation 'void sol::stack::stack_detail::eval<false,sol::argument_handler<sol::types<R,float,float>>&,sol::detail::default_construct&,T*const &,_Ty,float>(sol::types<>,std::integer_sequence<size_t>,lua_State *,int,Handler,sol::stack::record &,Fx,T *const &,_Ty &&,float &&)' being compiled
+          with
+          [
+              R=void,
+              T=Hitbox,
+              _Ty=irr::f32,
+              Handler=sol::argument_handler<sol::types<void,float,float>> &,
+              Fx=sol::detail::default_construct &
+          ]
+          D:\Irrlicht\sol2\include\sol\stack.hpp(147,28):
+          see reference to function template instantiation 'void sol::detail::default_construct::operator ()<T*const &,_Ty,_Ty>(Hitbox*const &,_Ty &&,_Ty &&) const' being compiled
+          with
+          [
+              T=Hitbox,
+              _Ty=irr::f32
+          ]
+          D:\Irrlicht\sol2\include\sol\raii.hpp(44,5):
+          see reference to function template instantiation 'void sol::detail::default_construct::construct<T*const &,_Ty,_Ty>(Hitbox*const &,_Ty &&,_Ty &&)' being compiled
+          with
+          [
+              T=Hitbox,
+              _Ty=irr::f32
+          ]
+          D:\Irrlicht\sol2\include\sol\raii.hpp(39,48):
+          see reference to function template instantiation 'void std::_Default_allocator_traits<_Alloc>::construct<T,_Ty,_Ty>(_Alloc &,_Objty *const ,_Ty &&,_Ty &&)' being compiled
+          with
+          [
+              _Alloc=std::allocator<sol::detail::default_construct::construct::Tu>,
+              T=Hitbox,
+              _Ty=irr::f32,
+              _Objty=Hitbox
+          ]
+  
+  Generating code
+  0 of 36159 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  Lime.vcxproj -> D:\Irrlicht\Lime\x64\Release\Lime.exe
+  'pwsh.exe' is not recognized as an internal or external command,
+  operable program or batch file.
