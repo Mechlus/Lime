@@ -261,6 +261,31 @@ bool Hitbox::overlaps(const Hitbox& other) {
 	return false;
 }
 
+bool Hitbox::pointInside(const Vector3D& point) {
+	vector3df p = vector3df(point.x, point.y, point.z);
+
+	if (!node->getTransformedBoundingBox().isPointInside(p)) return false;
+
+	if (height == 0) return (node->getAbsolutePosition() - p).getLengthSQ() <= radius * radius;
+
+	// Find closest point on line to point
+	vector3df myBottom = vector3df();
+	vector3df myTop = vector3df(0, height, 0);
+
+	node->getAbsoluteTransformation().transformVect(myBottom);
+	node->getAbsoluteTransformation().transformVect(myTop);
+
+	vector3df head = (myTop - myBottom);
+	float mag = head.getLengthSQ();
+	head.normalize();
+
+	vector3df n = p - myBottom;
+	float dot = n.dotProduct(head);
+	dot = core::clamp<float>(dot, 0.0f, mag);
+	
+	return ((myBottom + head * dot) - p).getLengthSQ() <= radius * radius;
+}
+
 void bindHitbox() {
 	sol::usertype<Hitbox> bind_type = lua->new_usertype<Hitbox>("Hitbox",
 		sol::constructors<Hitbox(), Hitbox(float radius, float height), Hitbox(const Hitbox& other)>(),
@@ -281,4 +306,5 @@ void bindHitbox() {
 
 	bind_type["destroy"] = &Hitbox::destroy;
 	bind_type["overlaps"] = &Hitbox::overlaps;
+	bind_type["pointInside"] = &Hitbox::pointInside;
 }

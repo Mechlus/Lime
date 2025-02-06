@@ -55,8 +55,8 @@ public:
     void updateMaterial(bool updateOpacity, bool updateColor); // Update material based on attributes
 
     void construct();
-    bool overlaps(const Hitbox& other); // Starts with aabb check, then two spheric checks, then a cylindrical check
-    float getClosestDistanceSquared(const core::vector3df& a1, const core::vector3df& a2, const core::vector3df& b1, const core::vector3df& b2);
+    bool overlaps(const Hitbox& other);
+    bool pointInside(const Vector3D& point);
     void destroy();
 };
 
