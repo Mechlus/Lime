@@ -10,17 +10,25 @@
 #include <vector>
 
 #include "Compatible3D.h"
+#include "DrawSphere.h"
 
 class Hitbox : public Compatible3D {
 public:
     irr::scene::IMeshSceneNode* node = 0;
-    irr::scene::ITriangleSelector* col = 0; // Does not use collision by default, but can be if the user requests
+    irr::scene::ISceneNode* holder = 0;
 
     float radius;
     float height;
     int lod = 1; // 0 - Low poly, 1 - Medium, 2 - Highest (affects rings and sectors only, does not affect collision performance with other hitboxes)
+    bool active = true;
+    bool visible = false;
+    bool collision = false;
 
-    irr::scene::ISceneNode* getNode() const override { return node; }
+    irr::scene::ISceneNode* getNode() const override { return holder; }
+
+    Hitbox();
+    Hitbox(int rad, int h);
+    Hitbox(const Hitbox& other);
 
     Vector3D getPosition();
     void setPosition(const Vector3D& pos);
@@ -37,8 +45,18 @@ public:
     int getID();
     void setID(int id);
 
-    void construct(float radius, float height, int rings, int sectors);
+    float getRadius();
+    void setRadius(float r);
+    float getHeight();
+    void setHeight(float h);
+    Vector2D getAttributes();
+    void setAttributes(const Vector2D& att);
+
+    void updateMaterial(bool updateOpacity, bool updateColor); // Update material based on attributes
+
+    void construct();
     bool overlaps(const Hitbox& other); // Starts with aabb check, then two spheric checks, then a cylindrical check
+    float getClosestDistanceSquared(const core::vector3df& a1, const core::vector3df& a2, const core::vector3df& b1, const core::vector3df& b2);
     void destroy();
 };
 

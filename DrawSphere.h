@@ -122,8 +122,6 @@ inline SMeshBuffer* genCapsule(vector3df center, float radius, float height, u32
     float halfHeight = height * 0.5f;
     u32 baseIndex = meshBuffer->Vertices.size();
 
-    vector3df adjustedCenter = center + vector3df(0, halfHeight, 0);
-
     for (u32 r = 0; r <= rings / 2; ++r) {
         float phi = (float(r) / (rings / 2)) * M_PI_2;
         for (u32 s = 0; s < sectors; ++s) {
@@ -134,7 +132,7 @@ inline SMeshBuffer* genCapsule(vector3df center, float radius, float height, u32
             float z = sin(theta) * sin(phi);
 
             vector3df position = vector3df(x * radius, (y * radius) + height, z * radius) + center;
-            meshBuffer->Vertices.push_back(S3DVertex(position, vector3df(x, y, z), SColor(255, 255, 255, 0), vector2df(float(s) / sectors, float(r) / rings)));
+            meshBuffer->Vertices.push_back(S3DVertex(position, vector3df(x, y, z), SColor(255, 255, 255, 255), vector2df(float(s) / sectors, float(r) / rings)));
         }
     }
 
@@ -147,7 +145,7 @@ inline SMeshBuffer* genCapsule(vector3df center, float radius, float height, u32
             float z = sin(theta) * radius;
 
             vector3df position = vector3df(x, y, z) + center;
-            meshBuffer->Vertices.push_back(S3DVertex(position, vector3df(x, 0, z), SColor(255, 255, 255, 0), vector2df(float(s) / sectors, float(r))));
+            meshBuffer->Vertices.push_back(S3DVertex(position, vector3df(x, 0, z), SColor(255, 255, 255, 255), vector2df(float(s) / sectors, float(r))));
         }
     }
 
@@ -162,7 +160,7 @@ inline SMeshBuffer* genCapsule(vector3df center, float radius, float height, u32
             float z = sin(theta) * sin(phi);
 
             vector3df position = vector3df(x * radius, (y * radius), z * radius) + center;
-            meshBuffer->Vertices.push_back(S3DVertex(position, vector3df(x, y, z), SColor(255,255,255,0), vector2df(float(s) / sectors, float(r) / rings)));
+            meshBuffer->Vertices.push_back(S3DVertex(position, vector3df(x, y, z), SColor(255,255,255,255), vector2df(float(s) / sectors, float(r) / rings)));
         }
     }
 

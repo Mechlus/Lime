@@ -18,6 +18,7 @@
 #include "Warden.h"
 #include "Empty.h"
 #include "LegacyLight.h"
+#include "Hitbox.h"
 
 #include "Compatible3D.h"
 
@@ -59,6 +60,7 @@ int LuaLime::initLua(irr::scene::ISceneManager* smgr, irr::video::IVideoDriver* 
 	bindTrail();
 	bindEmpty();
 	bindLegacyLight();
+	bindHitbox();
 
 	return 0;
 }

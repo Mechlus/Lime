@@ -35,10 +35,6 @@ Water::Water(sol::table tbl) : Water() {
     if (tbl["material"]) material = tbl["material"];
 }
 
-Water::~Water() {
-    destroy();
-}
-
 int Water::getShadows() {
     return water ? shadow : 0;
 }
@@ -66,6 +62,7 @@ void Water::refreshMesh() {
     if (water) water->remove();
 
     water = smgr->addWaterSurfaceSceneNode(rawMesh, height, speed, length, 0, 0, pos, rot, scale);
+    water->getMaterial(0) = material;
     if (irrHandler->defaultExclude) effects->excludeNodeFromLightingCalculations(water);
 }
 
@@ -145,7 +142,7 @@ void Water::setScale(const Vector3D& scale) {
 
 void Water::loadMaterial(const Material& m) {
     material = m.mat;
-    createRaw();
+    water->getMaterial(0) = material;
 }
 
 Vector2D Water::getTileSize() {

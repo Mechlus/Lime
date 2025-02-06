@@ -29,7 +29,6 @@ public:
     Water(const Material& m);
     Water(const Vector2D& ts, const Vector2D& tc, const Vector2D& tr);
     Water(sol::table tbl);
-    ~Water();
 
     int getShadows();
     void setShadows(int i);

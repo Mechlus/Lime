@@ -5,7 +5,6 @@
 
 #include <filesystem>
 #include <windows.h>
-#include "DrawSphere.h"
 namespace fs = std::filesystem;
 
 using namespace irr;
@@ -99,20 +98,6 @@ void IrrHandling::initScene()
 	lightManager = new CLightManager(smgr);
 	smgr->setLightManager(0);
 
-	SMeshBuffer* meshBuffer = genCapsule(vector3df(0,0,-10), 5, 10, 7, 10);
-
-	SMesh* mesh = new SMesh();
-	mesh->addMeshBuffer(meshBuffer);
-	mesh->recalculateBoundingBox();
-	meshBuffer->drop();
-
-	IMeshSceneNode* meshNode = smgr->addMeshSceneNode(mesh);
-	meshNode->getMaterial(0).Wireframe = true;
-	meshNode->getMaterial(0).AmbientColor = SColor(255, 255, 255, 0);
-	meshNode->getMaterial(0).FogEnable = false;
-	meshNode->getMaterial(0).Lighting = false;
-	mesh->drop();
-
 	appLoop();
 }
 
@@ -191,6 +176,8 @@ void IrrHandling::appLoop() {
 	sol::protected_function luaOnStart = (*lua)["Lime"]["OnStart"];
 	sol::protected_function luaOnUpdate = (*lua)["Lime"]["OnUpdate"];
 	sol::protected_function luaOnEnd = (*lua)["Lime"]["OnEnd"];
+
+	lua->script("math.randomseed(os.time())");
 
 	// Call start in main
 	if ((*lua)["Lime"]["OnStart"].get_type() == sol::type::function) {
