@@ -119,8 +119,6 @@ void Hitbox::updateMaterial(bool updateOpacity, bool updateColor) {
 			meshManipulator->setVertexColors(node->getMesh(), SColor(255, 255, 255, 0));
 		else
 			meshManipulator->setVertexColors(node->getMesh(), SColor(255, 0, 0, 255));
-
-		meshManipulator->drop();
 	}
 }
 
