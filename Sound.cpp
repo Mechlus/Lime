@@ -5,7 +5,7 @@ SoundManager::SoundManager()
 {
     for (int i = 0; i < MAX_CHANNELS; ++i)
     {
-        channels[i] = nullptr;
+        channels[i] = channel();
     }
 }
 
@@ -32,41 +32,53 @@ void SoundManager::play2DSoundOnChannel(int channel, const std::string& filePath
 {
     channel = validChannel(channel);
     stopChannel(channel);
-    channels[channel] = sound->play2D(filePath.c_str(), loop, false, false, ESM_AUTO_DETECT, true);
+    channels[channel].sound = sound->play2D(filePath.c_str(), loop, false, true, ESM_AUTO_DETECT, true);
+
+    if (!channels[channel].sound) return;
+
+    channels[channel].sound->setVolume(channels[channel].volume);
+    channels[channel].sound->setPan(channels[channel].pan);
+    channels[channel].sound->setPlaybackSpeed(channels[channel].spd);
 }
 
 void SoundManager::play3DSoundOnChannel(int channel, const std::string& filePath, Vector3D src, bool loop)
 {
     channel = validChannel(channel);
     stopChannel(channel);
-    channels[channel] = sound->play3D(filePath.c_str(), vec3df(static_cast<f32>(src.x), static_cast<f32>(src.y), static_cast<f32>(src.z)), loop, false, true, ESM_AUTO_DETECT, true);
+
+    if (!channels[channel].sound) return;
+
+    channels[channel].sound = sound->play3D(filePath.c_str(), vec3df(static_cast<f32>(src.x), static_cast<f32>(src.y), static_cast<f32>(src.z)), loop, false, true, ESM_AUTO_DETECT, true);
+    channels[channel].sound->setVolume(channels[channel].volume);
+    channels[channel].sound->setPan(channels[channel].pan);
+    channels[channel].sound->setPlaybackSpeed(channels[channel].spd);
 }
 
 void SoundManager::stopChannel(int channel)
 {
     channel = validChannel(channel);
-    if (channels[channel])
+    if (channels[channel].sound)
     {
-        channels[channel]->stop();
-        channels[channel] = nullptr;
+        channels[channel].sound->stop();
+        channels[channel].sound = nullptr;
     }
 }
 
 void SoundManager::pauseChannel(int channel, bool paused)
 {
     channel = validChannel(channel);
-    if (channels[channel])
+    if (channels[channel].sound)
     {
-        channels[channel]->setIsPaused(paused);
+        channels[channel].sound->setIsPaused(paused);
     }
 }
 
 void SoundManager::loopChannel(int channel, bool loop)
 {
     channel = validChannel(channel);
-    if (channels[channel])
+    if (channels[channel].sound)
     {
-        channels[channel]->setIsLooped(loop);
+        channels[channel].sound->setIsLooped(loop);
     }
 }
 
@@ -90,15 +102,15 @@ void SoundManager::setDopplerParameters(float dopFactor, float distFactor) {
 
 void SoundManager::SetChannelVelocity(int channel, const Vector3D& velocity) {
     channel = validChannel(channel);
-    if (channels[channel]) {
-        channels[channel]->setVelocity(vec3df(static_cast<f32>(velocity.x), static_cast<f32>(velocity.y), static_cast<f32>(velocity.z)));
+    if (channels[channel].sound) {
+        channels[channel].sound->setVelocity(vec3df(static_cast<f32>(velocity.x), static_cast<f32>(velocity.y), static_cast<f32>(velocity.z)));
     }
 }
 
 void SoundManager::setChannelPosition3D(int channel, const Vector3D& pos) {
     channel = validChannel(channel);
-    if (channels[channel]) {
-        channels[channel]->setPosition(vec3df(static_cast<f32>(pos.x), static_cast<f32>(pos.y), static_cast<f32>(pos.z)));
+    if (channels[channel].sound) {
+        channels[channel].sound->setPosition(vec3df(static_cast<f32>(pos.x), static_cast<f32>(pos.y), static_cast<f32>(pos.z)));
     }
 }
 
@@ -111,9 +123,9 @@ void SoundManager::setListenerPosition(const Vector3D& pos, const Vector3D& forw
 bool SoundManager::isChannelFree(int channel)
 {
     channel = validChannel(channel);
-    if (!channels[channel])
+    if (!channels[channel].sound)
         return true;
-    if (channels[channel]->isFinished())
+    if (channels[channel].sound->isFinished())
         return true;
     return false;
 }
@@ -133,56 +145,65 @@ int SoundManager::getNextAvailableChannel()
 void SoundManager::resetChannelFX(int channel)
 {
     channel = validChannel(channel);
-    if (channels[channel])
+    if (channels[channel].sound)
     {
-        channels[channel]->setPlaybackSpeed(1.0f);
-        channels[channel]->setVolume(1.0f);
-        channels[channel]->setPan(0.0f);
+        channels[channel].spd = 1.0f;
+        channels[channel].volume = 1.0f;
+        channels[channel].pan = 0.0f;
+
+        channels[channel].sound->setPlaybackSpeed(1.0f);
+        channels[channel].sound->setVolume(1.0f);
+        channels[channel].sound->setPan(0.0f);
     }
 }
 
 void SoundManager::setPitch(int channel, float pitch)
 {
+    // Ignore
     channel = validChannel(channel);
-    if (channels[channel])
+    channels[channel].spd = pitch;
+    if (channels[channel].sound)
     {
-        channels[channel]->setPlaybackSpeed(pitch);
+        channels[channel].sound->setPlaybackSpeed(pitch);
     }
 }
 
 void SoundManager::setVolume(int channel, float volume)
 {
     channel = validChannel(channel);
-    if (channels[channel])
+    channels[channel].volume = volume;
+    if (channels[channel].sound)
     {
-        channels[channel]->setVolume(volume);
+        channels[channel].sound->setVolume(volume);
     }
 }
 
 void SoundManager::setPlaybackSpeed(int channel, float spd)
 {
     channel = validChannel(channel);
-    if (channels[channel])
+    channels[channel].spd = spd;
+    if (channels[channel].sound)
     {
-        channels[channel]->setPlaybackSpeed(spd);
+        channels[channel].sound->setPlaybackSpeed(spd);
     }
 }
 
 void SoundManager::setPlayPosition(int channel, int time)
 {
     channel = validChannel(channel);
-    if (channels[channel])
+    if (channels[channel].sound)
     {
-        channels[channel]->setPlayPosition(time);
+        channels[channel].sound->setPlayPosition(time);
     }
 }
 
 void SoundManager::setPan(int channel, float pan)
 {
     channel = validChannel(channel);
-    if (channels[channel])
+    channels[channel].pan = pan;
+    if (channels[channel].sound)
     {
-        channels[channel]->setPan(pan);
+        channels[channel].sound->setPan(pan);
     }
 }
 
@@ -190,9 +211,9 @@ void SoundManager::setDistortionEffect(int channel, int effect, bool enable, sol
 {
     ISoundEffectControl* fx = 0;
     channel = validChannel(channel);
-    if (channels[channel])
+    if (channels[channel].sound)
     {
-        fx = channels[channel]->getSoundEffectControl();
+        fx = channels[channel].sound->getSoundEffectControl();
         if (!fx)
         {
             return;
@@ -271,9 +292,9 @@ std::string SoundManager::printChannelList()
     for (int i = 0; i < MAX_CHANNELS; ++i)
     {
         std::string status = std::to_string(i) + ": ";
-        if (channels[i] && !channels[i]->isFinished())
+        if (channels[i].sound && !channels[i].sound->isFinished())
         {
-            status += channels[i]->getSoundSource()->getName();
+            status += channels[i].sound->getSoundSource()->getName();
         }
         result += status + "\n"; // Append to the result string with a newline
     }

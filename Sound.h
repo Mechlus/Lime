@@ -14,11 +14,18 @@ typedef unsigned int u32;
 
 using namespace irrklang;
 
+struct channel {
+    irrklang::ISound* sound = nullptr;
+    float volume = 1.0f;
+    float pan = 0.0f;
+    float spd = 1.0f;
+};
+
 class SoundManager
 {
 private:
     static const int MAX_CHANNELS = 64;
-    std::array<ISound*, MAX_CHANNELS> channels;
+    std::array<channel, MAX_CHANNELS> channels;
 
 public:
     SoundManager();
