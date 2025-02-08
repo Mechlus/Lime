@@ -560,6 +560,10 @@ namespace Warden {
 		soundManager->setChannelPosition3D(channel, pos);
 	}
 
+	void setChannelDistance(int channel, float distance) {
+		soundManager->setMinDistance(channel, distance);
+	}
+
 	// Fonts
 	bool embedFont(const std::string& fontPath) {
 		std::string fontName = std::filesystem::path(fontPath).stem().string();
@@ -861,6 +865,7 @@ void bindWarden(sol::table application, sol::table world, sol::table sound, sol:
 	sound["SetDopplerEffectParameters"] = &Warden::setDopplerParameters;
 	sound["SetChannelPosition3D"] = &Warden::setChannelPosition3D;
 	sound["IsChannelEmpty"] = &Warden::isChannelFree;
+	sound["SetChannelMinimumDistance"] = &Warden::setChannelDistance;
 
 	// input
 	input["IsKeyDown"] = &Warden::isKeyDown;

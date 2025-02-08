@@ -39,6 +39,7 @@ void SoundManager::play2DSoundOnChannel(int channel, const std::string& filePath
     channels[channel].sound->setVolume(channels[channel].volume);
     channels[channel].sound->setPan(channels[channel].pan);
     channels[channel].sound->setPlaybackSpeed(channels[channel].spd);
+    channels[channel].sound->setMinDistance(channels[channel].minDist);
     channels[channel].sound->setIsPaused(false);
 }
 
@@ -54,6 +55,7 @@ void SoundManager::play3DSoundOnChannel(int channel, const std::string& filePath
     channels[channel].sound->setVolume(channels[channel].volume);
     channels[channel].sound->setPan(channels[channel].pan);
     channels[channel].sound->setPlaybackSpeed(channels[channel].spd);
+    channels[channel].sound->setMinDistance(channels[channel].minDist);
     channels[channel].sound->setIsPaused(false);
 }
 
@@ -153,10 +155,12 @@ void SoundManager::resetChannelFX(int channel)
         channels[channel].spd = 1.0f;
         channels[channel].volume = 1.0f;
         channels[channel].pan = 0.0f;
+        channels[channel].minDist = 1.0f;
 
         channels[channel].sound->setPlaybackSpeed(1.0f);
         channels[channel].sound->setVolume(1.0f);
         channels[channel].sound->setPan(0.0f);
+        channels[channel].sound->setMinDistance(1.0f);
     }
 }
 
@@ -207,6 +211,16 @@ void SoundManager::setPan(int channel, float pan)
     if (channels[channel].sound)
     {
         channels[channel].sound->setPan(pan);
+    }
+}
+
+void SoundManager::setMinDistance(int channel, float dist)
+{
+    channel = validChannel(channel);
+    channels[channel].minDist = dist;
+    if (channels[channel].sound)
+    {
+        channels[channel].sound->setMinDistance(dist);
     }
 }
 

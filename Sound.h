@@ -19,6 +19,7 @@ struct channel {
     float volume = 1.0f;
     float pan = 0.0f;
     float spd = 1.0f;
+    float minDist = 1.0f;
 };
 
 class SoundManager
@@ -52,6 +53,7 @@ public:
     void setPlaybackSpeed(int channel, float spd);
     void setPlayPosition(int channel, int time);
     void setPan(int channel, float pan);
+    void setMinDistance(int channel, float dist);
     void setDistortionEffect(int channel, int effect, bool enable, sol::table params);
     int validChannel(int i);
     std::string printChannelList();
