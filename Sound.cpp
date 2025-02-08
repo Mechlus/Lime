@@ -32,13 +32,14 @@ void SoundManager::play2DSoundOnChannel(int channel, const std::string& filePath
 {
     channel = validChannel(channel);
     stopChannel(channel);
-    channels[channel].sound = sound->play2D(filePath.c_str(), loop, false, true, ESM_AUTO_DETECT, true);
+    channels[channel].sound = sound->play2D(filePath.c_str(), loop, true, true, ESM_AUTO_DETECT, true);
 
     if (!channels[channel].sound) return;
 
     channels[channel].sound->setVolume(channels[channel].volume);
     channels[channel].sound->setPan(channels[channel].pan);
     channels[channel].sound->setPlaybackSpeed(channels[channel].spd);
+    channels[channel].sound->setIsPaused(false);
 }
 
 void SoundManager::play3DSoundOnChannel(int channel, const std::string& filePath, Vector3D src, bool loop)
@@ -46,12 +47,14 @@ void SoundManager::play3DSoundOnChannel(int channel, const std::string& filePath
     channel = validChannel(channel);
     stopChannel(channel);
 
+    channels[channel].sound = sound->play3D(filePath.c_str(), vec3df(static_cast<f32>(src.x), static_cast<f32>(src.y), static_cast<f32>(src.z)), loop, true, true, ESM_AUTO_DETECT, true);
+
     if (!channels[channel].sound) return;
 
-    channels[channel].sound = sound->play3D(filePath.c_str(), vec3df(static_cast<f32>(src.x), static_cast<f32>(src.y), static_cast<f32>(src.z)), loop, false, true, ESM_AUTO_DETECT, true);
     channels[channel].sound->setVolume(channels[channel].volume);
     channels[channel].sound->setPan(channels[channel].pan);
     channels[channel].sound->setPlaybackSpeed(channels[channel].spd);
+    channels[channel].sound->setIsPaused(false);
 }
 
 void SoundManager::stopChannel(int channel)
