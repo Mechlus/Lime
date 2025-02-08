@@ -53,8 +53,8 @@ C:\LimeDir\Lime\Sound.cpp(274,72): warning C4244: 'argument': conversion from 'u
 C:\LimeDir\Lime\Sound.cpp(274,61): warning C4244: 'argument': conversion from 'u32' to 'irrklang::ik_f32', possible loss of data
 C:\LimeDir\Lime\Sound.cpp(274,50): warning C4244: 'argument': conversion from 'u32' to 'irrklang::ik_f32', possible loss of data
   Generating code
-  8 of 36247 functions (<0.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    11 functions had inline decision re-evaluated but remain unchanged
+  8 of 36259 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+    6 functions were new in current compilation
+    70 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   Lime.vcxproj -> C:\LimeDir\Lime\x64\Release\Lime.exe

@@ -222,7 +222,7 @@ void SoundManager::setDistortionEffect(int channel, int effect, bool enable, sol
             return;
         }
         if (effect < 0) effect = 0;
-        if (effect > 2) effect = 2;
+        if (effect > 4) effect = 4;
 
         switch (effect)
         {
@@ -278,6 +278,39 @@ void SoundManager::setDistortionEffect(int channel, int effect, bool enable, sol
                 fx->disableWavesReverbSoundEffect();
             }
             break;
+
+        case 3:
+            if (enable)
+            {
+                f32 fCenter = 8000.0f;
+                f32 fBandwidth = 12.0f;
+                f32 fGain = 0.0f;
+                if (params["frequency"].valid()) fCenter = params["frequency"];
+                if (params["bandwidth"].valid()) fBandwidth = params["bandwidth"];
+                if (params["gain"].valid()) fGain = params["gain"];
+                fx->enableParamEqSoundEffect(fCenter, fBandwidth, fGain);
+            }
+            else
+            {
+                fx->disableParamEqSoundEffect();
+            }
+            break;
+
+        case 4:
+            if (enable)
+            {
+                ik_s32 rateHz = 20;
+                bool sinusWaveForm = true;
+                if (params["rate"].valid()) rateHz = params["rate"];
+                if (params["sinusWaveForm"].valid()) sinusWaveForm = params["sinusWaveForm"];
+                fx->enableGargleSoundEffect(rateHz, sinusWaveForm);
+            }
+            else
+            {
+                fx->disableGargleSoundEffect();
+            }
+            break;
+
         }
     }
 }
