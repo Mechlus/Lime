@@ -35,9 +35,10 @@ int LuaLime::initLua(irr::scene::ISceneManager* smgr, irr::video::IVideoDriver* 
 	sol::table sound = lua->create_named_table("Sound");
 	sol::table gui = lua->create_named_table("GUI");
 	sol::table input = lua->create_named_table("Input");
+	sol::table network = lua->create_named_table("Network");
 
 	// warden
-	bindWarden(application, world, sound, gui, input);
+	bindWarden(application, world, sound, gui, input, network);
 
 	// comp
 	bindCompatible3D();

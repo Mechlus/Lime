@@ -775,7 +775,7 @@ namespace Warden {
 	}*/
 };
 
-void bindWarden(sol::table application, sol::table world, sol::table sound, sol::table gui, sol::table input) {
+void bindWarden(sol::table application, sol::table world, sol::table sound, sol::table gui, sol::table input, sol::table network) {
 	// application
 	application["SetDriverType"] = &Warden::setDriverType;
 	application["SetFullscreen"] = &Warden::fullscreenWindow;
