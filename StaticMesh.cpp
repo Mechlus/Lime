@@ -39,9 +39,12 @@ bool StaticMesh::loadMeshWithTangents(const std::string& filePath) {
 bool StaticMesh::fullLoadMesh(const std::string& filePath, bool doTangents) {
     irr::scene::IAnimatedMesh* mesh = nullptr;
 
-    if (!doTangents)
-        mesh = smgr->getMesh(filePath.c_str());
-    else {
+    if (!doTangents) {
+        if (core::hasFileExtension(filePath.c_str(), "fbx"))
+            mesh = assimp->getMesh(filePath.c_str());
+        else
+            mesh = smgr->getMesh(filePath.c_str());
+    } else {
         irr::scene::IMeshManipulator* manipulator = smgr->getMeshManipulator();
         mesh = manipulator->createAnimatedMesh(manipulator->createMeshWithTangents(smgr->getMesh(filePath.c_str())->getMesh(0)));
     }
