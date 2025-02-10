@@ -78,6 +78,7 @@ void Water::createRaw() {
 }
 
 void Water::destroy() {
+    if (shadow) effects->removeShadowFromNode(water);
     if (water) water->remove();
 }
 
