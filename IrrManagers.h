@@ -5,7 +5,6 @@
 #include "LimeReceiver.h"
 #include "Sound.h"
 #include "LightManager.h"
-#include "IrrAssimp.h"
 #include <map>
 
 inline irr::IrrlichtDevice* device = nullptr;
@@ -21,7 +20,6 @@ inline EffectHandler* effects = nullptr;
 inline std::map<std::string, gui::IGUIFont*> fontCache;
 inline std::string defaultFont;
 inline CLightManager* lightManager = nullptr;
-inline IrrAssimp* assimp = nullptr;
 
 inline irr::scene::ICameraSceneNode* mainCamera = nullptr;
 inline irr::scene::ISceneNode* mainCameraForward = nullptr;

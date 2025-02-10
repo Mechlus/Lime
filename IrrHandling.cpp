@@ -98,8 +98,6 @@ void IrrHandling::initScene()
 	lightManager = new CLightManager(smgr);
 	smgr->setLightManager(0);
 
-	assimp = new IrrAssimp(smgr);
-
 	appLoop();
 }
 

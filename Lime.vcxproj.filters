@@ -37,9 +37,6 @@
     <Filter Include="Source Files\Externals\xEffects">
       <UniqueIdentifier>{1089de6d-5eb6-43d1-87f9-b08f566dd854}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Externals\IrrAssimp">
-      <UniqueIdentifier>{f55c77ff-bdfb-49e5-8773-8878923371d2}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Lime.cpp">
@@ -131,18 +128,6 @@
     </ClCompile>
     <ClCompile Include="Hitbox.cpp">
       <Filter>Source Files\Scene3D</Filter>
-    </ClCompile>
-    <ClCompile Include="IrrAssimpImport.cpp">
-      <Filter>Source Files\Externals\IrrAssimp</Filter>
-    </ClCompile>
-    <ClCompile Include="IrrAssimpUtils.cpp">
-      <Filter>Source Files\Externals\IrrAssimp</Filter>
-    </ClCompile>
-    <ClCompile Include="IrrAssimp.cpp">
-      <Filter>Source Files\Externals\IrrAssimp</Filter>
-    </ClCompile>
-    <ClCompile Include="IrrAssimpExport.cpp">
-      <Filter>Source Files\Externals\IrrAssimp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -271,18 +256,6 @@
     </ClInclude>
     <ClInclude Include="LightManager.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IrrAssimpExport.h">
-      <Filter>Source Files\Externals\IrrAssimp</Filter>
-    </ClInclude>
-    <ClInclude Include="IrrAssimpImport.h">
-      <Filter>Source Files\Externals\IrrAssimp</Filter>
-    </ClInclude>
-    <ClInclude Include="IrrAssimpUtils.h">
-      <Filter>Source Files\Externals\IrrAssimp</Filter>
-    </ClInclude>
-    <ClInclude Include="IrrAssimp.h">
-      <Filter>Source Files\Externals\IrrAssimp</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
