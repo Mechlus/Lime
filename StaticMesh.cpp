@@ -46,10 +46,8 @@ bool StaticMesh::fullLoadMesh(const std::string& filePath, bool doTangents) {
         mesh = manipulator->createAnimatedMesh(manipulator->createMeshWithTangents(smgr->getMesh(filePath.c_str())->getMesh(0)));
     }
 
-    if (!mesh) {
-        dConsole.sendMsg(std::filesystem::current_path().string().c_str(), 0);
+    if (!mesh)
         return false;
-    }
 
     meshPath = filePath;
     meshNode = smgr->addAnimatedMeshSceneNode(mesh);

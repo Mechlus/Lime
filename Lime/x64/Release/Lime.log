@@ -1,170 +1,51 @@
-﻿  Billboard.cpp
+﻿  StaticMesh.cpp
 D:\Irrlicht\Lime\EffectHandler.h(212,21): warning C4305: 'initializing': truncation from 'double' to 'irr::f32'
-  (compiling source file 'Billboard.cpp')
+  (compiling source file 'StaticMesh.cpp')
   
 D:\Irrlicht\Lime\EffectHandler.h(311,21): warning C4018: '<': signed/unsigned mismatch
-  (compiling source file 'Billboard.cpp')
+  (compiling source file 'StaticMesh.cpp')
   
 D:\Irrlicht\Lime\LimeReceiver.h(126,108): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
 D:\Irrlicht\Lime\LimeReceiver.h(126,108): warning C4244:         with
 D:\Irrlicht\Lime\LimeReceiver.h(126,108): warning C4244:         [
 D:\Irrlicht\Lime\LimeReceiver.h(126,108): warning C4244:             T=irr::s32
 D:\Irrlicht\Lime\LimeReceiver.h(126,108): warning C4244:         ]
-  (compiling source file 'Billboard.cpp')
+  (compiling source file 'StaticMesh.cpp')
   
 D:\Irrlicht\Lime\LimeReceiver.h(126,85): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
 D:\Irrlicht\Lime\LimeReceiver.h(126,85): warning C4244:         with
 D:\Irrlicht\Lime\LimeReceiver.h(126,85): warning C4244:         [
 D:\Irrlicht\Lime\LimeReceiver.h(126,85): warning C4244:             T=irr::s32
 D:\Irrlicht\Lime\LimeReceiver.h(126,85): warning C4244:         ]
-  (compiling source file 'Billboard.cpp')
+  (compiling source file 'StaticMesh.cpp')
   
 D:\Irrlicht\Lime\LimeReceiver.h(166,80): warning C4244: 'argument': conversion from 'const T' to 'float', possible loss of data
 D:\Irrlicht\Lime\LimeReceiver.h(166,80): warning C4244:         with
 D:\Irrlicht\Lime\LimeReceiver.h(166,80): warning C4244:         [
 D:\Irrlicht\Lime\LimeReceiver.h(166,80): warning C4244:             T=irr::s32
 D:\Irrlicht\Lime\LimeReceiver.h(166,80): warning C4244:         ]
-  (compiling source file 'Billboard.cpp')
+  (compiling source file 'StaticMesh.cpp')
   
 D:\Irrlicht\Lime\LimeReceiver.h(166,57): warning C4244: 'argument': conversion from 'const T' to 'float', possible loss of data
 D:\Irrlicht\Lime\LimeReceiver.h(166,57): warning C4244:         with
 D:\Irrlicht\Lime\LimeReceiver.h(166,57): warning C4244:         [
 D:\Irrlicht\Lime\LimeReceiver.h(166,57): warning C4244:             T=irr::s32
 D:\Irrlicht\Lime\LimeReceiver.h(166,57): warning C4244:         ]
-  (compiling source file 'Billboard.cpp')
+  (compiling source file 'StaticMesh.cpp')
   
-  IrrHandling.cpp
-D:\Irrlicht\Lime\EffectHandler.h(212,21): warning C4305: 'initializing': truncation from 'double' to 'irr::f32'
-  (compiling source file 'IrrHandling.cpp')
-  
-D:\Irrlicht\Lime\EffectHandler.h(311,21): warning C4018: '<': signed/unsigned mismatch
-  (compiling source file 'IrrHandling.cpp')
-  
-D:\Irrlicht\Lime\LimeReceiver.h(126,108): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
-D:\Irrlicht\Lime\LimeReceiver.h(126,108): warning C4244:         with
-D:\Irrlicht\Lime\LimeReceiver.h(126,108): warning C4244:         [
-D:\Irrlicht\Lime\LimeReceiver.h(126,108): warning C4244:             T=irr::s32
-D:\Irrlicht\Lime\LimeReceiver.h(126,108): warning C4244:         ]
-  (compiling source file 'IrrHandling.cpp')
-  
-D:\Irrlicht\Lime\LimeReceiver.h(126,85): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
-D:\Irrlicht\Lime\LimeReceiver.h(126,85): warning C4244:         with
-D:\Irrlicht\Lime\LimeReceiver.h(126,85): warning C4244:         [
-D:\Irrlicht\Lime\LimeReceiver.h(126,85): warning C4244:             T=irr::s32
-D:\Irrlicht\Lime\LimeReceiver.h(126,85): warning C4244:         ]
-  (compiling source file 'IrrHandling.cpp')
-  
-D:\Irrlicht\Lime\LimeReceiver.h(166,80): warning C4244: 'argument': conversion from 'const T' to 'float', possible loss of data
-D:\Irrlicht\Lime\LimeReceiver.h(166,80): warning C4244:         with
-D:\Irrlicht\Lime\LimeReceiver.h(166,80): warning C4244:         [
-D:\Irrlicht\Lime\LimeReceiver.h(166,80): warning C4244:             T=irr::s32
-D:\Irrlicht\Lime\LimeReceiver.h(166,80): warning C4244:         ]
-  (compiling source file 'IrrHandling.cpp')
-  
-D:\Irrlicht\Lime\LimeReceiver.h(166,57): warning C4244: 'argument': conversion from 'const T' to 'float', possible loss of data
-D:\Irrlicht\Lime\LimeReceiver.h(166,57): warning C4244:         with
-D:\Irrlicht\Lime\LimeReceiver.h(166,57): warning C4244:         [
-D:\Irrlicht\Lime\LimeReceiver.h(166,57): warning C4244:             T=irr::s32
-D:\Irrlicht\Lime\LimeReceiver.h(166,57): warning C4244:         ]
-  (compiling source file 'IrrHandling.cpp')
-  
-D:\Irrlicht\Lime\IrrHandling.cpp(153,20): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-D:\Irrlicht\Lime\IrrHandling.cpp(291,20): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-  Light.cpp
-D:\Irrlicht\Lime\EffectHandler.h(212,21): warning C4305: 'initializing': truncation from 'double' to 'irr::f32'
-  (compiling source file 'Light.cpp')
-  
-D:\Irrlicht\Lime\EffectHandler.h(311,21): warning C4018: '<': signed/unsigned mismatch
-  (compiling source file 'Light.cpp')
-  
-D:\Irrlicht\Lime\LimeReceiver.h(126,108): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
-D:\Irrlicht\Lime\LimeReceiver.h(126,108): warning C4244:         with
-D:\Irrlicht\Lime\LimeReceiver.h(126,108): warning C4244:         [
-D:\Irrlicht\Lime\LimeReceiver.h(126,108): warning C4244:             T=irr::s32
-D:\Irrlicht\Lime\LimeReceiver.h(126,108): warning C4244:         ]
-  (compiling source file 'Light.cpp')
-  
-D:\Irrlicht\Lime\LimeReceiver.h(126,85): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
-D:\Irrlicht\Lime\LimeReceiver.h(126,85): warning C4244:         with
-D:\Irrlicht\Lime\LimeReceiver.h(126,85): warning C4244:         [
-D:\Irrlicht\Lime\LimeReceiver.h(126,85): warning C4244:             T=irr::s32
-D:\Irrlicht\Lime\LimeReceiver.h(126,85): warning C4244:         ]
-  (compiling source file 'Light.cpp')
-  
-D:\Irrlicht\Lime\LimeReceiver.h(166,80): warning C4244: 'argument': conversion from 'const T' to 'float', possible loss of data
-D:\Irrlicht\Lime\LimeReceiver.h(166,80): warning C4244:         with
-D:\Irrlicht\Lime\LimeReceiver.h(166,80): warning C4244:         [
-D:\Irrlicht\Lime\LimeReceiver.h(166,80): warning C4244:             T=irr::s32
-D:\Irrlicht\Lime\LimeReceiver.h(166,80): warning C4244:         ]
-  (compiling source file 'Light.cpp')
-  
-D:\Irrlicht\Lime\LimeReceiver.h(166,57): warning C4244: 'argument': conversion from 'const T' to 'float', possible loss of data
-D:\Irrlicht\Lime\LimeReceiver.h(166,57): warning C4244:         with
-D:\Irrlicht\Lime\LimeReceiver.h(166,57): warning C4244:         [
-D:\Irrlicht\Lime\LimeReceiver.h(166,57): warning C4244:             T=irr::s32
-D:\Irrlicht\Lime\LimeReceiver.h(166,57): warning C4244:         ]
-  (compiling source file 'Light.cpp')
-  
-D:\Irrlicht\Lime\DrawSphere.h(19,19): warning C4267: 'initializing': conversion from 'size_t' to 'u32', possible loss of data
-  (compiling source file 'Light.cpp')
-  
-D:\Irrlicht\Lime\DrawSphere.h(24,19): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Light.cpp')
-  
-D:\Irrlicht\Lime\DrawSphere.h(27,25): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Light.cpp')
-  
-D:\Irrlicht\Lime\DrawSphere.h(39,23): warning C4267: 'initializing': conversion from 'size_t' to 'u32', possible loss of data
-  (compiling source file 'Light.cpp')
-  
-D:\Irrlicht\Lime\DrawSphere.h(43,25): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Light.cpp')
-  
-D:\Irrlicht\Lime\DrawSphere.h(53,21): warning C4267: 'initializing': conversion from 'size_t' to 'u32', possible loss of data
-  (compiling source file 'Light.cpp')
-  
-D:\Irrlicht\Lime\DrawSphere.h(56,19): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Light.cpp')
-  
-D:\Irrlicht\Lime\DrawSphere.h(59,25): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Light.cpp')
-  
-D:\Irrlicht\Lime\DrawSphere.h(112,40): warning C4267: 'argument': conversion from 'size_t' to 'irr::u32', possible loss of data
-  (compiling source file 'Light.cpp')
-  
-D:\Irrlicht\Lime\DrawSphere.h(111,67): warning C4267: 'argument': conversion from 'size_t' to 'irr::u32', possible loss of data
-  (compiling source file 'Light.cpp')
-  
-D:\Irrlicht\Lime\DrawSphere.h(126,19): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Light.cpp')
-  
-D:\Irrlicht\Lime\DrawSphere.h(128,25): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Light.cpp')
-  
-D:\Irrlicht\Lime\DrawSphere.h(143,25): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Light.cpp')
-  
-D:\Irrlicht\Lime\DrawSphere.h(154,19): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Light.cpp')
-  
-D:\Irrlicht\Lime\DrawSphere.h(156,25): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Light.cpp')
-  
-D:\Irrlicht\Lime\DebugVisual.h(128,27): warning C4305: 'initializing': truncation from 'double' to 'float'
-  (compiling source file 'Light.cpp')
-  
-D:\Irrlicht\Lime\Light.cpp(11,96): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\Irrlicht\Lime\Light.cpp(14,34): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\Irrlicht\Lime\Light.cpp(19,58): warning C4244: 'argument': conversion from 'double' to 'irr::f32', possible loss of data
-D:\Irrlicht\Lime\Light.cpp(19,43): warning C4244: 'argument': conversion from 'double' to 'irr::f32', possible loss of data
-D:\Irrlicht\Lime\Light.cpp(19,28): warning C4244: 'argument': conversion from 'double' to 'irr::f32', possible loss of data
-D:\Irrlicht\Lime\Light.cpp(77,92): warning C4244: 'argument': conversion from 'double' to 'irr::f32', possible loss of data
-D:\Irrlicht\Lime\Light.cpp(77,77): warning C4244: 'argument': conversion from 'double' to 'irr::f32', possible loss of data
-D:\Irrlicht\Lime\Light.cpp(77,62): warning C4244: 'argument': conversion from 'double' to 'irr::f32', possible loss of data
+D:\Irrlicht\Lime\StaticMesh.cpp(135,39): warning C4018: '>=': signed/unsigned mismatch
+D:\Irrlicht\Lime\StaticMesh.cpp(194,12): warning C4244: 'return': conversion from 'irr::f32' to 'int', possible loss of data
+D:\Irrlicht\Lime\StaticMesh.cpp(199,35): warning C4244: 'argument': conversion from 'int' to 'irr::f32', possible loss of data
+D:\Irrlicht\Lime\StaticMesh.cpp(302,71): warning C4244: 'argument': conversion from 'irr::u32' to 'float', possible loss of data
+D:\Irrlicht\Lime\StaticMesh.cpp(302,53): warning C4244: 'argument': conversion from 'irr::u32' to 'float', possible loss of data
+D:\Irrlicht\Lime\StaticMesh.cpp(302,34): warning C4244: 'argument': conversion from 'irr::u32' to 'float', possible loss of data
+D:\Irrlicht\Lime\StaticMesh.cpp(306,59): warning C4244: 'argument': conversion from 'const float' to 'irr::u32', possible loss of data
+D:\Irrlicht\Lime\StaticMesh.cpp(306,52): warning C4244: 'argument': conversion from 'const float' to 'irr::u32', possible loss of data
+D:\Irrlicht\Lime\StaticMesh.cpp(306,45): warning C4244: 'argument': conversion from 'const float' to 'irr::u32', possible loss of data
   Generating code
-  1140 of 36293 functions ( 3.1%) were compiled, the rest were copied from previous compilation.
+  13 of 36288 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    1026 functions had inline decision re-evaluated but remain unchanged
+    59 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   Lime.vcxproj -> D:\Irrlicht\Lime\x64\Release\Lime.exe
   'pwsh.exe' is not recognized as an internal or external command,

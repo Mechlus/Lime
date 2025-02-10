@@ -12,7 +12,7 @@
 
 class Trail : public Compatible3D {
 public:
-    ghostTrailSceneNode* t;
+    ghostTrailSceneNode* t = nullptr;
     irr::scene::ISceneNode* empty;
     float trailWidth;
     int segments;
