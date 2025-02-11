@@ -65,6 +65,12 @@ int Packet::getSize() {
     return inPacket ? inp.getSize() : outp.getSize();
 }
 
+sol::object Packet::get(int type, int bytePos) {
+    if (bytePos < 0 || bytePos >= inp.getSize()) return sol::nil;
+
+    // Set read position, edit source code
+}
+
 sol::object Packet::pop(int type) {
     switch (type) {
     case 0: { // INT_8BIT_UNSIGNED

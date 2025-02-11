@@ -129,6 +129,12 @@
     <ClCompile Include="Hitbox.cpp">
       <Filter>Source Files\Scene3D</Filter>
     </ClCompile>
+    <ClCompile Include="NetworkHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Packet.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DebugConsole.h">
@@ -256,6 +262,12 @@
     </ClInclude>
     <ClInclude Include="LightManager.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Packet.h">
+      <Filter>Source Files\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

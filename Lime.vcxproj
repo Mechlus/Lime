@@ -164,7 +164,9 @@
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="LuaLime.cpp" />
     <ClCompile Include="Material.cpp" />
+    <ClCompile Include="NetworkHandler.cpp" />
     <ClCompile Include="os.cpp" />
+    <ClCompile Include="Packet.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="StaticMesh.cpp" />
@@ -204,7 +206,9 @@
     <ClInclude Include="Line.h" />
     <ClInclude Include="LuaLime.h" />
     <ClInclude Include="Material.h" />
+    <ClInclude Include="NetworkHandler.h" />
     <ClInclude Include="os.h" />
+    <ClInclude Include="Packet.h" />
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="StaticMesh.h" />

@@ -68,7 +68,7 @@ public:
 	int posY = 0;
 	int fps = 0;
 
-	core::stringc key = "";
+	std::string key = "";
 	bool verbose = false;
 
 	// Render queue

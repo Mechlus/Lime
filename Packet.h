@@ -28,7 +28,7 @@ public:
 	// In Only
 	int getSenderID();
 	sol::object pop(int type); // removes type off of buffer
-	sol::object get(int type, int index); // does not modify buffer
+	sol::object get(int type, int bytePos); // does not modify buffer
 };
 
 void bindPacket();
