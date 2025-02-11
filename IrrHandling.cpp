@@ -64,7 +64,7 @@ void IrrHandling::initScene()
 	if (mainPath == "") {
 		dConsole.doOutput = true;
 		std::string err = "main.lua could not be found!";
-		dConsole.sendMsg(err.c_str(), 1);
+		dConsole.sendMsg(err.c_str(), MESSAGE_TYPE::WARNING);
 		end();
 		return;
 	}
@@ -72,7 +72,7 @@ void IrrHandling::initScene()
 	if (!result.valid())
 	{
 		sol::error err = result;
-		dConsole.sendMsg(std::string(err.what()).c_str(), 1);
+		dConsole.sendMsg(std::string(err.what()).c_str(), MESSAGE_TYPE::WARNING);
 		end();
 		return;
 	}
@@ -80,7 +80,7 @@ void IrrHandling::initScene()
 	if (dConsole.enabled)
 		dConsole.makeConsole();
 
-	dConsole.sendMsg("Lime started", 0);
+	dConsole.sendMsg("Lime started", MESSAGE_TYPE::NORMAL);
 
 	receiver = new LimeReceiver();
 	sound = irrklang::createIrrKlangDevice();
@@ -156,7 +156,7 @@ int IrrHandling::getMemUsed() {
 
 void IrrHandling::end() {
 	if (!didEnd) {
-		dConsole.sendMsg("Ending application...", 0);
+		dConsole.sendMsg("Ending application...", MESSAGE_TYPE::NORMAL);
 
 		if (dConsole.doOutput) { // write console output to output.txt if enabled
 			dConsole.writeOutput();
@@ -185,7 +185,7 @@ void IrrHandling::appLoop() {
 		if (!result.valid())
 		{
 			sol::error err = result;
-			dConsole.sendMsg(std::string(err.what()).c_str(), 1);
+			dConsole.sendMsg(std::string(err.what()).c_str(), MESSAGE_TYPE::WARNING);
 		}
 	}
 
@@ -204,7 +204,7 @@ void IrrHandling::appLoop() {
 			if (!result.valid())
 			{
 				sol::error err = result;
-				dConsole.sendMsg(std::string(err.what()).c_str(), 1);
+				dConsole.sendMsg(std::string(err.what()).c_str(), MESSAGE_TYPE::WARNING);
 			}
 		}
 
@@ -251,7 +251,7 @@ void IrrHandling::appLoop() {
 		if (!result.valid())
 		{
 			sol::error err = result;
-			dConsole.sendMsg(std::string(err.what()).c_str(), 1);
+			dConsole.sendMsg(std::string(err.what()).c_str(), MESSAGE_TYPE::WARNING);
 		}
 	}
 	if (!didEnd)

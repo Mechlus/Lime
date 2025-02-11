@@ -265,8 +265,6 @@ void SoundManager::setDistortionEffect(int channel, int effect, bool enable, sol
                 if (params["feedback"].valid()) feedback = params["feedback"];
                 if (params["delay"].valid()) delay = params["delay"];
                 fx->enableEchoSoundEffect(wetDry, feedback, delay, delay, 0);
-                if (fx->isEchoSoundEffectEnabled())
-                    dConsole.sendMsg("Lol", 0);
             }
             else
             {

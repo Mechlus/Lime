@@ -24,7 +24,7 @@ namespace Warden {
 	inline std::string caption = "Lime Application";
 
 	void logConsole(const std::string& title, int intensity) {
-		dConsole.sendMsg(title.c_str(), intensity);
+		dConsole.sendMsg(title.c_str(), (MESSAGE_TYPE)intensity);
 	}
 
 	// Get/set window caption
@@ -762,17 +762,20 @@ namespace Warden {
 			smgr->setLightManager(0);
 	}
 
-	/*
-	// Make into its own class, like adding an aabb check before doing 3D pos check, "active" state, if point along line intersects, point is inside, etc.
-	void drawDebugSphere(const Vector3D& pos, float radius = 5.0f, int rings = 20, int sectors = 20, const Vector3D& col = Vector3D(255), int opacity = 255.0, int life = 0) {
-		DebugSceneNode* d = new DebugSceneNode(0, smgr, 0, DebugType::SPHERE);
-		d->pos = vector3df(pos.x, pos.y, pos.z);
-		d->rad = radius;
-		d->val1 = rings;
-		d->val2 = sectors;
-		d->col = SColor(opacity, col.x, col.y, col.z);
-		d->raypick_life = life;
-	}*/
+	// Network
+	std::string getEncryptionKey() {
+		return device ? irrHandler->key.c_str() : "";
+	}
+
+	void setEncryptionKey(std::string k) {
+		if (device)
+			irrHandler->key = k.c_str();
+	}
+
+	void setVerbose(bool enable) {
+		if (device)
+			irrHandler->verbose = enable;
+	}
 };
 
 void bindWarden(sol::table application, sol::table world, sol::table sound, sol::table gui, sol::table input, sol::table network) {
@@ -874,4 +877,9 @@ void bindWarden(sol::table application, sol::table world, sol::table sound, sol:
 	input["CheckControllers"] = &Warden::isControllerConnected;
 	input["SetMouseVisibility"] = &Warden::showCursor;
 	input["SetMousePosition"] = &Warden::setCursorPosition;
+
+	// network
+	network["SetEncryptionKey"] = &Warden::setEncryptionKey;
+	network["GetEncryptionKey"] = &Warden::getEncryptionKey;
+	network["SetVerbose"] = &Warden::setVerbose;
 }

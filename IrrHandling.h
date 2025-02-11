@@ -68,6 +68,9 @@ public:
 	int posY = 0;
 	int fps = 0;
 
+	core::stringc key = "";
+	bool verbose = false;
+
 	// Render queue
 	std::queue<CameraToQueue> cameraQueue;
 

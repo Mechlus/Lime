@@ -21,7 +21,7 @@ const char* DebugConsole::getTime() {
 void DebugConsole::abruptEnd() {
 }
 
-void DebugConsole::sendMsg(const char* msg, int color) {
+void DebugConsole::sendMsg(const char* msg, MESSAGE_TYPE m) {
     std::string time = DebugConsole::getTime();
     std::string full = time + " " + msg;
 
@@ -35,18 +35,12 @@ void DebugConsole::sendMsg(const char* msg, int color) {
 
     WORD cur = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
 
-    if (color == 1) {
+    if ((int)m == 1) {
         cur = FOREGROUND_RED;
-    } else if(color == 2) {
+    } else if((int)m == 2) {
         cur = FOREGROUND_GREEN;
-    } else if (color == 3) {
+    } else if ((int)m == 3) {
         cur = FOREGROUND_BLUE;
-    } else if (color == 4) {
-        cur = FOREGROUND_RED | FOREGROUND_GREEN;
-    } else if (color == 5) {
-        cur = FOREGROUND_RED | FOREGROUND_BLUE;
-    } else if (color == 6) {
-        cur = FOREGROUND_GREEN | FOREGROUND_BLUE;
     }
 
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);

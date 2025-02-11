@@ -116,13 +116,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\irrlicht-1.8.5\include;..\luajit\src;..\sol2\include;..\irrKlang-1.6.0\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\irrlicht-1.8.5\include;..\luajit\src;..\sol2\include;..\irrKlang-1.6.0\include;..\HarchIrrNetLite\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>..\irrlicht-1.8.5\lib\Win64-visualStudio;..\luajit\src;..\irrKlang-1.6.0\lib\Winx64-visualStudio</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\irrlicht-1.8.5\lib\Win64-visualStudio;..\luajit\src;..\irrKlang-1.6.0\lib\Winx64-visualStudio;..\HarchIrrNetLite\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -134,7 +134,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\irrlicht-1.8.5\include;..\luajit\src;..\sol2\include;..\irrKlang-1.6.0\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\irrlicht-1.8.5\include;..\luajit\src;..\sol2\include;..\irrKlang-1.6.0\include;..\HarchIrrNetLite\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -142,7 +142,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>..\irrlicht-1.8.5\lib\Win64-visualStudio;..\luajit\src;..\irrKlang-1.6.0\lib\Winx64-visualStudio</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\irrlicht-1.8.5\lib\Win64-visualStudio;..\luajit\src;..\irrKlang-1.6.0\lib\Winx64-visualStudio;..\HarchIrrNetLite\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

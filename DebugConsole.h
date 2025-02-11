@@ -9,6 +9,13 @@
 #include "IrrHandling.h"
 #include <sol/sol.hpp>
 
+enum struct MESSAGE_TYPE : int {
+	NORMAL = 0,
+	WARNING = 1,
+	LUA_WARNING = 2,
+	NETWORK_WARNING = 3
+};
+
 class DebugConsole
 {
 private:
@@ -16,7 +23,7 @@ private:
 	void abruptEnd();
 public:
 	void makeConsole();
-	void sendMsg(const char* msg, int color);
+	void sendMsg(const char* msg, MESSAGE_TYPE type);
 	void writeOutput();
 
 	bool enabled = false;
