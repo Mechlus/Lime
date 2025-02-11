@@ -133,6 +133,10 @@ sol::object Packet::pop(int type) {
     }
 }
 
+sol::object Packet::get(int type, int bytePos) {
+
+}
+
 void Packet::compress() {
     if (inPacket) inp.compressPacket(); else outp.compressPacket();
 }

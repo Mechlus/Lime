@@ -147,7 +147,22 @@ bool Camera3D::getOrtho() {
 }
 
 void Camera3D::setOrtho(bool val) {
-    // TODO: Implement orthographic settings
+    if (val) {
+        irr::core::matrix4 orthoMat;
+        int width = device->getVideoDriver()->getScreenSize().Width;
+        int height = device->getVideoDriver()->getScreenSize().Height;
+        orthoMat.buildProjectionMatrixOrthoLH(width, height, camera->getNearValue(), camera->getFarValue());
+
+        camera->setProjectionMatrix(orthoMat, true);
+    }
+    else {
+        irr::core::matrix4 perspectiveMat;
+        float aspectRatio = (float)device->getVideoDriver()->getScreenSize().Width /
+            (float)device->getVideoDriver()->getScreenSize().Height;
+        perspectiveMat.buildProjectionMatrixPerspectiveFovLH(PI / 4.0f, aspectRatio, camera->getNearValue(), camera->getFarValue());
+
+        camera->setProjectionMatrix(perspectiveMat, false);
+    }
 }
 
 bool Camera3D::getDebug() {
@@ -185,7 +200,8 @@ void bindCamera3D() {
         "fieldOfView", sol::property(&Camera3D::getFOV, &Camera3D::setFOV),
         "visible", sol::property(&Camera3D::getVisible, &Camera3D::setVisible),
         "aspectRatio", sol::property(&Camera3D::getAspect, &Camera3D::setAspect),
-        "debug", sol::property(&Camera3D::getDebug, &Camera3D::setDebug)
+        "debug", sol::property(&Camera3D::getDebug, &Camera3D::setDebug),
+        "orthogonal", sol::property(&Camera3D::getOrtho, &Camera3D::setOrtho)
     );
 
     bindType["getForward"] = &Camera3D::getForward;
