@@ -143,26 +143,12 @@ void Camera3D::setAspect(float a) {
 }
 
 bool Camera3D::getOrtho() {
-    return camera->isOrthogonal();
+    return camera->isTrulyOrthogonal;
 }
 
 void Camera3D::setOrtho(bool val) {
-    if (val) {
-        irr::core::matrix4 orthoMat;
-        int width = device->getVideoDriver()->getScreenSize().Width;
-        int height = device->getVideoDriver()->getScreenSize().Height;
-        orthoMat.buildProjectionMatrixOrthoLH(width, height, camera->getNearValue(), camera->getFarValue());
-
-        camera->setProjectionMatrix(orthoMat, true);
-    }
-    else {
-        irr::core::matrix4 perspectiveMat;
-        float aspectRatio = (float)device->getVideoDriver()->getScreenSize().Width /
-            (float)device->getVideoDriver()->getScreenSize().Height;
-        perspectiveMat.buildProjectionMatrixPerspectiveFovLH(PI / 4.0f, aspectRatio, camera->getNearValue(), camera->getFarValue());
-
-        camera->setProjectionMatrix(perspectiveMat, false);
-    }
+    if (camera)
+        camera->isTrulyOrthogonal = val;
 }
 
 bool Camera3D::getDebug() {

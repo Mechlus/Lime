@@ -12,12 +12,13 @@
 
 struct CameraToQueue {
 public:
-	CameraToQueue(irr::scene::ICameraSceneNode* c, irr::scene::ISceneNode* f, bool d, bool g) : cam(c), forward(f), defaultRendering(d), renderGUI(g) {};
+	CameraToQueue(irr::scene::ICameraSceneNode* c, irr::scene::ISceneNode* f, bool d, bool g) : cam(c), forward(f), defaultRendering(d), renderGUI(g), ortho(c->isTrulyOrthogonal) {};
 
 	irr::scene::ICameraSceneNode* cam = nullptr;
 	irr::scene::ISceneNode* forward = nullptr;
 	bool defaultRendering = false;
 	bool renderGUI = false;
+	bool ortho = false;
 };
 
 struct BatchedTransform {
@@ -49,6 +50,7 @@ public:
 	void AddCameraToQueue(irr::scene::ICameraSceneNode* cam, irr::scene::ISceneNode* forward, bool defaultRendering, bool renderGUI);
 	void AddTransformToQueue(int type, irr::scene::ISceneNode* node, irr::core::vector3df transform);
 	void HandleTransformQueue();
+	void setCameraMatrix(irr::scene::ICameraSceneNode* c);
 	void HandleCameraQueue();
 	int m_frameLimit = 60;
 	float dt;

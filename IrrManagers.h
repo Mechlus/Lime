@@ -5,7 +5,6 @@
 #include "LimeReceiver.h"
 #include "Sound.h"
 #include "LightManager.h"
-#include <irrNet.h>
 #include <map>
 
 inline irr::IrrlichtDevice* device = nullptr;

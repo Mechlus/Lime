@@ -325,9 +325,29 @@ void IrrHandling::HandleTransformQueue() {
 	}
 }
 
+void IrrHandling::setCameraMatrix(irr::scene::ICameraSceneNode* c) {
+	if (c->isTrulyOrthogonal) {
+		irr::core::matrix4 orthoMat;
+		float z = c->getFOV() * 180.0 / PI / 5.0;
+		int width = device->getVideoDriver()->getScreenSize().Width;
+		int height = device->getVideoDriver()->getScreenSize().Height;
+		orthoMat.buildProjectionMatrixOrthoLH(width / z, height / z, c->getNearValue(), c->getFarValue());
+		c->setProjectionMatrix(orthoMat, true);
+	}
+	else {
+		irr::core::matrix4 perspectiveMat;
+		float aspectRatio = (float)device->getVideoDriver()->getScreenSize().Width / (float)device->getVideoDriver()->getScreenSize().Height;
+		perspectiveMat.buildProjectionMatrixPerspectiveFovLH(c->getFOV(), aspectRatio, c->getNearValue(), c->getFarValue());
+
+		c->setProjectionMatrix(perspectiveMat, false);
+	}
+}
+
 void IrrHandling::HandleCameraQueue() {
 	driver->beginScene(true, true, backgroundColor);
-	
+
+	setCameraMatrix(smgr->getActiveCamera());
+
 	if (legacyDrawing)
 		smgr->drawAll();
 	else {
@@ -337,6 +357,8 @@ void IrrHandling::HandleCameraQueue() {
 
 	while (!cameraQueue.empty()) {
 		CameraToQueue c = cameraQueue.front();
+
+		setCameraMatrix(smgr->getActiveCamera());
 
 		if (c.renderGUI && !renderedGUI) {
 			guienv->drawAll();

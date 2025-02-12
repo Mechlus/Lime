@@ -624,14 +624,22 @@ namespace Warden {
 
 			driver->beginScene(true, true, irrHandler->backgroundColor);
 
+			irrHandler->setCameraMatrix(cur);
+
 			smgr->setActiveCamera(cur);
-			effects->update(tx);
+
+			if (irrHandler->legacyDrawing) {
+				driver->setRenderTarget(tx, true, true, irrHandler->backgroundColor);
+				smgr->drawAll();
+			} else
+				effects->update();
 
 			if (renderGUI)
 				guienv->drawAll();
 			driver->endScene();
 
 			smgr->setActiveCamera(mainCamera);
+			driver->setRenderTarget(nullptr);
 		}
 
 		Texture tex = Texture();

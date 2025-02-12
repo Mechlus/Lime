@@ -15,7 +15,9 @@ D:\Irrlicht\Lime\Lime.cpp;D:\Irrlicht\Lime\Lime\x64\Release\Lime.obj
 D:\Irrlicht\Lime\Line.cpp;D:\Irrlicht\Lime\Lime\x64\Release\Line.obj
 D:\Irrlicht\Lime\LuaLime.cpp;D:\Irrlicht\Lime\Lime\x64\Release\LuaLime.obj
 D:\Irrlicht\Lime\Material.cpp;D:\Irrlicht\Lime\Lime\x64\Release\Material.obj
+D:\Irrlicht\Lime\NetworkHandler.cpp;D:\Irrlicht\Lime\Lime\x64\Release\NetworkHandler.obj
 D:\Irrlicht\Lime\os.cpp;D:\Irrlicht\Lime\Lime\x64\Release\os.obj
+D:\Irrlicht\Lime\Packet.cpp;D:\Irrlicht\Lime\Lime\x64\Release\Packet.obj
 D:\Irrlicht\Lime\ParticleSystem.cpp;D:\Irrlicht\Lime\Lime\x64\Release\ParticleSystem.obj
 D:\Irrlicht\Lime\Sound.cpp;D:\Irrlicht\Lime\Lime\x64\Release\Sound.obj
 D:\Irrlicht\Lime\StaticMesh.cpp;D:\Irrlicht\Lime\Lime\x64\Release\StaticMesh.obj
