@@ -14,6 +14,11 @@ public:
 	void handle(); // Handle events if initialized
 	void setVerbose(bool enable); // Enable/disable networking warnings
 
+	// Server/Hosting
+	bool hostServer(std::string ip, int maxClients, int maxChannels);
+
+	// Client
+
 	bool initialized = false;
 	bool verbose = false;
 	bool finished = false;
