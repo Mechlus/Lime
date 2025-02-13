@@ -770,7 +770,16 @@ namespace Warden {
 			smgr->setLightManager(0);
 	}
 
+	// Network (Client)
+
 	// Network (Server)
+	void setVerbose(bool v) {
+		networkHandler->setVerbose(v);
+	}
+
+	bool initializeNetworking() {
+		return networkHandler ? networkHandler->initialize() : false;
+	}
 };
 
 void bindWarden() {
@@ -892,6 +901,12 @@ void bindWarden() {
 	}
 
 	// networkClient
-	
+	if (true) {
+	}
+
 	// networkServer
+	if (true) {
+		networkServer["Initialize"] = &Warden::initializeNetworking;
+		networkServer["SetVerbose"] = &Warden::setVerbose;
+	}
 }

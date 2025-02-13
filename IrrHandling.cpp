@@ -181,8 +181,6 @@ void IrrHandling::appLoop() {
 	sol::protected_function luaOnUpdate = (*lua)["Lime"]["OnUpdate"];
 	sol::protected_function luaOnEnd = (*lua)["Lime"]["OnEnd"];
 
-	std::thread networkThread(std::bind(&NetworkHandler::handle, networkHandler));
-
 	lua->script("math.randomseed(os.time())");
 
 	// Call start in main
@@ -250,6 +248,9 @@ void IrrHandling::appLoop() {
 		if (frameTime < frameDur)
 			device->sleep((frameDur - frameTime) / 2.0);*/
 	}
+
+	if (networkHandler)
+		networkHandler->shutdown();
 
 	// Call end in main
 	if ((*lua)["Lime"]["OnEnd"].get_type() == sol::type::function) {

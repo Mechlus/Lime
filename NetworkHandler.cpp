@@ -28,14 +28,11 @@ bool NetworkHandler::shutdown() {
 		return false;
 	}
 
+	initialized = false;
 	enet_deinitialize();
 	return true;
 }
 
 void NetworkHandler::handle() {
-	if (!initialized) return;
-
-	while (true) {
-
-	}
+	
 }
