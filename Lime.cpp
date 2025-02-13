@@ -1,10 +1,3 @@
-#include <iostream>
-#include <windows.h>
-#include <sstream>
-#include <direct.h>
-#include <fstream>
-#include <psapi.h>
-
 #include "LuaLime.h"
 #include "IrrHandling.h"
 #include "IrrManagers.h"

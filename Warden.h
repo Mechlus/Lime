@@ -770,124 +770,128 @@ namespace Warden {
 			smgr->setLightManager(0);
 	}
 
-	// Network
-	std::string getEncryptionKey() {
-		return device ? irrHandler->key.c_str() : "";
-	}
-
-	void setEncryptionKey(std::string k) {
-		if (device)
-			irrHandler->key = k.c_str();
-	}
-
-	void setVerbose(bool enable) {
-		if (device)
-			irrHandler->verbose = enable;
-	}
+	// Network (Server)
 };
 
-void bindWarden(sol::table application, sol::table world, sol::table sound, sol::table gui, sol::table input, sol::table network) {
+void bindWarden() {
+	sol::table application = lua->create_named_table("Lime");
+	sol::table world = lua->create_named_table("World");
+	sol::table sound = lua->create_named_table("Sound");
+	sol::table gui = lua->create_named_table("GUI");
+	sol::table input = lua->create_named_table("Input");
+	sol::table networkClient = lua->create_named_table("NetworkClient");
+	sol::table networkServer = lua->create_named_table("NetworkServer");
+
 	// application
-	application["SetDriverType"] = &Warden::setDriverType;
-	application["SetFullscreen"] = &Warden::fullscreenWindow;
-	application["SetCaption"] = &Warden::setTitle;
-	application["GetCaption"] = &Warden::getTitle;
-	application["SetWindowPosition"] = &Warden::setWindowPosition;
-	application["GetWindowSize"] = &Warden::getWindowSize;
-	application["SetWindowSize"] = &Warden::setWindowSize;
-	application["GetMonitorSize"] = &Warden::getMonitorSize;
-	application["EndApplication"] = &Warden::endApplication;
-	application["IsWindowFocused"] = &Warden::isFocused;
-	application["SetResizable"] = &Warden::makeResizable;
-	application["GetElapsedTime"] = &Warden::getElapsedTime;
-	application["Log"] = &Warden::logConsole;
-	application["AddArchiveToMemory"] = &Warden::addArchive;
-	application["SetShowConsole"] = &Warden::showConsole;
-	application["SetWriteConsole"] = &Warden::writeConsoleOutput;
-	application["RecreateDevice"] = &Warden::recreateDevice;
-	application["SetVSync"] = &Warden::setVerticalSync;
+	if (true) {
+		application["SetDriverType"] = &Warden::setDriverType;
+		application["SetFullscreen"] = &Warden::fullscreenWindow;
+		application["SetCaption"] = &Warden::setTitle;
+		application["GetCaption"] = &Warden::getTitle;
+		application["SetWindowPosition"] = &Warden::setWindowPosition;
+		application["GetWindowSize"] = &Warden::getWindowSize;
+		application["SetWindowSize"] = &Warden::setWindowSize;
+		application["GetMonitorSize"] = &Warden::getMonitorSize;
+		application["EndApplication"] = &Warden::endApplication;
+		application["IsWindowFocused"] = &Warden::isFocused;
+		application["SetResizable"] = &Warden::makeResizable;
+		application["GetElapsedTime"] = &Warden::getElapsedTime;
+		application["Log"] = &Warden::logConsole;
+		application["AddArchiveToMemory"] = &Warden::addArchive;
+		application["SetShowConsole"] = &Warden::showConsole;
+		application["SetWriteConsole"] = &Warden::writeConsoleOutput;
+		application["RecreateDevice"] = &Warden::recreateDevice;
+		application["SetVSync"] = &Warden::setVerticalSync;
+	}
 	
 	// world
-	world["GetFrameRate"] = &Warden::getFrameRate;
-	world["SetFrameRate"] = &Warden::setFrameRate;
-	world["GetMemoryUsage"] = &Warden::getMemoryUsage;
-	world["SetSkydome"] = &Warden::setSkydome;
-	world["SetSkydomeParameters"] = &Warden::setSkydomeParams;
-	world["SetBackgroundColor"] = &Warden::setBackgroundColor;
-	world["GetObjectCount"] = &Warden::getObjectCount;
-	world["FireRaypick3D"] = &Warden::fireRaypick;
-	world["FireRaypick2D"] = &Warden::fireRaypick2D;
-	world["SetFogDistances"] = &Warden::setFogDistances;
-	world["SetFogColor"] = &Warden::setFogColor;
-	world["SetFogType"] = &Warden::setFogType;
-	world["SetFogDensity"] = &Warden::setFogDensity;
-	world["SetPixelFog"] = &Warden::setFogPixel;
-	world["SetRangeFog"] = &Warden::useDistanceForFog;
-	world["SetFogParameters"] = &Warden::setFogSettings;
-	world["SetAmbientColor"] = &Warden::setAmbientColor;
-	world["ConvertToScreenPosition"] = &Warden::toScreenPosition;
-	world["SetShadows"] = &Warden::setShadows;
-	world["GetRenderTexture"] = &Warden::renderCameraOutput;
-	world["Clear"] = &Warden::clearScene;
-	world["AddPostProcessingEffect"] = &Warden::addPPX;
-	world["SetDefaultShadowFiltering"] = &Warden::setDefaultShadowFiltering;
-	world["SetDefaultShadowResolution"] = &Warden::setDefaultShadowResolution;
-	world["SetDefaultLightingExclusion"] = &Warden::defaultExclude;
-	world["PreloadMesh"] = &Warden::preloadMesh;
-	world["PreloadTexture"] = &Warden::preloadTexture;
-	world["UnloadMesh"] = &Warden::unloadMesh;
-	world["UnloadTexture"] = &Warden::unloadTexture;
-	world["SetLegacyDrawing"] = &Warden::setLegacyDrawing;
-	world["SetShadowColor"] = &Warden::setShadowColor;
-	world["SetShadowOpacity"] = &Warden::setShadowOpacity;
-	world["SetLightManagementMode"] = &Warden::setLightManagementMode;
+	if (true) {
+		world["GetFrameRate"] = &Warden::getFrameRate;
+		world["SetFrameRate"] = &Warden::setFrameRate;
+		world["GetMemoryUsage"] = &Warden::getMemoryUsage;
+		world["SetSkydome"] = &Warden::setSkydome;
+		world["SetSkydomeParameters"] = &Warden::setSkydomeParams;
+		world["SetBackgroundColor"] = &Warden::setBackgroundColor;
+		world["GetObjectCount"] = &Warden::getObjectCount;
+		world["FireRaypick3D"] = &Warden::fireRaypick;
+		world["FireRaypick2D"] = &Warden::fireRaypick2D;
+		world["SetFogDistances"] = &Warden::setFogDistances;
+		world["SetFogColor"] = &Warden::setFogColor;
+		world["SetFogType"] = &Warden::setFogType;
+		world["SetFogDensity"] = &Warden::setFogDensity;
+		world["SetPixelFog"] = &Warden::setFogPixel;
+		world["SetRangeFog"] = &Warden::useDistanceForFog;
+		world["SetFogParameters"] = &Warden::setFogSettings;
+		world["SetAmbientColor"] = &Warden::setAmbientColor;
+		world["ConvertToScreenPosition"] = &Warden::toScreenPosition;
+		world["SetShadows"] = &Warden::setShadows;
+		world["GetRenderTexture"] = &Warden::renderCameraOutput;
+		world["Clear"] = &Warden::clearScene;
+		world["AddPostProcessingEffect"] = &Warden::addPPX;
+		world["SetDefaultShadowFiltering"] = &Warden::setDefaultShadowFiltering;
+		world["SetDefaultShadowResolution"] = &Warden::setDefaultShadowResolution;
+		world["SetDefaultLightingExclusion"] = &Warden::defaultExclude;
+		world["PreloadMesh"] = &Warden::preloadMesh;
+		world["PreloadTexture"] = &Warden::preloadTexture;
+		world["UnloadMesh"] = &Warden::unloadMesh;
+		world["UnloadTexture"] = &Warden::unloadTexture;
+		world["SetLegacyDrawing"] = &Warden::setLegacyDrawing;
+		world["SetShadowColor"] = &Warden::setShadowColor;
+		world["SetShadowOpacity"] = &Warden::setShadowOpacity;
+		world["SetLightManagementMode"] = &Warden::setLightManagementMode;
+	}
 
 	// gui/2D images/text
-	gui["ImportFont"] = &Warden::embedFont;
-	gui["SetDefaultFont"] = &Warden::setDefaultFont;
-	gui["GetImportedFontsList"] = &Warden::getFontList;
-	gui["SetBilinearFiltering"] = &Warden::setBilinearFiltering;
-	gui["SetAnisotropicFiltering"] = &Warden::setAnisotropicFiltering;
-	gui["SetTrilinearFiltering"] = &Warden::setTrilinearFiltering;
-	gui["SetAntiAliasing"] = &Warden::setAntiAliasing;
-	gui["Clear"] = &Warden::clearGUI;
-	gui["Queue"] = &Warden::queueGUI;
+	if (true) {
+		gui["ImportFont"] = &Warden::embedFont;
+		gui["SetDefaultFont"] = &Warden::setDefaultFont;
+		gui["GetImportedFontsList"] = &Warden::getFontList;
+		gui["SetBilinearFiltering"] = &Warden::setBilinearFiltering;
+		gui["SetAnisotropicFiltering"] = &Warden::setAnisotropicFiltering;
+		gui["SetTrilinearFiltering"] = &Warden::setTrilinearFiltering;
+		gui["SetAntiAliasing"] = &Warden::setAntiAliasing;
+		gui["Clear"] = &Warden::clearGUI;
+		gui["Queue"] = &Warden::queueGUI;
+	}
 
 	// sound
-	sound["PlaySound2D"] = &Warden::play2DSound;
-	sound["PlaySound3D"] = &Warden::play3DSound;
-	sound["PlaySound2DOnChannel"] = &Warden::play2DSoundOnChannel;
-	sound["PlaySound3DOnChannel"] = &Warden::play3DSoundOnChannel;
-	sound["StopChannel"] = &Warden::stopChannel;
-	sound["SetChannelPaused"] = &Warden::pauseChannel;
-	sound["SetChannelLooped"] = &Warden::loopChannel;
-	sound["StopAllChannels"] = &Warden::stopAllSounds;
-	sound["PreloadSound"] = &Warden::preloadSound;
-	sound["SetListenerPosition"] = &Warden::setListenerPosition;
-	sound["ClearChannelEffects"] = &Warden::resetChannelFX;
-	sound["SetChannelEffect"] = &Warden::setDistortionEffect;
-	sound["SetChannelVolume"] = &Warden::setVolume;
-	sound["SetChannelPitch"] = &Warden::setPitch;
-	sound["SetChannelPan"] = &Warden::setPan;
-	sound["GetChannelList"] = &Warden::printChannelList;
-	sound["SetChannelPlaybackSpeed"] = &Warden::setPlaybackSpeed;
-	sound["SetChannelPlaybackPosition"] = &Warden::setPlayPosition;
-	sound["SetChannelVelocity"] = &Warden::setChannelVelocity;
-	sound["SetDopplerEffectParameters"] = &Warden::setDopplerParameters;
-	sound["SetChannelPosition3D"] = &Warden::setChannelPosition3D;
-	sound["IsChannelEmpty"] = &Warden::isChannelFree;
-	sound["SetChannelMinimumDistance"] = &Warden::setChannelDistance;
+	if (true) {
+		sound["PlaySound2D"] = &Warden::play2DSound;
+		sound["PlaySound3D"] = &Warden::play3DSound;
+		sound["PlaySound2DOnChannel"] = &Warden::play2DSoundOnChannel;
+		sound["PlaySound3DOnChannel"] = &Warden::play3DSoundOnChannel;
+		sound["StopChannel"] = &Warden::stopChannel;
+		sound["SetChannelPaused"] = &Warden::pauseChannel;
+		sound["SetChannelLooped"] = &Warden::loopChannel;
+		sound["StopAllChannels"] = &Warden::stopAllSounds;
+		sound["PreloadSound"] = &Warden::preloadSound;
+		sound["SetListenerPosition"] = &Warden::setListenerPosition;
+		sound["ClearChannelEffects"] = &Warden::resetChannelFX;
+		sound["SetChannelEffect"] = &Warden::setDistortionEffect;
+		sound["SetChannelVolume"] = &Warden::setVolume;
+		sound["SetChannelPitch"] = &Warden::setPitch;
+		sound["SetChannelPan"] = &Warden::setPan;
+		sound["GetChannelList"] = &Warden::printChannelList;
+		sound["SetChannelPlaybackSpeed"] = &Warden::setPlaybackSpeed;
+		sound["SetChannelPlaybackPosition"] = &Warden::setPlayPosition;
+		sound["SetChannelVelocity"] = &Warden::setChannelVelocity;
+		sound["SetDopplerEffectParameters"] = &Warden::setDopplerParameters;
+		sound["SetChannelPosition3D"] = &Warden::setChannelPosition3D;
+		sound["IsChannelEmpty"] = &Warden::isChannelFree;
+		sound["SetChannelMinimumDistance"] = &Warden::setChannelDistance;
+	}
 
 	// input
-	input["IsKeyDown"] = &Warden::isKeyDown;
-	input["GetMouseState"] = &Warden::getMouseState;
-	input["GetControllerState"] = &Warden::getControllerState;
-	input["CheckControllers"] = &Warden::isControllerConnected;
-	input["SetMouseVisibility"] = &Warden::showCursor;
-	input["SetMousePosition"] = &Warden::setCursorPosition;
+	if (true) {
+		input["IsKeyDown"] = &Warden::isKeyDown;
+		input["GetMouseState"] = &Warden::getMouseState;
+		input["GetControllerState"] = &Warden::getControllerState;
+		input["CheckControllers"] = &Warden::isControllerConnected;
+		input["SetMouseVisibility"] = &Warden::showCursor;
+		input["SetMousePosition"] = &Warden::setCursorPosition;
+	}
 
-	// network
-	network["SetEncryptionKey"] = &Warden::setEncryptionKey;
-	network["GetEncryptionKey"] = &Warden::getEncryptionKey;
-	network["SetVerbose"] = &Warden::setVerbose;
+	// networkClient
+	
+	// networkServer
 }

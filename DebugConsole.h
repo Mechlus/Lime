@@ -1,5 +1,4 @@
 #pragma once
-#include <windows.h>
 #include <iostream>
 #include <chrono>
 #include <iomanip>
@@ -13,7 +12,7 @@ enum struct MESSAGE_TYPE : int {
 	NORMAL = 0,
 	WARNING = 1,
 	LUA_WARNING = 2,
-	NETWORK_WARNING = 3
+	NETWORK_VERBOSE = 3
 };
 
 class DebugConsole

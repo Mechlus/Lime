@@ -1,8 +1,15 @@
 #pragma once
+#define _WINSOCKAPI_
+#include <windows.h>
+#include <winsock.h>
+#include <iostream>
+#include <sstream>
+#include <direct.h>
+#include <fstream>
+#include <psapi.h>
+
 #include <irrlicht.h>
 #include <irrKlang.h>
-#include <windows.h>
-#include <psapi.h>
 #include <string>
 #include "DebugConsole.h"
 #include "LuaLime.h"

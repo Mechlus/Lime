@@ -29,16 +29,8 @@ int LuaLime::initLua(irr::scene::ISceneManager* smgr, irr::video::IVideoDriver* 
 	lua = new sol::state(); // maybe change heap alloc
 	lua->open_libraries(sol::lib::base, sol::lib::string, sol::lib::os, sol::lib::coroutine, sol::lib::jit, sol::lib::utf8, sol::lib::io, sol::lib::math, sol::lib::table, sol::lib::package);
 
-	// do binds
-	sol::table application = lua->create_named_table("Lime");
-	sol::table world = lua->create_named_table("World");
-	sol::table sound = lua->create_named_table("Sound");
-	sol::table gui = lua->create_named_table("GUI");
-	sol::table input = lua->create_named_table("Input");
-	sol::table network = lua->create_named_table("Network");
-
 	// warden
-	bindWarden(application, world, sound, gui, input, network);
+	bindWarden();
 
 	// comp
 	bindCompatible3D();

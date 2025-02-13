@@ -3,8 +3,10 @@
 #include "LimeReceiver.h"
 #include "Sound.h"
 
+#include <thread>
+
 #include <filesystem>
-#include <windows.h>
+
 namespace fs = std::filesystem;
 
 using namespace irr;
@@ -98,6 +100,8 @@ void IrrHandling::initScene()
 	lightManager = new CLightManager(smgr);
 	smgr->setLightManager(0);
 
+	networkHandler = new NetworkHandler();
+
 	appLoop();
 }
 
@@ -176,6 +180,8 @@ void IrrHandling::appLoop() {
 	sol::protected_function luaOnStart = (*lua)["Lime"]["OnStart"];
 	sol::protected_function luaOnUpdate = (*lua)["Lime"]["OnUpdate"];
 	sol::protected_function luaOnEnd = (*lua)["Lime"]["OnEnd"];
+
+	std::thread networkThread(std::bind(&NetworkHandler::handle, networkHandler));
 
 	lua->script("math.randomseed(os.time())");
 
