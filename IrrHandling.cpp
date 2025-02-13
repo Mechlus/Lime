@@ -3,8 +3,6 @@
 #include "LimeReceiver.h"
 #include "Sound.h"
 
-#include <thread>
-
 #include <filesystem>
 
 namespace fs = std::filesystem;
@@ -180,6 +178,9 @@ void IrrHandling::appLoop() {
 	sol::protected_function luaOnStart = (*lua)["Lime"]["OnStart"];
 	sol::protected_function luaOnUpdate = (*lua)["Lime"]["OnUpdate"];
 	sol::protected_function luaOnEnd = (*lua)["Lime"]["OnEnd"];
+
+	if (networkHandler)
+		networkHandler->handle();
 
 	lua->script("math.randomseed(os.time())");
 

@@ -29,10 +29,21 @@ bool NetworkHandler::shutdown() {
 	}
 
 	initialized = false;
+	finished = true;
 	enet_deinitialize();
 	return true;
 }
 
 void NetworkHandler::handle() {
-	
+	netLoop = std::thread(netBody, this);
+}
+
+void netBody(NetworkHandler* n)
+{
+	while (!n->finished) {
+		if (!n->initialized) continue;
+		dConsole.sendMsg("Running body...", MESSAGE_TYPE::WARNING);
+	}
+	dConsole.sendMsg("Over", MESSAGE_TYPE::LUA_WARNING);
+	std::terminate();
 }

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "IrrHandling.h"
-
+#include <thread>
 #include <enet\enet.h>
 
 class NetworkHandler
@@ -16,6 +16,7 @@ public:
 
 	bool initialized = false;
 	bool verbose = false;
+	bool finished = false;
 private:
 	// Server
 	ENetHost* server = nullptr;
@@ -23,4 +24,8 @@ private:
 	// Client
 	ENetHost* host = nullptr;
 	ENetPeer* peer = nullptr;
+	
+	std::thread netLoop;
 };
+
+void netBody(NetworkHandler* n);
