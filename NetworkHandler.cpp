@@ -73,5 +73,16 @@ bool NetworkHandler::hostServer(std::string ip, int maxClients, int maxChannels)
 		}
 	}
 
+	// Add callback "NetworkServer.OnServerHosted"
+
 	return server != nullptr;
+}
+
+void NetworkHandler::setBandwidthLimit(int incoming, int outgoing) {
+	if (!server) {
+		if (verbose) dConsole.sendMsg("Networking WARNING: Setting bandwidth limits must be done after hosting a server", MESSAGE_TYPE::NETWORK_VERBOSE);
+		return;
+	}
+
+	enet_host_bandwidth_limit(server, incoming, outgoing); // in bytes per second
 }

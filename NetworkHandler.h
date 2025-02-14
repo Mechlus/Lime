@@ -16,6 +16,7 @@ public:
 
 	// Server/Hosting
 	bool hostServer(std::string ip, int maxClients, int maxChannels);
+	void setBandwidthLimit(int incoming, int outgoing);
 
 	// Client
 
@@ -28,7 +29,7 @@ private:
 
 	// Client
 	ENetHost* host = nullptr;
-	ENetPeer* peer = nullptr;
+	ENetPeer* client = nullptr;
 	
 	std::thread netLoop;
 };
