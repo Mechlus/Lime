@@ -54,7 +54,7 @@ void DebugConsole::sendMsg(const char* msg, MESSAGE_TYPE m) {
 }
 
 void DebugConsole::writeOutput() {
-    std::ofstream outFile("output.txt");
+    std::ofstream outFile("output.log");
     if (outFile) {
         outFile << DebugConsole::out << std::endl;
     }

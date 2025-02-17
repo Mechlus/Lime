@@ -68,11 +68,24 @@ void IrrHandling::initScene()
 		end();
 		return;
 	}
-	sol::protected_function_result result = lua->safe_script_file(mainPath);
-	if (!result.valid())
-	{
-		sol::error err = result;
-		dConsole.sendMsg(std::string(err.what()).c_str(), MESSAGE_TYPE::WARNING);
+
+	try {
+		sol::protected_function_result result = lua->safe_script_file(mainPath);
+	}
+	catch(const std::exception& e) {
+		std::string err = e.what();
+		
+		dConsole.doOutput = true;
+		dConsole.sendMsg(err.c_str(), MESSAGE_TYPE::WARNING);
+		dConsole.writeOutput();
+
+		err = "Lime encountered an error:\n" + err;
+
+		std::wstring wStr = std::wstring(err.begin(), err.end());
+		const wchar_t* wCharStr = wStr.c_str();
+
+		MessageBox(nullptr, wStr.c_str(), TEXT("Lime Runtime Error"), MB_ICONEXCLAMATION);
+
 		end();
 		return;
 	}

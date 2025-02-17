@@ -45,13 +45,32 @@ void Image2D::setClickable(sol::function f) {
 	if (f && !button) {
 		clickable = true;
 		updateButton();
-		receiver->imageCallbackArray.push_back(ImageCallbackPair(button, f));
+		receiver->buttonCallbackClick.push_back(ButtonCallbackPairClick(button, f));
 	}
 	else if (!f && button) {
 		receiver->removeImg(button);
 		button->remove();
 		clickable = false;
 	}
+}
+
+void Image2D::setHover(sol::function hov) {
+	if (!img) return;
+	if (button) receiver->removeImg(button);
+
+	if (!clickable) {
+		bool cl = clickable;
+		clickable = true;
+		updateButton();
+		clickable = cl;
+	}
+
+	receiver->buttonCallbackHover.push_back(ButtonCallbackPairHover(button, hov));
+}
+
+bool Image2D::getPressed() {
+	if (!img) return false;
+	return button ? button->isPressed() : false;
 }
 
 void Image2D::updateButton() {
@@ -210,4 +229,6 @@ void bindImage2D() {
 	bind_type["setBorderAlignment"] = &Image2D::setBorderAlignment;
 	bind_type["setParent"] = &Image2D::setParent;
 	bind_type["fireOnClick"] = &Image2D::setClickable;
+	bind_type["fireOnHover"] = &Image2D::setHover;
+	bind_type["getPressed"] = &Image2D::getPressed;
 }

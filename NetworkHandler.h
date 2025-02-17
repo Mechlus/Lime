@@ -15,7 +15,8 @@ public:
 	void setVerbose(bool enable); // Enable/disable networking warnings
 
 	// Server/Hosting
-	bool hostServer(std::string ip, int maxClients, int maxChannels);
+	void hostServer(std::string ip, int maxClients, int maxChannels);
+	bool stopHosting();
 	void setBandwidthLimit(int incoming, int outgoing);
 
 	// Client

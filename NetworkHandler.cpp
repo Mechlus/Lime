@@ -50,13 +50,14 @@ void netBody(NetworkHandler* n)
 	}
 }
 
-bool NetworkHandler::hostServer(std::string ip, int maxClients, int maxChannels) {
+void NetworkHandler::hostServer(std::string ip, int maxClients, int maxChannels) {
 	ENetAddress address;
 	address.host = ENET_HOST_ANY; // Hosts on localhost by default
 	address.port = 1234;
 
 	enet_address_set_host(&address, ip.c_str());
 
+	// Put this in thread
 	server = enet_host_create(&address, maxClients, maxChannels, 0, 0);
 
 	if (verbose) {
@@ -73,9 +74,26 @@ bool NetworkHandler::hostServer(std::string ip, int maxClients, int maxChannels)
 		}
 	}
 
-	// Add callback "NetworkServer.OnServerHosted"
+	sol::function f = (*lua)["NetworkServer"]["OnServerHosted"];
+	if (f.get_type() == sol::type::function) {
+		sol::protected_function_result result = f();
+		if (verbose && !result.valid())
+		{
+			dConsole.sendMsg("Networking WARNING: The server is being hosted but NetworkServer.OnServerHosted is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
+		}
+	}
+}
 
-	return server != nullptr;
+bool NetworkHandler::stopHosting() {
+	if (server) {
+		enet_host_destroy(server);
+		if (verbose) dConsole.sendMsg("Server hosting closed", MESSAGE_TYPE::NETWORK_VERBOSE);
+		return true;
+	}
+	else {
+		if (verbose) dConsole.sendMsg("Networking WARNING: NetworkServer.StopHosting was called but there is no server to stop hosting", MESSAGE_TYPE::NETWORK_VERBOSE);
+		return false;
+	}
 }
 
 void NetworkHandler::setBandwidthLimit(int incoming, int outgoing) {

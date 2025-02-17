@@ -4,13 +4,22 @@
 #include "LuaLime.h"
 #include "Vector2D.h"
 
-class ImageCallbackPair {
+class ButtonCallbackPairClick {
 public:
-    ImageCallbackPair(irr::gui::IGUIButton* b, sol::function f) : button(b), callback(f) {
+    ButtonCallbackPairClick(irr::gui::IGUIButton* b, sol::function f) : button(b), callback(f) {
     }
 
     irr::gui::IGUIButton* button;
     sol::function callback;
+};
+
+class ButtonCallbackPairHover {
+public:
+    ButtonCallbackPairHover(irr::gui::IGUIButton* b, sol::function f) : button(b), hover(f) {
+    }
+
+    irr::gui::IGUIButton* button;
+    sol::function hover;
 };
 
 using namespace irr;
@@ -18,20 +27,10 @@ using namespace irr;
 class LimeReceiver : public IEventReceiver
 {
 public:
-    std::vector<ImageCallbackPair> imageCallbackArray;
+    std::vector<ButtonCallbackPairClick> buttonCallbackClick;
+    std::vector<ButtonCallbackPairHover> buttonCallbackHover;
 
-    void removeImg(irr::gui::IGUIButton* b) {
-        imageCallbackArray.erase(
-            std::remove_if(
-                imageCallbackArray.begin(),
-                imageCallbackArray.end(),
-                [b](const ImageCallbackPair& pair) {
-                    return pair.button == b;
-                }
-            ),
-            imageCallbackArray.end()
-        );
-    }
+    void removeImg(irr::gui::IGUIButton* b);
 
     struct SMouseState
     {
@@ -63,138 +62,16 @@ public:
         }
     } ControllerState;
 
-    LimeReceiver()
-    {
-        keys.fill(false);
-        keysRepeat.fill(false);
-    }
+    LimeReceiver();
 
-    virtual bool OnEvent(const SEvent& event) override
-    {
-        // Handle keyboard input events
-        if (event.EventType == EET_KEY_INPUT_EVENT)
-        {
-            keys[event.KeyInput.Key] = event.KeyInput.PressedDown;
+    virtual bool OnEvent(const SEvent& event) override;
 
-            if (event.KeyInput.PressedDown) {
-                if (!keysRepeat[event.KeyInput.Key]) {
-                    callLuaFunction("Input", "OnKeyPressed", static_cast<irr::EKEY_CODE>(event.KeyInput.Key));
-                    keysRepeat[event.KeyInput.Key] = true;
-                }
-            }
-            else {
-                callLuaFunction("Input", "OnKeyReleased", static_cast<irr::EKEY_CODE>(event.KeyInput.Key));
-                keysRepeat[event.KeyInput.Key] = false;
-            }
-        }
+    sol::table getMouseState() const;
 
-        // Handle mouse input events
-        if (event.EventType == EET_MOUSE_INPUT_EVENT)
-        {
-            switch (event.MouseInput.Event)
-            {
-            case EMIE_LMOUSE_PRESSED_DOWN:
-                MouseState.LeftButtonDown = true;
-                callLuaFunction("Input", "OnLeftMouseClick");
-                break;
-
-            case EMIE_LMOUSE_LEFT_UP:
-                MouseState.LeftButtonDown = false;
-                break;
-
-            case EMIE_RMOUSE_PRESSED_DOWN:
-                MouseState.RightButtonDown = true;
-                callLuaFunction("Input", "OnRightMouseClick");
-                break;
-
-            case EMIE_RMOUSE_LEFT_UP:
-                MouseState.RightButtonDown = false;
-                break;
-
-            case EMIE_MMOUSE_PRESSED_DOWN:
-                MouseState.MiddleButtonDown = true;
-                callLuaFunction("Input", "OnMiddleMouseClick");
-                break;
-
-            case EMIE_MMOUSE_LEFT_UP:
-                MouseState.MiddleButtonDown = false;
-                break;
-
-            case EMIE_MOUSE_MOVED:
-                MouseState.Position.X = event.MouseInput.X;
-                MouseState.Position.Y = event.MouseInput.Y;
-                callLuaFunction("Input", "OnMouseMove", Vector2D(MouseState.Position.X, MouseState.Position.Y));
-                break;
-
-            case EMIE_MOUSE_WHEEL:
-                MouseState.WheelDelta = event.MouseInput.Wheel;
-                callLuaFunction("Input", "OnMouseScroll", MouseState.WheelDelta);
-                break;
-
-            default:
-                break;
-            }
-        }
-
-        if (event.EventType == EET_JOYSTICK_INPUT_EVENT)
-        {
-            JoystickState = event.JoystickEvent;
-
-            for (u32 i = 0; i < SEvent::SJoystickEvent::NUMBER_OF_AXES; ++i)
-            {
-                ControllerState.Axis[i] = JoystickState.Axis[i];
-            }
-
-            ControllerState.Buttons = JoystickState.ButtonStates;
-        }
-
-        if (event.GUIEvent.EventType == irr::gui::EGET_BUTTON_CLICKED) {
-            irr::gui::IGUIButton* clickedButton = static_cast<irr::gui::IGUIButton*>(event.GUIEvent.Caller);
-            for (const auto& pair : imageCallbackArray) {
-                if (pair.button == clickedButton && pair.callback) {
-                    pair.callback();
-                }
-            }
-        }
-
-        return false;
-    }
-
-    sol::table getMouseState() const
-    {
-        sol::table table = lua->create_table();
-        table["position"] = Vector2D(MouseState.Position.X, MouseState.Position.Y);
-        table["leftDown"] = MouseState.LeftButtonDown;
-        table["rightDown"] = MouseState.RightButtonDown;
-        table["middleDown"] = MouseState.MiddleButtonDown;
-        table["wheelDelta"] = MouseState.WheelDelta;
-        return table;
-    }
-
-    sol::table getControllerState() const
-    {
-        sol::table table = lua->create_table();
-
-        sol::table axisTable = lua->create_table();
-        for (int i = 0; i < SEvent::SJoystickEvent::NUMBER_OF_AXES; i++) {
-            axisTable[i + 1] = ControllerState.Axis[i] / 32767.f;
-        }
-
-        sol::table buttonTable = lua->create_table();
-        for (int i = 0; i < 32; ++i) {
-            buttonTable[i + 1] = ControllerState.isButtonPressed(i);
-        }
-
-        table["axis"] = axisTable;
-        table["buttons"] = buttonTable;
-        return table;
-    }
+    sol::table getControllerState() const;
 
     // Check if a key is currently pressed
-    bool isKeyDown(irr::EKEY_CODE keyCode) const
-    {
-        return keys[keyCode];
-    }
+    bool isKeyDown(irr::EKEY_CODE keyCode) const;
 
 private:
     std::array<bool, KEY_KEY_CODES_COUNT> keys;

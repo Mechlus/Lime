@@ -162,6 +162,7 @@
     <ClCompile Include="IrrHandling.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Lime.cpp" />
+    <ClCompile Include="LimeReceiver.cpp" />
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="LuaLime.cpp" />
     <ClCompile Include="Material.cpp" />

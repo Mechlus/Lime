@@ -13,6 +13,8 @@ public:
     irr::gui::IGUIButton* button = nullptr;
     bool clickable = false;
     sol::function onClick;
+    sol::function onHover;
+    sol::function offHover;
 
     Image2D();
     Image2D(const Texture& tex);
@@ -24,6 +26,8 @@ public:
     void setHovered();
     bool getHovered();
     void setClickable(sol::function f);
+    void setHover(sol::function hov);
+    bool getPressed();
 
     Vector3D getColor();
     void setColor(Vector3D& color);

@@ -10,6 +10,9 @@
 class Text2D {
 private:
     irr::gui::IGUIStaticText* text;
+    irr::gui::IGUIButton* button = nullptr;
+    bool clickable = false;
+    sol::function onClick;
 
 public:
     Text2D();
