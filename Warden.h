@@ -636,11 +636,11 @@ namespace Warden {
 
 			if (renderGUI)
 				guienv->drawAll();
-			driver->endScene();
-
-			smgr->setActiveCamera(mainCamera);
-			driver->setRenderTarget(nullptr);
 		}
+
+		// Draw scene again, but does not account for queued cameras
+		smgr->setActiveCamera(mainCamera);
+		driver->setRenderTarget(0, true, true, irrHandler->backgroundColor);
 
 		Texture tex = Texture();
 		tex.texture = tx;
