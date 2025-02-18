@@ -109,21 +109,23 @@ bool LimeReceiver::OnEvent(const SEvent& event)
         ControllerState.Buttons = JoystickState.ButtonStates;
     }
 
-    if (event.GUIEvent.EventType == irr::gui::EGET_BUTTON_CLICKED) {
-        irr::gui::IGUIButton* clickedButton = static_cast<irr::gui::IGUIButton*>(event.GUIEvent.Caller);
+    if (event.GUIEvent.EventType == irr::gui::EGET_ELEMENT_FOCUSED || event.GUIEvent.EventType == irr::gui::EGET_BUTTON_CLICKED) {
+        irr::gui::IGUIButton* button = static_cast<irr::gui::IGUIButton*>(event.GUIEvent.Caller);
         for (const auto& pair : buttonCallbackClick) {
-            if (pair.button == clickedButton) {
-                if (pair.callback) pair.callback(); // Call with clicked or released?
+            if (pair.button == button) {
+                if (pair.button == lastFocused) return true;
+                lastFocused = pair.button;
+                if (pair.callback) pair.callback(event.GUIEvent.EventType == irr::gui::EGET_ELEMENT_FOCUSED);
                 return true;
             }
         }
     }
 
-    if (event.GUIEvent.EventType == irr::gui::EGET_ELEMENT_HOVERED) {
+    if (event.GUIEvent.EventType == irr::gui::EGET_ELEMENT_HOVERED || event.GUIEvent.EventType == irr::gui::EGET_ELEMENT_LEFT) {
         irr::gui::IGUIButton* clickedButton = static_cast<irr::gui::IGUIButton*>(event.GUIEvent.Caller);
         for (const auto& pair : buttonCallbackHover) {
             if (pair.button == clickedButton) {
-                if (pair.hover) pair.hover(); // Call with hovered or not, but fix eget element hovered?
+                if (pair.hover) pair.hover(event.GUIEvent.EventType == irr::gui::EGET_ELEMENT_HOVERED);
                 return true;
             }
         }

@@ -19,72 +19,6 @@ Image2D::Image2D(const Image2D& other) {
 	img = other.img;
 }
 
-bool Image2D::getClickable() {
-	return img ? button != nullptr : false;
-}
-
-bool Image2D::getHovered() {
-	if (!img)
-		return false;
-
-	irr::core::position2di mousePos = device->getCursorControl()->getPosition();
-	irr::core::recti rect(
-		img->getAbsoluteClippingRect().UpperLeftCorner,
-		img->getAbsoluteClippingRect().LowerRightCorner
-	);
-	return rect.isPointInside(mousePos);
-}
-
-void Image2D::setHovered() {
-
-}
-
-void Image2D::setClickable(sol::function f) {
-	if (!img)
-		return;
-	if (f && !button) {
-		clickable = true;
-		updateButton();
-		receiver->buttonCallbackClick.push_back(ButtonCallbackPairClick(button, f));
-	}
-	else if (!f && button) {
-		receiver->removeImg(button);
-		button->remove();
-		clickable = false;
-	}
-}
-
-void Image2D::setHover(sol::function hov) {
-	if (!img) return;
-	if (button) receiver->removeImg(button);
-
-	if (!clickable) {
-		bool cl = clickable;
-		clickable = true;
-		updateButton();
-		clickable = cl;
-	}
-
-	receiver->buttonCallbackHover.push_back(ButtonCallbackPairHover(button, hov));
-}
-
-bool Image2D::getPressed() {
-	if (!img) return false;
-	return button ? button->isPressed() : false;
-}
-
-void Image2D::updateButton() {
-	if (!clickable)
-		return;
-
-	irr::core::recti r = img->getRelativePosition();
-	if (button)
-		receiver->removeImg(button);
-	button = guienv->addButton(irr::core::recti(0, 0, r.LowerRightCorner.X - r.UpperLeftCorner.X, r.LowerRightCorner.Y - r.UpperLeftCorner.Y), img);
-	button->setDrawBorder(false);
-	button->setUseAlphaChannel(true);
-}
-
 Vector3D Image2D::getColor() {
 	return img ? Vector3D(img->getColor().getRed(), img->getColor().getGreen(), img->getColor().getBlue()) : Vector3D();
 }
@@ -210,13 +144,14 @@ void bindImage2D() {
 	sol::usertype<Image2D> bind_type = lua->new_usertype<Image2D>("Image2D",
 		sol::constructors <Image2D(const Texture & tex), Image2D(const Texture & tex, const Vector2D & pos), Image2D(const Texture & tex, const Vector2D & pos, const Vector2D & dimensions), Image2D(const Image2D & other)>(),
 
+		sol::base_classes, sol::bases<Compatible2D>(),
+
 		"position", sol::property(&Image2D::getPosition, &Image2D::setPosition),
 		"visible", sol::property(&Image2D::getVisible, &Image2D::setVisible),
 		"size", sol::property(&Image2D::getSize, &Image2D::setSize),
 		"enabled", sol::property(&Image2D::getEnabled, &Image2D::setEnabled),
 		"useAlpha", sol::property(&Image2D::getUseAlpha, &Image2D::setUseAlpha),
 		"scaleToFit", sol::property(&Image2D::scalesToFit, &Image2D::setScalesToFit),
-		"hovered", sol::property(&Image2D::getHovered, &Image2D::setHovered),
 		"color", sol::property(&Image2D::getColor, &Image2D::setColor),
 		"opacity", sol::property(&Image2D::getOpacity, &Image2D::setOpacity)
 	);
@@ -228,7 +163,4 @@ void bindImage2D() {
 	bind_type["toBack"] = &Image2D::sendToBack;
 	bind_type["setBorderAlignment"] = &Image2D::setBorderAlignment;
 	bind_type["setParent"] = &Image2D::setParent;
-	bind_type["fireOnClick"] = &Image2D::setClickable;
-	bind_type["fireOnHover"] = &Image2D::setHover;
-	bind_type["getPressed"] = &Image2D::getPressed;
 }

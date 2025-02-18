@@ -72,7 +72,7 @@ public:
 
     // Check if a key is currently pressed
     bool isKeyDown(irr::EKEY_CODE keyCode) const;
-
+    irr::gui::IGUIButton* lastFocused = nullptr;
 private:
     std::array<bool, KEY_KEY_CODES_COUNT> keys;
     std::array<bool, KEY_KEY_CODES_COUNT> keysRepeat;

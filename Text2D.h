@@ -7,12 +7,11 @@
 #include "Image2D.h"
 #include <string>
 
-class Text2D {
+#include "Compatible2D.h"
+
+class Text2D : public Compatible2D {
 private:
     irr::gui::IGUIStaticText* text;
-    irr::gui::IGUIButton* button = nullptr;
-    bool clickable = false;
-    sol::function onClick;
 
 public:
     Text2D();
@@ -67,6 +66,8 @@ public:
     void setParent(const Image2D& other);
 
     void destroy();
+
+    irr::gui::IGUIElement* getNode() const override { return text; }
 };
 
 void bindText2D();

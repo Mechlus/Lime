@@ -7,27 +7,17 @@
 #include <string>
 #include <vector>
 
-class Image2D {
+#include "Compatible2D.h"
+
+class Image2D : public Compatible2D {
 public:
     irr::gui::IGUIImage* img = nullptr;
-    irr::gui::IGUIButton* button = nullptr;
-    bool clickable = false;
-    sol::function onClick;
-    sol::function onHover;
-    sol::function offHover;
 
     Image2D();
     Image2D(const Texture& tex);
     Image2D(const Texture& tex, const Vector2D& pos);
     Image2D(const Texture& tex, const Vector2D& pos, const Vector2D& dimensions);
     Image2D(const Image2D& other);
-
-    bool getClickable();
-    void setHovered();
-    bool getHovered();
-    void setClickable(sol::function f);
-    void setHover(sol::function hov);
-    bool getPressed();
 
     Vector3D getColor();
     void setColor(Vector3D& color);
@@ -64,8 +54,7 @@ public:
 
     void setParent(const Image2D& other);
 
-private:
-    void updateButton();
+    irr::gui::IGUIElement* getNode() const override { return img; }
 };
 
 void bindImage2D();

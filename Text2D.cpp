@@ -193,6 +193,8 @@ void bindText2D() {
 	sol::usertype<Text2D> bind_type = lua->new_usertype<Text2D>("Text2D",
 		sol::constructors <Text2D(), Text2D(const Text2D & other), Text2D(std::string tx), Text2D(std::string tx, const Vector2D & pos), Text2D(std::string tx, const Vector2D & pos, const Vector2D & dimensions)>(),
 
+		sol::base_classes, sol::bases<Compatible2D>(),
+
 		"position", sol::property(&Text2D::getPosition, &Text2D::setPosition),
 		"visible", sol::property(&Text2D::getVisible, &Text2D::setVisible),
 		"size", sol::property(&Text2D::getSize, &Text2D::setSize),

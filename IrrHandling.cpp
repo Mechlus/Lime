@@ -212,6 +212,7 @@ void IrrHandling::appLoop() {
 	f32 const frameDur = 1000.f / m_frameLimit;
 
 	while (device->run()) {
+		receiver->lastFocused = nullptr;
 		const u32 now = device->getTimer()->getTime();
 		dt = (now - then) / 16.667f;
 		then = now;

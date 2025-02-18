@@ -272,6 +272,9 @@
     <ClInclude Include="Packet.h">
       <Filter>Source Files\Core</Filter>
     </ClInclude>
+    <ClInclude Include="Compatible2D.h">
+      <Filter>Source Files\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Lime.rc">

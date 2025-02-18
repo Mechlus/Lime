@@ -20,6 +20,7 @@
 #include "LegacyLight.h"
 #include "Hitbox.h"
 
+#include "Compatible2D.h"
 #include "Compatible3D.h"
 
 #include <sol/sol.hpp>
@@ -33,6 +34,7 @@ int LuaLime::initLua(irr::scene::ISceneManager* smgr, irr::video::IVideoDriver* 
 	bindWarden();
 
 	// comp
+	bindCompatible2D();
 	bindCompatible3D();
 
 	// objs
