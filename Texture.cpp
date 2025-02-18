@@ -25,10 +25,8 @@ void Texture::keyColor(const Vector2D& pos) {
 		driver->makeColorKeyTexture(texture, core::position2d<s32>(pos.x, pos.y));
 }
 
-bool Texture::saveTexture(std::string path) {
-	if (texture)
-		return irrHandler->writeTextureToFile(texture, path.c_str());
-	return false;
+void Texture::saveTexture(std::string path) {
+	irrHandler->doWriteTextureThreaded(texture, path);
 }
 
 void bindTexture() {

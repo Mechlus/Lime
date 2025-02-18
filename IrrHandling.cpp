@@ -280,26 +280,28 @@ void IrrHandling::appLoop() {
 		end();
 }
 
-bool IrrHandling::writeTextureToFile(irr::video::ITexture* texture, const irr::core::stringw& name)
+void IrrHandling::doWriteTextureThreaded(irr::video::ITexture* texture, std::string name) {
+	std::thread(std::bind(&IrrHandling::writeTextureToFile, this, texture, name)).detach();
+}
+
+void IrrHandling::writeTextureToFile(irr::video::ITexture* texture, std::string name)
 {
 	if (!texture)
-		return false;
+		return;
 
 	void* data = texture->lock(irr::video::ETLM_READ_ONLY);
 	if (!data)
-		return false;
+		return;
 
 	irr::video::IImage* image = driver->createImageFromData(texture->getColorFormat(), texture->getSize(), data, false);
 	texture->unlock();
 
 	if (!image)
-		return false;
+		return;
 
 	driver->writeImageToFile(image, name.c_str(), 99);
 
 	image->drop();
-
-	return true;
 }
 
 void IrrHandling::updateFPS() {
@@ -403,4 +405,33 @@ void IrrHandling::HandleCameraQueue() {
 	}
 
 	smgr->setActiveCamera(mainCamera);
+}
+
+void IrrHandling::displayMessage(std::string title, std::string message, int image) {
+	std::wstring nTitle = std::wstring(title.begin(), title.end());
+	const wchar_t* nTitleC = nTitle.c_str();
+
+	std::wstring nMessage = std::wstring(message.begin(), message.end());
+	const wchar_t* nMessageC = nMessage.c_str();
+
+	UINT icon = MB_OK;
+
+	image = irr::core::clamp<int>(image, 0, 3);
+
+	switch (image) {
+	case 0:
+		icon = MB_OK;
+		break;
+	case 1:
+		icon = MB_ICONWARNING;
+		break;
+	case 2:
+		icon = MB_ICONQUESTION;
+		break;
+	case 3:
+		icon = MB_ICONINFORMATION;
+		break;
+	}
+
+	MessageBox(nullptr, nMessageC, nTitleC, icon);
 }

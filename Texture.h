@@ -16,7 +16,7 @@ public:
     bool load(const std::string& imgpath);
     std::string getPath() const;
     void keyColor(const Vector2D& pos);
-    bool saveTexture(std::string path);
+    void saveTexture(std::string path);
 };
 
 void bindTexture();

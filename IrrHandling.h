@@ -52,13 +52,15 @@ public:
 	int getMemUsed();
 	void end();
 	void appLoop();
-	bool writeTextureToFile(irr::video::ITexture* texture, const irr::core::stringw& name);
+	void doWriteTextureThreaded(irr::video::ITexture* texture, std::string name);
+	void writeTextureToFile(irr::video::ITexture* texture, std::string name);
 	void updateFPS();
 	void AddCameraToQueue(irr::scene::ICameraSceneNode* cam, irr::scene::ISceneNode* forward, bool defaultRendering, bool renderGUI);
 	void AddTransformToQueue(int type, irr::scene::ISceneNode* node, irr::core::vector3df transform);
 	void HandleTransformQueue();
 	void setCameraMatrix(irr::scene::ICameraSceneNode* c);
 	void HandleCameraQueue();
+	void displayMessage(std::string title, std::string message, int image);
 	int m_frameLimit = 60;
 	float dt;
 	bool didEnd = false;

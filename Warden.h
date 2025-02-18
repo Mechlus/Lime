@@ -770,6 +770,10 @@ namespace Warden {
 			smgr->setLightManager(0);
 	}
 
+	void displayMessage(std::string title, std::string message, int image) {
+		irrHandler->displayMessage(title, message, image);
+	}
+
 	// Network (Client)
 
 	// Network (Server)
@@ -811,6 +815,7 @@ void bindWarden() {
 		application["SetWriteConsole"] = &Warden::writeConsoleOutput;
 		application["RecreateDevice"] = &Warden::recreateDevice;
 		application["SetVSync"] = &Warden::setVerticalSync;
+		application["DisplayMessage"] = &Warden::displayMessage;
 	}
 	
 	// world
