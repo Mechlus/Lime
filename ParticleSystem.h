@@ -35,6 +35,7 @@ public:
 
     bool getActive();
     void setActive(bool active);
+    void emitOnce(int amount);
 
     void loadMaterial(const Material& mat);
 

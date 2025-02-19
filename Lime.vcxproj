@@ -213,6 +213,9 @@
     <ClInclude Include="os.h" />
     <ClInclude Include="Packet.h" />
     <ClInclude Include="ParticleSystem.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="resource1.h" />
+    <ClInclude Include="resource2.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="StaticMesh.h" />
     <ClInclude Include="LegacyLight.h" />
@@ -228,9 +231,6 @@
     <ClInclude Include="Warden.h" />
     <ClInclude Include="WaterMesh.h" />
     <ClInclude Include="XEffects.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Lime.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

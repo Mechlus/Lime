@@ -5,6 +5,7 @@ D:\Irrlicht\Lime\EffectHandler.h(212,21): warning C4305: 'initializing': truncat
 D:\Irrlicht\Lime\EffectHandler.h(311,21): warning C4018: '<': signed/unsigned mismatch
   (compiling source file 'Billboard.cpp')
   
+  CShaderPre.cpp
   Camera3D.cpp
 D:\Irrlicht\Lime\EffectHandler.h(212,21): warning C4305: 'initializing': truncation from 'double' to 'irr::f32'
   (compiling source file 'Camera3D.cpp')
@@ -151,6 +152,13 @@ D:\Irrlicht\Lime\EditBox.cpp(142,65): warning C4244:         with
 D:\Irrlicht\Lime\EditBox.cpp(142,65): warning C4244:         [
 D:\Irrlicht\Lime\EditBox.cpp(142,65): warning C4244:             T=irr::s32
 D:\Irrlicht\Lime\EditBox.cpp(142,65): warning C4244:         ]
+  EffectHandler.cpp
+D:\Irrlicht\Lime\EffectHandler.h(212,21): warning C4305: 'initializing': truncation from 'double' to 'irr::f32'
+  (compiling source file 'EffectHandler.cpp')
+  
+D:\Irrlicht\Lime\EffectHandler.h(311,21): warning C4018: '<': signed/unsigned mismatch
+  (compiling source file 'EffectHandler.cpp')
+  
   Empty.cpp
 D:\Irrlicht\Lime\EffectHandler.h(212,21): warning C4305: 'initializing': truncation from 'double' to 'irr::f32'
   (compiling source file 'Empty.cpp')
@@ -206,6 +214,15 @@ D:\Irrlicht\Lime\DrawSphere.h(156,25): warning C4244: 'initializing': conversion
 D:\Irrlicht\Lime\DebugVisual.h(128,27): warning C4305: 'initializing': truncation from 'double' to 'float'
   (compiling source file 'Empty.cpp')
   
+  GhostTrailSceneNode.cpp
+D:\Irrlicht\Lime\GhostTrailSceneNode.cpp(24,23): warning C4018: '<': signed/unsigned mismatch
+D:\Irrlicht\Lime\GhostTrailSceneNode.cpp(54,23): warning C4018: '<': signed/unsigned mismatch
+D:\Irrlicht\Lime\GhostTrailSceneNode.cpp(241,27): warning C4018: '<': signed/unsigned mismatch
+D:\Irrlicht\Lime\GhostTrailSceneNode.cpp(243,34): warning C4018: '<': signed/unsigned mismatch
+D:\Irrlicht\Lime\GhostTrailSceneNode.cpp(167,9): warning C4101: 'p': unreferenced local variable
+D:\Irrlicht\Lime\GhostTrailSceneNode.cpp(278,23): warning C4018: '<': signed/unsigned mismatch
+D:\Irrlicht\Lime\GhostTrailSceneNode.cpp(280,29): warning C4018: '<': signed/unsigned mismatch
+D:\Irrlicht\Lime\GhostTrailSceneNode.cpp(291,27): warning C4018: '<': signed/unsigned mismatch
   Hitbox.cpp
 D:\Irrlicht\Lime\EffectHandler.h(212,21): warning C4305: 'initializing': truncation from 'double' to 'irr::f32'
   (compiling source file 'Hitbox.cpp')
@@ -688,6 +705,11 @@ D:\Irrlicht\Lime\LimeReceiver.cpp(140,53): warning C4244:         with
 D:\Irrlicht\Lime\LimeReceiver.cpp(140,53): warning C4244:         [
 D:\Irrlicht\Lime\LimeReceiver.cpp(140,53): warning C4244:             T=irr::s32
 D:\Irrlicht\Lime\LimeReceiver.cpp(140,53): warning C4244:         ]
+  Line.cpp
+D:\Irrlicht\Lime\Line.cpp(30,20): warning C4244: '=': conversion from 'time_t' to 'irr::u32', possible loss of data
+D:\Irrlicht\Lime\Line.cpp(40,20): warning C4244: '=': conversion from 'time_t' to 'irr::u32', possible loss of data
+D:\Irrlicht\Lime\Line.cpp(77,20): warning C4244: '=': conversion from 'time_t' to 'irr::u32', possible loss of data
+D:\Irrlicht\Lime\Line.cpp(90,15): warning C4244: 'initializing': conversion from 'time_t' to 'irr::u32', possible loss of data
   LuaLime.cpp
 D:\Irrlicht\Lime\EffectHandler.h(212,21): warning C4305: 'initializing': truncation from 'double' to 'irr::f32'
   (compiling source file 'LuaLime.cpp')
@@ -876,6 +898,7 @@ D:\Irrlicht\Lime\EffectHandler.h(212,21): warning C4305: 'initializing': truncat
 D:\Irrlicht\Lime\EffectHandler.h(311,21): warning C4018: '<': signed/unsigned mismatch
   (compiling source file 'Packet.cpp')
   
+  Compiling...
   ParticleSystem.cpp
 D:\Irrlicht\Lime\EffectHandler.h(212,21): warning C4305: 'initializing': truncation from 'double' to 'irr::f32'
   (compiling source file 'ParticleSystem.cpp')
@@ -1042,7 +1065,6 @@ D:\Irrlicht\Lime\Text2D.cpp(174,55): warning C4244:         with
 D:\Irrlicht\Lime\Text2D.cpp(174,55): warning C4244:         [
 D:\Irrlicht\Lime\Text2D.cpp(174,55): warning C4244:             T=irr::s32
 D:\Irrlicht\Lime\Text2D.cpp(174,55): warning C4244:         ]
-  Compiling...
   Text3D.cpp
 D:\Irrlicht\Lime\EffectHandler.h(212,21): warning C4305: 'initializing': truncation from 'double' to 'irr::f32'
   (compiling source file 'Text3D.cpp')
@@ -1056,6 +1078,39 @@ D:\Irrlicht\Lime\Text3D.cpp(70,31): warning C4244: 'argument': conversion from '
 D:\Irrlicht\Lime\Text3D.cpp(76,56): warning C4244: 'argument': conversion from 'const float' to 'irr::u32', possible loss of data
 D:\Irrlicht\Lime\Text3D.cpp(76,49): warning C4244: 'argument': conversion from 'const float' to 'irr::u32', possible loss of data
 D:\Irrlicht\Lime\Text3D.cpp(76,42): warning C4244: 'argument': conversion from 'const float' to 'irr::u32', possible loss of data
+  TextArea.cpp
+D:\Irrlicht\Lime\TextArea.cpp(124,19): warning C4267: 'return': conversion from 'size_t' to 'irr::u32', possible loss of data
+D:\Irrlicht\Lime\TextArea.cpp(239,30): warning C4267: '=': conversion from 'size_t' to 'irr::s32', possible loss of data
+D:\Irrlicht\Lime\TextArea.cpp(449,29): warning C4267: '=': conversion from 'size_t' to 'irr::s32', possible loss of data
+D:\Irrlicht\Lime\TextArea.cpp(483,19): warning C4267: '=': conversion from 'size_t' to 'irr::u32', possible loss of data
+D:\Irrlicht\Lime\TextArea.cpp(613,31): warning C4267: '=': conversion from 'size_t' to 'irr::u32', possible loss of data
+D:\Irrlicht\Lime\TextArea.cpp(614,26): warning C4267: '=': conversion from 'size_t' to 'irr::u32', possible loss of data
+D:\Irrlicht\Lime\TextArea.cpp(617,26): warning C4267: '=': conversion from 'size_t' to 'irr::u32', possible loss of data
+D:\Irrlicht\Lime\TextArea.cpp(697,15): warning C4267: 'initializing': conversion from 'size_t' to 'irr::u32', possible loss of data
+D:\Irrlicht\irrlicht-1.8.5\include\irrString.h(1303,29): warning C4267: 'initializing': conversion from 'size_t' to 'irr::u32', possible loss of data
+  (compiling source file 'TextArea.cpp')
+      D:\Irrlicht\irrlicht-1.8.5\include\irrString.h(1303,29):
+      the template instantiation context (the oldest one first) is
+          D:\Irrlicht\Lime\TextArea.cpp(510,19):
+          see reference to function template instantiation 'irr::u32 irr::core::string<wchar_t,irr::core::irrAllocator<T>>::split<std::vector<irr::core::stringw,std::allocator<irr::core::stringw>>>(container &,const T *const ,irr::u32,bool,bool) const' being compiled
+          with
+          [
+              T=wchar_t,
+              container=std::vector<irr::core::stringw,std::allocator<irr::core::stringw>>
+          ]
+              D:\Irrlicht\Lime\TextArea.cpp(510,24):
+              see the first reference to 'irr::core::string<wchar_t,irr::core::irrAllocator<T>>::split' in 'TextArea::updateVisibleLines'
+          with
+          [
+              T=wchar_t
+          ]
+  
+D:\Irrlicht\irrlicht-1.8.5\include\irrString.h(1303,20): warning C4267: 'initializing': conversion from 'size_t' to 'const irr::u32', possible loss of data
+  (compiling source file 'TextArea.cpp')
+  
+D:\Irrlicht\irrlicht-1.8.5\include\irrString.h(1325,20): warning C4267: 'return': conversion from 'size_t' to 'irr::u32', possible loss of data
+  (compiling source file 'TextArea.cpp')
+  
   Texture.cpp
 D:\Irrlicht\Lime\EffectHandler.h(212,21): warning C4305: 'initializing': truncation from 'double' to 'irr::f32'
   (compiling source file 'Texture.cpp')
@@ -1135,9 +1190,8 @@ D:\Irrlicht\Lime\WaterMesh.cpp(72,41): warning C4244:         [
 D:\Irrlicht\Lime\WaterMesh.cpp(72,41): warning C4244:             T=irr::u32
 D:\Irrlicht\Lime\WaterMesh.cpp(72,41): warning C4244:         ]
   Generating code
-  56 of 37134 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
-    55 functions were new in current compilation
-    1300 functions had inline decision re-evaluated but remain unchanged
+  Previous IPDB and IOBJ mismatch, fall back to full compilation.
+  All 37332 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Finished generating code
   Lime.vcxproj -> D:\Irrlicht\Lime\x64\Release\Lime.exe
   'pwsh.exe' is not recognized as an internal or external command,

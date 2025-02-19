@@ -784,6 +784,15 @@ namespace Warden {
 	bool initializeNetworking() {
 		return networkHandler ? networkHandler->initialize() : false;
 	}
+
+	void hostServer(std::string ip, int maxClients, int maxChannels) {
+		if (!networkHandler || !networkHandler->initialized) {
+			if (networkHandler->verbose) dConsole.sendMsg("Networking WARNING: Failed to host server: Networking is not initialized", MESSAGE_TYPE::NETWORK_VERBOSE);
+			return;
+		}
+
+		networkHandler->hostServer(ip, maxClients, maxChannels);
+	}
 };
 
 void bindWarden() {
@@ -913,5 +922,6 @@ void bindWarden() {
 	if (true) {
 		networkServer["Initialize"] = &Warden::initializeNetworking;
 		networkServer["SetVerbose"] = &Warden::setVerbose;
+		networkServer["Host"] = &Warden::hostServer;
 	}
 }

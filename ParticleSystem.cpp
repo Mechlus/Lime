@@ -278,6 +278,11 @@ void ParticleSystem::setActive(bool active) {
 		ps->active = active;
 }
 
+void ParticleSystem::emitOnce(int amount) {
+	if (ps)
+		ps->spark(device->getTimer()->getTime(), amount);
+}
+
 void ParticleSystem::loadMaterial(const Material& mat) {
 	if (ps)
 		ps->getMaterial(0) = mat.mat;
@@ -331,4 +336,5 @@ void bindParticleSystem() {
 	bind_type["clearAffectors"] = &ParticleSystem::removeAffectors;
 	bind_type["clearParticles"] = &ParticleSystem::removeParticles;
 	bind_type["loadMaterial"] = &ParticleSystem::loadMaterial;
+	bind_type["spark"] = &ParticleSystem::emitOnce;
 }

@@ -32,6 +32,10 @@ bool NetworkHandler::shutdown() {
 	initialized = false;
 	finished = true;
 	netLoop.join();
+
+	if (server)
+		enet_host_destroy(server);
+
 	enet_deinitialize();
 	return true;
 }
@@ -43,10 +47,11 @@ void NetworkHandler::handle() {
 void netBody(NetworkHandler* n)
 {
 	while (!n->finished) {
-		if (!n->initialized) continue;
-
+		if (!n->initialized) {
+			std::this_thread::yield();
+			continue;
+		}
 		// Process networking
-		
 	}
 }
 
@@ -60,18 +65,18 @@ void NetworkHandler::hostServer(std::string ip, int maxClients, int maxChannels)
 	// Put this in thread
 	server = enet_host_create(&address, maxClients, maxChannels, 0, 0);
 
-	if (verbose) {
+	char ipString[64];
+	int out = enet_address_get_host_ip(&server->address, ipString, sizeof(ipString));
+
+	if (!server || out != 0 || ipString != ip) {
 		std::string ms = "";
-		if (server) {
-			ms = "Hosting on server IP ";
-			ms += address.host;
-			dConsole.sendMsg(ms.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
-		}
-		else {
-			ms = "Networking WARNING: Server could not be hosted on IP ";
-			ms += address.host;
-			dConsole.sendMsg(ms.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
-		}
+		ms = "Networking WARNING: Server could not be hosted on IP ";
+		ms += ip;
+		if (verbose) dConsole.sendMsg(ms.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
+		if (server)
+			enet_host_destroy(server);
+		server = nullptr;
+		return;
 	}
 
 	sol::function f = (*lua)["NetworkServer"]["OnServerHosted"];
@@ -80,6 +85,16 @@ void NetworkHandler::hostServer(std::string ip, int maxClients, int maxChannels)
 		if (verbose && !result.valid())
 		{
 			dConsole.sendMsg("Networking WARNING: The server is being hosted but NetworkServer.OnServerHosted is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
+		}
+		else if (verbose) {
+			std::string msg = "Hosting server on ";
+			msg += ipString;
+			msg += " for ";
+			msg += std::to_string(maxClients);
+			msg += " clients with ";
+			msg += std::to_string(maxChannels);
+			msg += " channels";
+			dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
 		}
 	}
 }
