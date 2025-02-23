@@ -787,11 +787,35 @@ namespace Warden {
 
 	void hostServer(std::string ip, int maxClients, int maxChannels) {
 		if (!networkHandler || !networkHandler->initialized) {
-			if (networkHandler->verbose) dConsole.sendMsg("Networking WARNING: Failed to host server: Networking is not initialized", MESSAGE_TYPE::NETWORK_VERBOSE);
+			if ((networkHandler->verbose)) dConsole.sendMsg("Networking WARNING: Failed to host server: Networking is not initialized", MESSAGE_TYPE::NETWORK_VERBOSE);
 			return;
 		}
 
 		networkHandler->hostServer(ip, maxClients, maxChannels);
+	}
+
+	bool isHostingServer() {
+		return networkHandler ? networkHandler->isHosting() : false;
+	}
+
+	int getIP() {
+		return networkHandler ? networkHandler->getServerIP() : 0;
+	}
+
+	int getPort() {
+		return networkHandler ? networkHandler->getPort() : 0;
+	}
+
+	void setBandwidthLimits(int incoming, int outgoing) {
+		if (networkHandler) networkHandler->setBandwidthLimit(incoming, outgoing); else if (!(networkHandler->initialized)) dConsole.sendMsg("Networking WARNING: Failed to set bandwidth limits: Networking is not initialized", MESSAGE_TYPE::NETWORK_VERBOSE);
+	}
+
+	bool shutdownNetworking() {
+		return networkHandler ? networkHandler->shutdown() : false;
+	}
+
+	bool stopHosting() {
+		return networkHandler ? networkHandler->stopHosting() : false;
 	}
 };
 
@@ -923,5 +947,11 @@ void bindWarden() {
 		networkServer["Initialize"] = &Warden::initializeNetworking;
 		networkServer["SetVerbose"] = &Warden::setVerbose;
 		networkServer["Host"] = &Warden::hostServer;
+		networkServer["IsHosting"] = &Warden::isHostingServer;
+		networkServer["StopHosting"] = &Warden::stopHosting;
+		networkServer["GetIP"] = &Warden::getIP;
+		networkServer["GetPort"] = &Warden::getPort;
+		networkServer["SetBandwidthLimits"] = &Warden::setBandwidthLimits;
+		networkServer["Shutdown"] = &Warden::shutdownNetworking;
 	}
 }

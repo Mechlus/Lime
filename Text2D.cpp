@@ -214,5 +214,4 @@ void bindText2D() {
 	bind_type["toBack"] = &Text2D::sendToBack;
 	bind_type["setBorderAlignment"] = &Text2D::setBorderAlignment;
 	bind_type["setTextAlignment"] = &Text2D::setTextAlignment;
-	bind_type["setParent"] = &Text2D::setParent;
 }

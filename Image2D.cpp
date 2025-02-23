@@ -162,5 +162,4 @@ void bindImage2D() {
 	bind_type["toFront"] = &Image2D::bringToFront;
 	bind_type["toBack"] = &Image2D::sendToBack;
 	bind_type["setBorderAlignment"] = &Image2D::setBorderAlignment;
-	bind_type["setParent"] = &Image2D::setParent;
 }
