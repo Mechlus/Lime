@@ -785,13 +785,13 @@ namespace Warden {
 		return networkHandler ? networkHandler->initialize() : false;
 	}
 
-	void hostServer(std::string ip, int maxClients, int maxChannels) {
+	void hostServer(std::string ip, int port, int maxClients, int maxChannels) {
 		if (!networkHandler || !networkHandler->initialized) {
 			if ((networkHandler->verbose)) dConsole.sendMsg("Networking WARNING: Failed to host server: Networking is not initialized", MESSAGE_TYPE::NETWORK_VERBOSE);
 			return;
 		}
 
-		networkHandler->hostServer(ip, maxClients, maxChannels);
+		networkHandler->hostServer(ip, port, maxClients, maxChannels);
 	}
 
 	bool isHostingServer() {
@@ -816,6 +816,50 @@ namespace Warden {
 
 	bool stopHosting() {
 		return networkHandler ? networkHandler->stopHosting() : false;
+	}
+
+	bool createClient(int outgoing, int channels) {
+		return networkHandler ? networkHandler->createClient(outgoing, channels) : false;
+	}
+
+	bool destroyClient() {
+		return networkHandler ? networkHandler->destroyClient() : false;
+	}
+
+	void connectClient(std::string ad, int port, int channels) {
+		if (networkHandler) networkHandler->connectClient(ad, port, channels);
+	}
+
+	void disconnectClient() {
+		if (networkHandler) networkHandler->disconnectClient();
+	}
+
+	bool isClientConnected() {
+		return networkHandler ? networkHandler->isClientConnected() : false;
+	}
+
+	int getPeerState(int peerID) {
+		return networkHandler ? networkHandler->getPeerState(peerID) : -1;
+	}
+
+	int getPeerPing(int peerID) {
+		return networkHandler ? networkHandler->getPeerState(peerID) : -1;
+	}
+
+	void forceDisconnectClient(int peerID, int reason) {
+		if (networkHandler) networkHandler->forceDisconnectClient(peerID, reason);
+	}
+
+	void sendPacketToServer(int channel, const Packet& p, bool tcp) {
+		if (networkHandler) networkHandler->sendPacketToServer(p, channel, tcp);
+	}
+
+	void sendPacketToPeer(int peerID, int channel, const Packet& p, bool tcp) {
+		if (networkHandler) networkHandler->sendPacketToPeer(peerID, p, channel, tcp);
+	}
+
+	void sendPacketToAll(int channel, const Packet& p, bool tcp) {
+		if (networkHandler) networkHandler->sendPacketToAll(p, channel, tcp);
 	}
 };
 
@@ -940,6 +984,15 @@ void bindWarden() {
 
 	// networkClient
 	if (true) {
+		networkClient["Initialize"] = &Warden::initializeNetworking;
+		networkClient["SetVerbose"] = &Warden::setVerbose;
+		networkClient["Create"] = &Warden::createClient;
+		networkClient["Destroy"] = &Warden::destroyClient;
+		networkClient["Connect"] = &Warden::connectClient;
+		networkClient["Disconnect"] = &Warden::disconnectClient;
+		networkClient["IsConnected"] = &Warden::isClientConnected;
+
+		networkClient["SendPacketToServer"] = &Warden::sendPacketToServer;
 	}
 
 	// networkServer
@@ -953,5 +1006,11 @@ void bindWarden() {
 		networkServer["GetPort"] = &Warden::getPort;
 		networkServer["SetBandwidthLimits"] = &Warden::setBandwidthLimits;
 		networkServer["Shutdown"] = &Warden::shutdownNetworking;
+		networkServer["GetPeerState"] = &Warden::getPeerState;
+		networkServer["GetPeerPing"] = &Warden::getPeerPing;
+		networkServer["DisconnectPeer"] = &Warden::forceDisconnectClient;
+
+		networkServer["SendPacketToPeer"] = &Warden::sendPacketToPeer;
+		networkServer["SendPacketToAll"] = &Warden::sendPacketToAll;
 	}
 }

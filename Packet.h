@@ -1,28 +1,30 @@
 #pragma once
 
-#include "IrrManagers.h"
+#include "IrrHandling.h"
+#include <enet\enet.h>
 
 class Packet {
 private:
 
 public:
 	Packet();
+	Packet(const void* data, size_t size, int sender);
+	Packet(ENetPacket* p, int id);
+	~Packet();
 
-	void append(int type, sol::object data);
-	void clear();
+	void append(int type, sol::object data); // Append data to packet
+	void clear(); // Clears binary
 
-	int getSize();
-
-	void compress();
-	void decompress();
-
-	void encrypt();
-	void decrypt();
+	int getSize(); // Returns size
 
 	// In Only
 	int getSenderID();
-	sol::object pop(int type); // removes type off of buffer
-	sol::object get(int type, int bytePos); // does not modify buffer
+	sol::object get(int type, size_t bytePos); // does not modify buffer
+
+	bool writeToFile(int bytePos, std::string path);
+
+	ENetPacket* p = nullptr;
+	int originalID = -1;
 };
 
 void bindPacket();

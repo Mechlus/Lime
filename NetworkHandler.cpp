@@ -7,6 +7,10 @@ void NetworkHandler::setVerbose(bool enable) {
 	verbose = enable;
 }
 
+std::unordered_map<enet_uint16, ENetPeer*>& NetworkHandler::getPeerMap() {
+	return peerMap;
+}
+
 bool NetworkHandler::initialize() {
 	if (initialized) {
 		if (verbose) dConsole.sendMsg("Networking WARNING: ENet is already initialized", MESSAGE_TYPE::NETWORK_VERBOSE);
@@ -32,49 +36,115 @@ bool NetworkHandler::shutdown() {
 
 	initialized = false;
 	finished = true;
-	netLoop.join();
+	netServerThread.join();
+	netClientThread.join();
 
-	if (server)
+	if (server) {
+		enet_host_flush(server);
 		enet_host_destroy(server);
+	}
+
+	if (client) {
+		enet_host_flush(client);
+		enet_host_destroy(client);
+	}
 
 	enet_deinitialize();
 	return true;
 }
 
-void NetworkHandler::handle() {
-	netLoop = std::thread(netBody, this);
+void NetworkHandler::handle(IrrHandling* m) {
+	netServerThread = std::thread(netBodyServer, this, m);
+	netClientThread = std::thread(netBodyClient, this, m);
 }
 
 ENetHost* NetworkHandler::getHost() {
 	return server;
 }
 
-ENetPeer* NetworkHandler::getClient() {
+ENetHost* NetworkHandler::getClient() {
 	return client;
 }
 
-void NetworkHandler::setTimeoutLength(int ms) {
-	if (!initialized) {
-		if (verbose) dConsole.sendMsg("Networking WARNING: Timeout length cannot be set; ENet is not initialized", MESSAGE_TYPE::NETWORK_VERBOSE);
+ENetPeer* NetworkHandler::getPeer() {
+	return peer;
+}
+
+int NetworkHandler::getPeerState(int peerID) {
+	if (!server) {
+		if (verbose) dConsole.sendMsg("Networking WARNING: Could not fetch peer state; server is not being hosted", MESSAGE_TYPE::NETWORK_VERBOSE);
+		return -1;
 	}
-	else {
-		timeoutLength = ms;
+
+	ENetPeer* p = peerMap[peerID];
+	if (!p) {
 		if (verbose) {
-			std::string msg = "Networking timeout length updated (";
-			msg += ms;
-			msg += " milliseconds)";
+			std::string msg = "Networking WARNING: Peer with ID ";
+			msg += std::to_string(peerID);
+			msg += " could not be fetched";
 			dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
 		}
+		return -1;
 	}
+
+	return (int)p->state;
 }
 
-int NetworkHandler::getTimeoutLength() {
-	return timeoutLength;
+int NetworkHandler::getPeerPing(int peerID) {
+	if (!server && !client) {
+		if (verbose) dConsole.sendMsg("Networking WARNING: Could not fetch peer ping; client is not connected to a server", MESSAGE_TYPE::NETWORK_VERBOSE);
+		return -1;
+	}
+
+	ENetPeer* p = peerMap[peerID];
+	if (!p) {
+		if (verbose) {
+			std::string msg = "Networking WARNING: Peer with ID ";
+			msg += std::to_string(peerID);
+			msg += "'s ping could not be fetched";
+			dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
+		}
+		return -1;
+	}
+
+	return (int)p->roundTripTime;
 }
 
-void netBody(NetworkHandler* n)
-{
-	ENetEvent* event;
+void NetworkHandler::forceDisconnectClient(int peerID, int reason) {
+	if (!server) {
+		if (verbose) dConsole.sendMsg("Networking WARNING: Could not kick client; server is not being hosted", MESSAGE_TYPE::NETWORK_VERBOSE);
+		return;
+	}
+
+	ENetPeer* p = peerMap[peerID];
+	if (!p) {
+		if (verbose) {
+			std::string msg = "Networking WARNING: Peer with ID ";
+			msg += std::to_string(peerID);
+			msg += " could not be disconnected";
+			dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
+		}
+		return;
+	}
+
+	if (verbose) {
+		std::string msg = "Peer with ID ";
+		msg += std::to_string(peerID);
+		msg += " disconnected for reason code ";
+		msg += std::to_string(reason);
+		dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
+	}
+
+	enet_peer_disconnect(p,reason);
+}
+
+void netBodyServer(NetworkHandler* n, IrrHandling* m) {
+	// Server Network Loop
+	ENetEvent event;
+
+	sol::protected_function onPeerConnect = (*lua)["NetworkServer"]["OnClientConnect"];
+	sol::protected_function onPeerDisconnect = (*lua)["NetworkServer"]["OnClientDisconnect"];
+	sol::protected_function onPacketReceived = (*lua)["NetworkServer"]["OnPacketReceived"];
 
 	while (!n->finished) {
 		if (!n->initialized || !(n->getHost())) {
@@ -82,46 +152,130 @@ void netBody(NetworkHandler* n)
 			continue;
 		}
 
-		while (enet_host_service(n->getHost(), event, n->getTimeoutLength())) {
-			switch (event->type) {
-			case ENET_EVENT_TYPE_CONNECT:
-				if ((*lua)["NetworkServer"]["OnPeerConnect"].get_type() == sol::type::function) {
-					sol::protected_function_result result = (*lua)["NetworkServer"]["OnPeerConnect"];
-				}
-				else {
-					if (n->verbose) dConsole.sendMsg("Networking WARNING: A peer connected but NetworkServer.OnPeerConnect is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
-				}
+		int out = enet_host_service(n->getHost(), &event, 1);
+		if (out <= 0) continue;
 
-				if (n->verbose) {
-					std::string msg = "Peer joined presuming ID ";
-					msg += event->peer->incomingPeerID;
-					msg += " from IP ";
-					msg += event->peer->address.host;
-					dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
-				}
-				break;
-			case ENET_EVENT_TYPE_DISCONNECT:
-				if ((*lua)["NetworkServer"]["OnPeerDisconnect"].get_type() == sol::type::function) {
-					sol::protected_function_result result = (*lua)["NetworkServer"]["OnPeerDisconnect"];
-				}
-				else {
-					if (n->verbose) dConsole.sendMsg("Networking WARNING: A peer disconnected but NetworkServer.OnPeerDisconnect is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
-				}
-
-				if (n->verbose) {
-					std::string msg = "Peer disconnected abandoning ID ";
-					msg += event->peer->incomingPeerID;
-					msg += " from IP ";
-					msg += event->peer->address.host;
-					dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
-				}
-				break;
+		switch (event.type) {
+		case ENET_EVENT_TYPE_CONNECT:
+			if (onPeerConnect.valid())
+				m->addLuaTask(onPeerConnect, sol::table());
+			else {
+				if (n->verbose) dConsole.sendMsg("Networking WARNING: A peer connected but NetworkServer.OnClientConnect is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
 			}
+
+			n->getPeerMap()[event.peer->incomingPeerID] = event.peer;
+
+			if (n->verbose) {
+				std::string msg = "Client joined presuming ID ";
+				msg += std::to_string(event.peer->incomingPeerID);
+				msg += " from IP ";
+				msg += std::to_string(event.peer->address.host);
+				dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
+			}
+			break;
+		case ENET_EVENT_TYPE_DISCONNECT:
+			if (onPeerDisconnect.valid())
+				m->addLuaTask(onPeerDisconnect, sol::table());
+			else {
+				if (n->verbose) dConsole.sendMsg("Networking WARNING: A peer disconnected but NetworkServer.OnClientDisconnect is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
+			}
+
+			n->getPeerMap().erase(event.peer->incomingPeerID);
+
+			if (n->verbose) {
+				std::string msg = "Client disconnected abandoning ID ";
+				msg += std::to_string(event.peer->incomingPeerID);
+				msg += " from IP ";
+				msg += std::to_string(event.peer->address.host);
+				dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
+			}
+			break;
+		case ENET_EVENT_TYPE_RECEIVE:
+			if (onPacketReceived.valid()) {
+				sol::table t = lua->create_table(); // Order matters here. Pushing the packet first causes crashes!
+				t[1] = event.channelID;
+				t[2] = Packet(event.packet, event.peer->incomingPeerID);
+				
+				m->addLuaTask(onPacketReceived, t);
+			} else {
+				if (n->verbose) dConsole.sendMsg("Networking WARNING: A packet was received but NetworkServer.OnPacketReceived is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
+				enet_packet_destroy(event.packet);
+			}
+			break;
 		}
 	}
 }
 
-void NetworkHandler::hostServer(std::string ip, int maxClients, int maxChannels) {
+void netBodyClient(NetworkHandler* n, IrrHandling* m) {
+	// Client Network Loop
+	ENetEvent event;
+
+	sol::protected_function onConnect = (*lua)["NetworkClient"]["OnConnect"];
+	sol::protected_function onDisconnect = (*lua)["NetworkClient"]["OnDisconnect"];
+	sol::protected_function onPacketReceived = (*lua)["NetworkClient"]["OnPacketReceived"];
+
+	while (!n->finished) {
+		if (!n->initialized || !(n->getClient())) {
+			std::this_thread::yield();
+			continue;
+		}
+
+		if (!n->getPeer()) continue;
+
+		int out = enet_host_service(n->getClient(), &event, 1);
+		if (out <= 0) continue;
+
+		switch (event.type) {
+		case ENET_EVENT_TYPE_CONNECT:
+			if (onConnect.valid())
+				m->addLuaTask(onConnect, sol::table());
+			else {
+				if (n->verbose) dConsole.sendMsg("Networking WARNING: Client connected but NetworkClient.OnConnect is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
+			}
+
+			//if (!n->getHost()) n->getPeerMap()[event.peer->incomingPeerID] = event.peer;
+
+			if (n->verbose) {
+				std::string msg = "Connected to server via client ";
+				dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
+			}
+			break;
+		case ENET_EVENT_TYPE_DISCONNECT:
+			if (onDisconnect.valid()) {
+				sol::table t = lua->create_table();
+				t[1] = event.data;
+				m->addLuaTask(onDisconnect, t);
+			}
+			else {
+				if (n->verbose) dConsole.sendMsg("Networking WARNING: Client disconnected but NetworkClient.OnDisconnect is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
+			}
+
+			//if (!n->getHost()) n->getPeerMap().erase(event.peer->incomingPeerID);
+
+			if (n->verbose) {
+				std::string msg = "Disconnected from server as client, reason code ";
+				msg += std::to_string(event.data);
+				dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
+			}
+			break;
+		case ENET_EVENT_TYPE_RECEIVE:
+			if (onPacketReceived.valid()) {
+				sol::table t = lua->create_table();
+				t[1] = event.channelID;
+				t[2] = Packet(event.packet, event.peer->incomingPeerID);
+
+				m->addLuaTask(onPacketReceived, t);
+			}
+			else {
+				if (n->verbose) dConsole.sendMsg("Networking WARNING: A packet was received but NetworkClient.OnPacketReceived is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
+				enet_packet_destroy(event.packet);
+			}
+			break;
+		}
+	}
+}
+
+void NetworkHandler::hostServer(std::string ip, int port, int maxClients, int maxChannels) {
 	if (!initialized) {
 		if (verbose) dConsole.sendMsg("Networking WARNING: Host cannot be created; ENet is not initialized", MESSAGE_TYPE::NETWORK_VERBOSE);
 		return;
@@ -134,11 +288,9 @@ void NetworkHandler::hostServer(std::string ip, int maxClients, int maxChannels)
 
 	ENetAddress address;
 	address.host = ENET_HOST_ANY; // Hosts on localhost by default
-	address.port = 1234;
-
 	enet_address_set_host(&address, ip.c_str());
+	address.port = port;
 
-	// Put this in thread
 	server = enet_host_create(&address, maxClients, maxChannels, 0, 0);
 
 	char ipString[64];
@@ -150,8 +302,9 @@ void NetworkHandler::hostServer(std::string ip, int maxClients, int maxChannels)
 		ms += ipString;
 		if (verbose) dConsole.sendMsg(ms.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
 
-		if ((*lua)["NetworkServer"]["OnHostFail"].get_type() == sol::type::function) {
-			sol::protected_function_result result = (*lua)["NetworkServer"]["OnHostFail"];
+		sol::protected_function onHostFail = (*lua)["NetworkServer"]["OnHostFail"];
+		if (onHostFail.valid()) {
+			sol::protected_function_result result = onHostFail();
 		}
 		else if (verbose) {
 			dConsole.sendMsg("Networking WARNING: The server failed to host but NetworkServer.OnHostFail is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
@@ -167,18 +320,20 @@ void NetworkHandler::hostServer(std::string ip, int maxClients, int maxChannels)
 		return;
 	}
 
-	if ((*lua)["NetworkServer"]["OnHosted"].get_type() == sol::type::function) {
-		sol::protected_function_result result = (*lua)["NetworkServer"]["OnHosted"];
-		if (verbose) {
-			std::string msg = "Hosting server on ";
-			msg += ipString;
-			msg += " for ";
-			msg += std::to_string(maxClients);
-			msg += " clients with ";
-			msg += std::to_string(maxChannels);
-			msg += " channels";
-			dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
-		}
+	if (verbose) {
+		std::string msg = "Hosting server on ";
+		msg += ipString;
+		msg += " for ";
+		msg += std::to_string(maxClients);
+		msg += " clients with ";
+		msg += std::to_string(maxChannels);
+		msg += " channels";
+		dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
+	}
+
+	sol::protected_function onHosted = (*lua)["NetworkServer"]["OnHosted"];
+	if (onHosted.valid()) {
+		sol::protected_function_result result = onHosted();
 	}
 	else if (verbose) {
 		dConsole.sendMsg("Networking WARNING: The server is being hosted but NetworkServer.OnHosted is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
@@ -187,6 +342,7 @@ void NetworkHandler::hostServer(std::string ip, int maxClients, int maxChannels)
 
 bool NetworkHandler::stopHosting() {
 	if (server) {
+		enet_host_flush(server);
 		enet_host_destroy(server);
 		if (verbose) dConsole.sendMsg("Server hosting closed", MESSAGE_TYPE::NETWORK_VERBOSE);
 		return true;
@@ -224,9 +380,254 @@ void NetworkHandler::setUseRangeEncoder(bool enable) {
 	else if (server)
 		enet_host_compress(server, nullptr);
 
-	if (!server && verbose) dConsole.sendMsg("Networking WARNING: Enabling/disabling compression must be done after hosting a server", MESSAGE_TYPE::NETWORK_VERBOSE);
+	if (client && enable)
+		enet_host_compress_with_range_coder(client);
+	else if (client)
+		enet_host_compress(client, nullptr);
+
+	if (!server  && !client && verbose) dConsole.sendMsg("Networking WARNING: Enabling/disabling compression must be done after being connected to a server", MESSAGE_TYPE::NETWORK_VERBOSE);
 	else if (verbose) {
 		if (enable) dConsole.sendMsg("Range-encoding compressor enabled", MESSAGE_TYPE::NETWORK_VERBOSE);
 		else dConsole.sendMsg("Range-encoding compressor disabled", MESSAGE_TYPE::NETWORK_VERBOSE);
+	}
+}
+
+// Client
+bool NetworkHandler::createClient(int outgoing, int channels) {
+	if (!initialized) {
+		if (verbose) dConsole.sendMsg("Networking WARNING: A call to create a client was made but networking is not initialized", MESSAGE_TYPE::NETWORK_VERBOSE);
+		return false;
+	}
+
+	if (client) {
+		if (verbose) dConsole.sendMsg("Networking WARNING: Client could not be created; current client should be destroyed first", MESSAGE_TYPE::NETWORK_VERBOSE);
+		return false;
+	}
+
+	client = enet_host_create(NULL, outgoing, channels, 0, 0);
+	if (!client) {
+		if (verbose) dConsole.sendMsg("Networking WARNING: Client could not be created", MESSAGE_TYPE::NETWORK_VERBOSE);
+		return false;
+	}
+
+	if (verbose) {
+		std::string msg = "Created client with ";
+		msg += std::to_string(outgoing);
+		msg += " outgoing connection(s) and ";
+		msg += std::to_string(channels);
+		msg += " channel(s) accessible";
+		dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
+	}
+	return true;
+}
+
+void NetworkHandler::connectClient(std::string ad, int port, int channels) {
+	if (!initialized) {
+		if (verbose) dConsole.sendMsg("Networking WARNING: A call to connect a client was made but networking is not initialized", MESSAGE_TYPE::NETWORK_VERBOSE);
+		return;
+	}
+
+	if (!client) {
+		if (verbose) dConsole.sendMsg("Networking WARNING: Client could not connect to address; client is not created", MESSAGE_TYPE::NETWORK_VERBOSE);
+		return;
+	}
+
+	ENetAddress address;
+	enet_address_set_host(&address, ad.c_str());
+	address.port = port;
+
+	if (verbose) {
+		std::string msg = "Client attempting to connect to ";
+		msg += ad;
+		msg += ":";
+		msg += std::to_string(port);
+		dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
+	}
+
+	std::thread connectThread([this, address, channels]() {
+		peer = enet_host_connect(client, &address, channels, 0);
+
+		if (!peer) {
+			if (verbose) dConsole.sendMsg("Networking WARNING: Failed to create peer connection", MESSAGE_TYPE::NETWORK_VERBOSE);
+
+			sol::protected_function f = (*lua)["NetworkClient"]["OnConnectFail"];
+			if (f.valid()) {
+				sol::protected_function_result result = f();
+			}
+			return;
+		}
+		else {
+			ENetEvent event;
+			if (enet_host_service(client, &event, 5000) > 0 && event.type == ENET_EVENT_TYPE_CONNECT) {
+				if (verbose) dConsole.sendMsg("Client connected to server", MESSAGE_TYPE::NETWORK_VERBOSE);
+
+				sol::protected_function f = (*lua)["NetworkClient"]["OnConnect"];
+				if (f.valid()) {
+					sol::protected_function_result result = f();
+				}
+			}
+			else {
+				if (verbose) dConsole.sendMsg("Client failed to connect to server", MESSAGE_TYPE::NETWORK_VERBOSE);
+
+				sol::protected_function f = (*lua)["NetworkClient"]["OnConnectFail"];
+				if (f.valid()) {
+					sol::protected_function_result result = f();
+				}
+			}
+		}
+		});
+
+	connectThread.detach();
+}
+
+void NetworkHandler::disconnectClient() {
+	if (!initialized) {
+		if (verbose) dConsole.sendMsg("Networking WARNING: A call to disconnect the client was made but networking is not initialized", MESSAGE_TYPE::NETWORK_VERBOSE);
+		return;
+	}
+
+	if (!client) {
+		if (verbose) dConsole.sendMsg("Networking WARNING: A call to disconnect the client was made but there is no available client", MESSAGE_TYPE::NETWORK_VERBOSE);
+		return;
+	}
+
+	if (!peer) {
+		if (verbose) dConsole.sendMsg("Networking WARNING: A call to disconnect the client was made but the client is not connected to a server", MESSAGE_TYPE::NETWORK_VERBOSE);
+		return;
+	}
+	
+	if (verbose) dConsole.sendMsg("Disconnecting client from server", MESSAGE_TYPE::NETWORK_VERBOSE);
+	enet_peer_disconnect(peer, 0);
+}
+
+bool NetworkHandler::destroyClient() {
+	if (!initialized) {
+		if (verbose) dConsole.sendMsg("Networking WARNING: A call to destroy the client was made but networking is not initialized", MESSAGE_TYPE::NETWORK_VERBOSE);
+		return false;
+	}
+
+	if (!client) {
+		if (verbose) dConsole.sendMsg("Networking WARNING: A call to destroy the client was made but there is no available client", MESSAGE_TYPE::NETWORK_VERBOSE);
+		return false;
+	}
+
+	enet_host_flush(client);
+	enet_host_destroy(client);
+	return true;
+}
+
+bool NetworkHandler::isClientConnected() {
+	return peer && client && peer->state == ENET_PEER_STATE_CONNECTED;
+}
+
+void NetworkHandler::sendPacketToServer(const Packet& p, int channel, bool tcp) {
+	if (!initialized) {
+		if (verbose) dConsole.sendMsg("Networking WARNING: A call to send a packet to the server was made but networking is not initialized", MESSAGE_TYPE::NETWORK_VERBOSE);
+		return;
+	}
+
+	if (!client) {
+		if (verbose) dConsole.sendMsg("Networking WARNING: Packet could not be sent to the server; not connected to a server", MESSAGE_TYPE::NETWORK_VERBOSE);
+		return;
+	}
+
+	if (server && !client) {
+		if (verbose) dConsole.sendMsg("Networking WARNING: Cannot send packet to self; server is this application instance", MESSAGE_TYPE::NETWORK_VERBOSE);
+		return;
+	}
+
+	if (!p.p) {
+		if (verbose) dConsole.sendMsg("Networking WARNING: Packet could not be sent to the server; packet is invalid", MESSAGE_TYPE::NETWORK_VERBOSE);
+		return;
+	}
+
+	p.p->flags = tcp ? ENET_PACKET_FLAG_RELIABLE : ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT;
+	enet_peer_send(peer, channel, p.p);
+	enet_host_flush(client);
+
+	if (verbose) {
+		std::string msg = "Packet of size ";
+		msg += std::to_string(p.p->dataLength);
+		msg += "B sent to server";
+		msg += " on channel ";
+		msg += std::to_string(channel);
+		msg += " via ";
+		msg += tcp ? "TCP" : "UDP";
+		dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
+	}
+}
+
+void NetworkHandler::sendPacketToPeer(int peerID, const Packet& p, int channel, bool tcp) {
+	if (!initialized) {
+		if (verbose) dConsole.sendMsg("Networking WARNING: A call to send a packet to a peer was made but networking is not initialized", MESSAGE_TYPE::NETWORK_VERBOSE);
+		return;
+	}
+
+	if (!client && !server) {
+		if (verbose) dConsole.sendMsg("Networking WARNING: Packet could not be sent to peer; not connected to a server", MESSAGE_TYPE::NETWORK_VERBOSE);
+		return;
+	}
+
+	if (!p.p) {
+		if (verbose) dConsole.sendMsg("Networking WARNING: Packet could not be sent to peer; packet is invalid", MESSAGE_TYPE::NETWORK_VERBOSE);
+		return;
+	}
+
+	ENetPeer* thisPeer = peerMap[peerID];
+	if (!thisPeer) {
+		if (verbose) {
+			std::string msg = "Networking WARNING: Failed to send packet to peer with ID ";
+			msg += std::to_string(peerID);
+			msg += "; peer does not exist";
+			dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
+		}
+		return;
+	}
+
+	p.p->flags = tcp ? ENET_PACKET_FLAG_RELIABLE : ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT;
+	enet_peer_send(thisPeer, channel, p.p);
+	enet_host_flush(server ? server : client);
+
+	if (verbose) {
+		std::string msg = "Packet of size ";
+		msg += std::to_string(p.p->dataLength);
+		msg += "B sent to peer with ID ";
+		msg += std::to_string(peerID);
+		msg += " on channel ";
+		msg += std::to_string(channel);
+		msg += " via ";
+		msg += tcp ? "TCP" : "UDP";
+		dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
+	}
+}
+
+void NetworkHandler::sendPacketToAll(const Packet& p, int channel, bool tcp) {
+	if (!initialized) {
+		if (verbose) dConsole.sendMsg("Networking WARNING: A call to send a packet to all was made but networking is not initialized", MESSAGE_TYPE::NETWORK_VERBOSE);
+		return;
+	}
+
+	if (!client && !server) {
+		if (verbose) dConsole.sendMsg("Networking WARNING: Packet could not be sent to all; not connected to a server", MESSAGE_TYPE::NETWORK_VERBOSE);
+		return;
+	}
+
+	if (!p.p) {
+		if (verbose) dConsole.sendMsg("Networking WARNING: Packet could not be sent to all; packet is invalid", MESSAGE_TYPE::NETWORK_VERBOSE);
+		return;
+	}
+
+	p.p->flags = tcp ? ENET_PACKET_FLAG_RELIABLE : ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT;
+	enet_host_broadcast(server ? server : client, channel, p.p);
+
+	if (verbose) {
+		std::string msg = "Packet of size ";
+		msg += std::to_string(p.p->dataLength);
+		msg += "B sent to all ";
+		msg += " on channel ";
+		msg += std::to_string(channel);
+		msg += " via ";
+		msg += tcp ? "TCP" : "UDP";
+		dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
 	}
 }

@@ -19,6 +19,7 @@
 #include "Empty.h"
 #include "LegacyLight.h"
 #include "Hitbox.h"
+#include "Packet.h"
 
 #include "Compatible2D.h"
 #include "Compatible3D.h"
@@ -56,6 +57,7 @@ int LuaLime::initLua(irr::scene::ISceneManager* smgr, irr::video::IVideoDriver* 
 	bindEmpty();
 	bindLegacyLight();
 	bindHitbox();
+	bindPacket();
 
 	return 0;
 }

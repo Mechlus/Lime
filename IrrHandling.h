@@ -61,6 +61,8 @@ public:
 	void setCameraMatrix(irr::scene::ICameraSceneNode* c);
 	void HandleCameraQueue();
 	void displayMessage(std::string title, std::string message, int image);
+	void addLuaTask(sol::function f, sol::table args);
+	void runLuaTasks();
 	int m_frameLimit = 60;
 	float dt;
 	bool didEnd = false;
@@ -87,6 +89,9 @@ public:
 
 	// Transform queue
 	std::queue<BatchedTransform> transformQueue;
+
+	// Lua function call queue
+	std::queue<std::pair<sol::function, sol::table>> threadedLuaQueue;
 
 	// XEffects
 	E_FILTER_TYPE defaultShadowFiltering = E_FILTER_TYPE::EFT_8PCF;

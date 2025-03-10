@@ -192,8 +192,7 @@ void IrrHandling::appLoop() {
 	sol::protected_function luaOnUpdate = (*lua)["Lime"]["OnUpdate"];
 	sol::protected_function luaOnEnd = (*lua)["Lime"]["OnEnd"];
 
-	if (networkHandler)
-		networkHandler->handle();
+	bool ranHandlers = false;
 
 	lua->script("math.randomseed(os.time())");
 
@@ -262,6 +261,14 @@ void IrrHandling::appLoop() {
 		f32 frameTime = device->getTimer()->getTime() - now;
 		if (frameTime < frameDur)
 			device->sleep((frameDur - frameTime) / 2.0);*/
+
+		if (!ranHandlers) {
+			ranHandlers = true;
+			if (networkHandler)
+				networkHandler->handle(irrHandler);
+		}
+
+		irrHandler->runLuaTasks();
 	}
 
 	if (networkHandler)
@@ -370,13 +377,15 @@ void IrrHandling::setCameraMatrix(irr::scene::ICameraSceneNode* c) {
 void IrrHandling::HandleCameraQueue() {
 	driver->beginScene(true, true, backgroundColor);
 
-	setCameraMatrix(smgr->getActiveCamera());
+	if (smgr->getActiveCamera()) {
+		setCameraMatrix(smgr->getActiveCamera());
 
-	if (legacyDrawing)
-		smgr->drawAll();
-	else {
-		effects->update();
-		effects->setClearColour(irr::video::SColor(0, 0, 0, 0));
+		if (legacyDrawing)
+			smgr->drawAll();
+		else {
+			effects->update();
+			effects->setClearColour(irr::video::SColor(0, 0, 0, 0));
+		}
 	}
 
 	while (!cameraQueue.empty()) {
@@ -384,20 +393,23 @@ void IrrHandling::HandleCameraQueue() {
 
 		setCameraMatrix(smgr->getActiveCamera());
 
-		if (c.renderGUI && !renderedGUI) {
-			guienv->drawAll();
-			renderedGUI = true;
-		}
-		else {
-			smgr->setActiveCamera(c.cam);
-			c.cam->updateAbsolutePosition();
-			c.forward->updateAbsolutePosition();
-			c.cam->setTarget(c.forward->getAbsolutePosition());
+		if (c.cam) {
+			if (c.renderGUI && !renderedGUI) {
+				guienv->drawAll();
+				renderedGUI = true;
+			}
+			else {
+				smgr->setActiveCamera(c.cam);
+				c.cam->updateAbsolutePosition();
+				c.forward->updateAbsolutePosition();
+				c.cam->setTarget(c.forward->getAbsolutePosition());
 
-			if (c.defaultRendering) {
-				smgr->drawAll();
-			} else {
-				effects->update();
+				if (c.defaultRendering) {
+					smgr->drawAll();
+				}
+				else {
+					effects->update();
+				}
 			}
 		}
 
@@ -434,4 +446,26 @@ void IrrHandling::displayMessage(std::string title, std::string message, int ima
 	}
 
 	MessageBox(nullptr, nMessageC, nTitleC, icon);
+}
+
+void IrrHandling::addLuaTask(sol::function f, sol::table args) {
+	threadedLuaQueue.push({ f, args });
+}
+
+void IrrHandling::runLuaTasks() {
+	while (!threadedLuaQueue.empty()) {
+		std::pair<sol::function, sol::table> task = threadedLuaQueue.front();
+		if (task.first.valid()) {
+			std::vector<sol::object> args;
+			//args.push_back(sol::nil);
+			if (task.second.valid()) {
+				for (size_t i = 1; i <= task.second.size(); ++i) {
+					args.push_back(sol::make_object((*lua), task.second[i]));
+				}
+			}
+
+			sol::protected_function_result result = task.first(sol::as_args(args));
+		}
+		threadedLuaQueue.pop();
+	}
 }
