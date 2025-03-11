@@ -10,6 +10,7 @@
 #include <vector>
 
 #include "Compatible3D.h"
+#include "MeshBuffer.h"
 
 using namespace irr;
 using namespace video;
@@ -35,6 +36,7 @@ public:
     bool loadMesh(const std::string& filePath);
     bool loadMeshWithTangents(const std::string& filePath);
     bool fullLoadMesh(const std::string& filePath, bool doTangents);
+    bool loadMeshViaBuffer(const MeshBuffer& b);
 
     int getShadows();
     void setShadows(int i);

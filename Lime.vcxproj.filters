@@ -138,6 +138,9 @@
     <ClCompile Include="LimeReceiver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MeshBuffer.cpp">
+      <Filter>Source Files\Scene3D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DebugConsole.h">
@@ -283,6 +286,9 @@
     </ClInclude>
     <ClInclude Include="resource2.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshBuffer.h">
+      <Filter>Source Files\Scene3D</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

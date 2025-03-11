@@ -17,8 +17,9 @@ public:
 	void clear();
 	void destroy();
 	void recalculateBoundingBox();
+	int getVertexCount() const;
+	irr::scene::SMeshBuffer* getBuffer() const;
 
-	irr::scene::SMeshBuffer* getBuffer();
 	u16 currentIndex = 0;
 private:
 	irr::scene::SMeshBuffer* buffer;

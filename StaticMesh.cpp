@@ -310,6 +310,17 @@ void StaticMesh::setVColor(const Vector3D& col) {
     }
 }
 
+bool StaticMesh::loadMeshViaBuffer(const MeshBuffer& b) {
+    if (meshNode) meshNode->drop();
+    SMesh* m = new SMesh();
+    m->addMeshBuffer(b.getBuffer());
+
+    meshNode = smgr->addMeshSceneNode(m);
+    m->drop();
+
+    return meshNode;
+}
+
 void bindStaticMesh() {
     sol::usertype<StaticMesh> bindType = lua->new_usertype<StaticMesh>("Mesh",
         sol::constructors<StaticMesh(), StaticMesh(const std::string & filePath), StaticMesh(const StaticMesh & other)>(),
@@ -330,6 +341,7 @@ void bindStaticMesh() {
 
     bindType["load"] = &StaticMesh::loadMesh;
     bindType["loadWithTangents"] = &StaticMesh::loadMeshWithTangents;
+    bindType["loadFromBuffer"] = &StaticMesh::loadMeshViaBuffer;
     bindType["loadMaterial"] = &StaticMesh::loadMaterial;
     bindType["destroy"] = &StaticMesh::deload;
     bindType["getVertexCount"] = &StaticMesh::getVertexCount;
