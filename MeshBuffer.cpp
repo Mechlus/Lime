@@ -16,7 +16,7 @@ MeshBuffer::~MeshBuffer() {
 void MeshBuffer::pushFace(const Vector3D& v1, const Vector3D& v2, const Vector3D& v3,
                           const Vector3D& n1, const Vector3D& n2, const Vector3D& n3,
                           const Vector2D& uvw1, const Vector2D& uvw2, const Vector2D& uvw3,
-                          const Vector3D& rgb, int opacity) {
+                          const Vector3D& c1, const Vector3D& c2, const Vector3D& c3) {
     if (!buffer) return;
 
     buffer->Vertices.reallocate(buffer->Vertices.size() + 3);
