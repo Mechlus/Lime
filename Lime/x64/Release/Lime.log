@@ -1,26 +1,26 @@
-﻿  MeshBuffer.cpp
-C:\LimeDir\Lime\EffectHandler.h(212,21): warning C4305: 'initializing': truncation from 'double' to 'irr::f32'
-  (compiling source file 'MeshBuffer.cpp')
+﻿  StaticMesh.cpp
+D:\Irrlicht\Lime\EffectHandler.h(212,21): warning C4305: 'initializing': truncation from 'double' to 'irr::f32'
+  (compiling source file 'StaticMesh.cpp')
   
-C:\LimeDir\Lime\EffectHandler.h(311,21): warning C4018: '<': signed/unsigned mismatch
-  (compiling source file 'MeshBuffer.cpp')
+D:\Irrlicht\Lime\EffectHandler.h(311,21): warning C4018: '<': signed/unsigned mismatch
+  (compiling source file 'StaticMesh.cpp')
   
-C:\LimeDir\Lime\MeshBuffer.cpp(26,133): warning C4244: 'argument': conversion from 'const float' to 'irr::u32', possible loss of data
-C:\LimeDir\Lime\MeshBuffer.cpp(26,127): warning C4244: 'argument': conversion from 'const float' to 'irr::u32', possible loss of data
-C:\LimeDir\Lime\MeshBuffer.cpp(26,121): warning C4244: 'argument': conversion from 'const float' to 'irr::u32', possible loss of data
-C:\LimeDir\Lime\MeshBuffer.cpp(26,115): warning C4244: 'argument': conversion from 'const float' to 'irr::u32', possible loss of data
-C:\LimeDir\Lime\MeshBuffer.cpp(27,137): warning C4244: 'argument': conversion from 'const float' to 'irr::u32', possible loss of data
-C:\LimeDir\Lime\MeshBuffer.cpp(27,131): warning C4244: 'argument': conversion from 'const float' to 'irr::u32', possible loss of data
-C:\LimeDir\Lime\MeshBuffer.cpp(27,125): warning C4244: 'argument': conversion from 'const float' to 'irr::u32', possible loss of data
-C:\LimeDir\Lime\MeshBuffer.cpp(27,119): warning C4244: 'argument': conversion from 'const float' to 'irr::u32', possible loss of data
-C:\LimeDir\Lime\MeshBuffer.cpp(28,137): warning C4244: 'argument': conversion from 'const float' to 'irr::u32', possible loss of data
-C:\LimeDir\Lime\MeshBuffer.cpp(28,131): warning C4244: 'argument': conversion from 'const float' to 'irr::u32', possible loss of data
-C:\LimeDir\Lime\MeshBuffer.cpp(28,125): warning C4244: 'argument': conversion from 'const float' to 'irr::u32', possible loss of data
-C:\LimeDir\Lime\MeshBuffer.cpp(28,119): warning C4244: 'argument': conversion from 'const float' to 'irr::u32', possible loss of data
-C:\LimeDir\Lime\MeshBuffer.cpp(66,23): warning C4018: '<': signed/unsigned mismatch
+D:\Irrlicht\Lime\StaticMesh.cpp(135,39): warning C4018: '>=': signed/unsigned mismatch
+D:\Irrlicht\Lime\StaticMesh.cpp(194,12): warning C4244: 'return': conversion from 'irr::f32' to 'int', possible loss of data
+D:\Irrlicht\Lime\StaticMesh.cpp(199,35): warning C4244: 'argument': conversion from 'int' to 'irr::f32', possible loss of data
+D:\Irrlicht\Lime\StaticMesh.cpp(295,90): warning C4244: 'argument': conversion from 'irr::u32' to 'float', possible loss of data
+D:\Irrlicht\Lime\StaticMesh.cpp(295,71): warning C4244: 'argument': conversion from 'irr::u32' to 'float', possible loss of data
+D:\Irrlicht\Lime\StaticMesh.cpp(295,53): warning C4244: 'argument': conversion from 'irr::u32' to 'float', possible loss of data
+D:\Irrlicht\Lime\StaticMesh.cpp(295,34): warning C4244: 'argument': conversion from 'irr::u32' to 'float', possible loss of data
+D:\Irrlicht\Lime\StaticMesh.cpp(299,57): warning C4244: 'argument': conversion from 'const float' to 'irr::u32', possible loss of data
+D:\Irrlicht\Lime\StaticMesh.cpp(299,50): warning C4244: 'argument': conversion from 'const float' to 'irr::u32', possible loss of data
+D:\Irrlicht\Lime\StaticMesh.cpp(299,43): warning C4244: 'argument': conversion from 'const float' to 'irr::u32', possible loss of data
+D:\Irrlicht\Lime\StaticMesh.cpp(299,36): warning C4244: 'argument': conversion from 'const float' to 'irr::u32', possible loss of data
   Generating code
-  2 of 40489 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  2 of 40504 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    19 functions had inline decision re-evaluated but remain unchanged
+    10 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
-  Lime.vcxproj -> C:\LimeDir\Lime\x64\Release\Lime.exe
+  Lime.vcxproj -> D:\Irrlicht\Lime\x64\Release\Lime.exe
+  'pwsh.exe' is not recognized as an internal or external command,
+  operable program or batch file.

@@ -317,7 +317,8 @@ bool StaticMesh::loadMeshViaBuffer(const MeshBuffer& b) {
     if (meshNode) meshNode->drop();
     SMesh* m = new SMesh();
     m->addMeshBuffer(b.getBuffer());
-    m->getMeshBuffer(0)->recalculateBoundingBox();
+
+    m->recalculateBoundingBox();
 
     irr::scene::IMeshManipulator* meshManipulator = device->getSceneManager()->getMeshManipulator();
     meshNode = smgr->addAnimatedMeshSceneNode(meshManipulator->createAnimatedMesh(m));

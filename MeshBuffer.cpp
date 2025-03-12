@@ -41,6 +41,8 @@ void MeshBuffer::pushFace(const Vector3D& v1, const Vector3D& v2, const Vector3D
     buffer->Indices[currentIndex + 1] = currentIndex + 1;
     buffer->Indices[currentIndex + 2] = currentIndex + 2;
 
+    buffer->recalculateBoundingBox();
+
     currentIndex += 3;
 }
 
@@ -66,8 +68,6 @@ void MeshBuffer::recalculateBoundingBox() {
     for (s32 i = 1; i < buffer->Vertices.size(); i++) {
         bbox.addInternalPoint(buffer->Vertices[i].Pos);
     }
-
-    buffer->BoundingBox = bbox;
 }
 
 int MeshBuffer::getVertexCount() const {
@@ -87,5 +87,4 @@ void bindMeshBuffer() {
     bind_type["destroy"] = &MeshBuffer::destroy;
     bind_type["clear"] = &MeshBuffer::clear;
     bind_type["getVertexCount"] = &MeshBuffer::getVertexCount;
-    bind_type["generateBoundingBox"] = &MeshBuffer::recalculateBoundingBox;
 }
