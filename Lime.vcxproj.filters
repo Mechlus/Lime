@@ -141,6 +141,9 @@
     <ClCompile Include="MeshBuffer.cpp">
       <Filter>Source Files\Scene3D</Filter>
     </ClCompile>
+    <ClCompile Include="Vector4D.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DebugConsole.h">
@@ -289,6 +292,9 @@
     </ClInclude>
     <ClInclude Include="MeshBuffer.h">
       <Filter>Source Files\Scene3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector4D.h">
+      <Filter>Source Files\Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

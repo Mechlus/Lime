@@ -2,7 +2,7 @@
 #include <filesystem>
 
 StaticMesh::StaticMesh() : meshNode(nullptr), selector(nullptr), collisionEnabled(false),
-vColor(), opacity(255), shadow(ESM_EXCLUDE), hadShadow(false) {
+vColor(), shadow(ESM_EXCLUDE), hadShadow(false) {
 }
 
 StaticMesh::StaticMesh(const std::string& filePath) : StaticMesh() {
@@ -274,6 +274,11 @@ sol::table StaticMesh::getBoundingBox() {
     return result;
 }
 
+void StaticMesh::recalculateBoundingBox() {
+    if (!meshNode) return;
+    meshNode->getMesh()->getMeshBuffer(0)->recalculateBoundingBox();
+}
+
 void StaticMesh::makePlanarMapping() {
     if (meshNode) {
         smgr->getMeshManipulator()->makePlanarTextureMapping(meshNode->getMesh(), 0.004f);
@@ -286,28 +291,26 @@ void StaticMesh::setHardwareHint(int i) {
     }
 }
 
-int StaticMesh::getOpacity() {
-    return opacity;
+Vector4D StaticMesh::getVColor() {
+    return Vector4D(vColor.getRed(), vColor.getGreen(), vColor.getBlue(), vColor.getAlpha());
 }
 
-void StaticMesh::setOpacity(int op) {
-    opacity = op;
-    if (meshNode) {
-        irr::scene::IMeshManipulator* meshManipulator = device->getSceneManager()->getMeshManipulator();
-        meshManipulator->setVertexColorAlpha(meshNode->getMesh(), opacity);
-    }
-}
-
-Vector3D StaticMesh::getVColor() {
-    return Vector3D(vColor.getRed(), vColor.getGreen(), vColor.getBlue());
-}
-
-void StaticMesh::setVColor(const Vector3D& col) {
-    vColor = irr::video::SColor(opacity, col.x, col.y, col.z);
+void StaticMesh::setVColor(const Vector4D& col) {
+    vColor = irr::video::SColor(col.w, col.x, col.y, col.z);
     if (meshNode) {
         irr::scene::IMeshManipulator* meshManipulator = device->getSceneManager()->getMeshManipulator();
         meshManipulator->setVertexColors(meshNode->getMesh(), vColor);
     }
+}
+
+bool StaticMesh::writeToFile(std::string path) {
+    if (!meshNode) return false;
+
+    IMesh* mesh = meshNode->getMesh();
+    IMeshWriter* writer = smgr->createMeshWriter(EMESH_WRITER_TYPE::EMWT_COLLADA);
+
+    irr::io::IWriteFile* fs = device->getFileSystem()->createAndWriteFile(path.c_str());
+    return writer->writeMesh(fs, mesh, 0);
 }
 
 bool StaticMesh::loadMeshViaBuffer(const MeshBuffer& b) {
@@ -315,10 +318,18 @@ bool StaticMesh::loadMeshViaBuffer(const MeshBuffer& b) {
     SMesh* m = new SMesh();
     m->addMeshBuffer(b.getBuffer());
 
-    meshNode = smgr->addMeshSceneNode(m);
+    irr::scene::IMeshManipulator* meshManipulator = device->getSceneManager()->getMeshManipulator();
+    meshNode = smgr->addAnimatedMeshSceneNode(meshManipulator->createAnimatedMesh(m));
+
     m->drop();
 
-    return meshNode;
+    if (irrHandler->defaultExclude)
+        effects->excludeNodeFromLightingCalculations(meshNode);
+
+    if (!meshNode)
+        return false;
+
+    return true;
 }
 
 void bindStaticMesh() {
@@ -336,7 +347,6 @@ void bindStaticMesh() {
         "frame", sol::property(&StaticMesh::getFrame, &StaticMesh::setFrame),
         "debug", sol::property(&StaticMesh::getDebug, &StaticMesh::setDebug),
         "vertexColor", sol::property(&StaticMesh::getVColor, &StaticMesh::setVColor),
-        "vertexAlpha", sol::property(&StaticMesh::getOpacity, &StaticMesh::setOpacity),
         "shadows", sol::property(&StaticMesh::getShadows, &StaticMesh::setShadows));
 
     bindType["load"] = &StaticMesh::loadMesh;
@@ -355,4 +365,5 @@ void bindStaticMesh() {
     bindType["toPlanarMapping"] = &StaticMesh::makePlanarMapping;
     bindType["setHardwareMappingHint"] = &StaticMesh::setHardwareHint;
     bindType["ignoreLighting"] = &StaticMesh::exclude;
+    bindType["writeToFile"] = &StaticMesh::writeToFile;
 }

@@ -1,6 +1,6 @@
 #include "Text3D.h"
 
-Text3D::Text3D(const std::string& tx, const Vector3D& pos, const Vector3D& col, int op, const std::string& fontName) {
+Text3D::Text3D(const std::string& tx, const Vector3D& pos, const Vector4D& col, const std::string& fontName) {
 	irr::gui::IGUIFont* f = guienv->getBuiltInFont();
 	if (defaultFont != "")
 		f = fontCache[defaultFont];
@@ -11,7 +11,6 @@ Text3D::Text3D(const std::string& tx, const Vector3D& pos, const Vector3D& col, 
 	text = smgr->addTextSceneNode(f, L"Text", color);
 
 	myText = tx;
-	setOpacity(op);
 	setColor(col);
 	setPosition(pos);
 	text->grab();
@@ -19,11 +18,11 @@ Text3D::Text3D(const std::string& tx, const Vector3D& pos, const Vector3D& col, 
 	effects->excludeNodeFromLightingCalculations(text);
 }
 
-Text3D::Text3D() : Text3D("Text", Vector3D(), Vector3D(255, 255, 255), 255, "") {}
-Text3D::Text3D(const std::string& tx) : Text3D(tx, Vector3D(), Vector3D(255, 255, 255), 255, "") {}
-Text3D::Text3D(const std::string& tx, const Vector3D& pos) : Text3D(tx, pos, Vector3D(255, 255, 255), 255, "") {}
-Text3D::Text3D(const std::string& tx, const Vector3D& pos, const Vector3D& col, int op) : Text3D(tx, pos, col, op, "") {}
-Text3D::Text3D(const std::string& tx, const std::string& fontName) : Text3D(tx, Vector3D(), Vector3D(255, 255, 255), 255, fontName) {}
+Text3D::Text3D() : Text3D("Text", Vector3D(), Vector4D(255, 255, 255, 2555), "") {}
+Text3D::Text3D(const std::string& tx) : Text3D(tx, Vector3D(), Vector4D(255, 255, 255, 255), "") {}
+Text3D::Text3D(const std::string& tx, const Vector3D& pos) : Text3D(tx, pos, Vector4D(255, 255, 255, 255), "") {}
+Text3D::Text3D(const std::string& tx, const Vector3D& pos, const Vector4D& col) : Text3D(tx, pos, col, "") {}
+Text3D::Text3D(const std::string& tx, const std::string& fontName) : Text3D(tx, Vector3D(), Vector4D(255, 255, 255, 255), fontName) {}
 
 void Text3D::destroy() {
 	text->remove();
@@ -65,29 +64,15 @@ void Text3D::setPosition(const Vector3D& pos) {
 	text->setPosition(irr::core::vector3df(pos.x, pos.y, pos.z));
 }
 
-Vector3D Text3D::getColor() {
+Vector4D Text3D::getColor() {
 	if (text)
-		return Vector3D(color.getRed(), color.getGreen(), color.getBlue());
-	return Vector3D();
+		return Vector4D(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+	return Vector4D();
 }
 
-void Text3D::setColor(const Vector3D& col) {
+void Text3D::setColor(const Vector4D& col) {
 	if (text) {
-		color = irr::video::SColor(opacity, col.x, col.y, col.z);
-		updateColor();
-	}
-}
-
-int Text3D::getOpacity() {
-	if (text)
-		return opacity;
-	return 0;
-}
-
-void Text3D::setOpacity(int op) {
-	opacity = irr::core::clamp<int>(op, 0, 255);
-	if (text) {
-		color = irr::video::SColor(opacity, color.getRed(), color.getGreen(), color.getBlue());
+		color = irr::video::SColor(col.w, col.x, col.y, col.z);
 		updateColor();
 	}
 }
@@ -122,14 +107,13 @@ bool Text3D::setFont(const std::string& fontName) {
 
 void bindText3D() {
 	sol::usertype<Text3D> bind_type = lua->new_usertype<Text3D>("Text3D",
-		sol::constructors < Text3D(const std::string & tx, const std::string & fontName), Text3D(const std::string & tx, const Vector3D & pos, const Vector3D & col, int op), Text3D(const std::string & tx), Text3D(const std::string & tx, const Vector3D & pos), Text3D() >(),
+		sol::constructors < Text3D(const std::string & tx, const std::string & fontName), Text3D(const std::string & tx, const Vector3D & pos, const Vector4D & col), Text3D(const std::string & tx), Text3D(const std::string & tx, const Vector3D & pos), Text3D() >(),
 
 		sol::base_classes, sol::bases<Compatible3D>(),
 
 		"position", sol::property(&Text3D::getPosition, &Text3D::setPosition),
 		"visible", sol::property(&Text3D::getVisibility, &Text3D::setVisibility),
 		"textColor", sol::property(&Text3D::getColor, &Text3D::setColor),
-		"opacity", sol::property(&Text3D::getOpacity, &Text3D::setOpacity),
 		"text", sol::property(&Text3D::getText, &Text3D::setText)
 	);
 

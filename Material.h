@@ -5,6 +5,7 @@
 #include "Texture.h"
 #include "Vector2D.h"
 #include "Vector3D.h"
+#include "Vector4D.h"
 #include "LuaLime.h"
 
 class Material {
@@ -36,17 +37,17 @@ public:
     bool getLighting();
     void setLighting(bool i);
 
-    Vector3D getDiffuseColor();
-    void setDiffuseColor(Vector3D& color);
+    Vector4D getDiffuseColor();
+    void setDiffuseColor(Vector4D& color);
 
-    Vector3D getAmbientColor();
-    void setAmbientColor(Vector3D& color);
+    Vector4D getAmbientColor();
+    void setAmbientColor(Vector4D& color);
 
-    Vector3D getEmissiveColor();
-    void setEmissiveColor(Vector3D& color);
+    Vector4D getEmissiveColor();
+    void setEmissiveColor(Vector4D& color);
 
-    Vector3D getSpecularColor();
-    void setSpecularColor(Vector3D& color);
+    Vector4D getSpecularColor();
+    void setSpecularColor(Vector4D& color);
 
     bool getGourad();
     void setGourad(bool i);

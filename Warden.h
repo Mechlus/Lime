@@ -178,9 +178,9 @@ namespace Warden {
 	}
 
 	// Set background color
-	void setBackgroundColor(Vector3D& color) {
+	void setBackgroundColor(Vector4D& color) {
 		if (driver && irrHandler) {
-			irrHandler->backgroundColor = irr::video::SColor(255, color.x, color.y, color.z);
+			irrHandler->backgroundColor = irr::video::SColor(color.w, color.x, color.y, color.z);
 			effects->setClearColour(irrHandler->backgroundColor);
 		}
 	}
@@ -392,8 +392,8 @@ namespace Warden {
 	}
 
 	// Set fog color
-	void setFogColor(Vector3D color) {
-		fogColor = video::SColor(255, static_cast<u32>(color.x), static_cast<u32>(color.y), static_cast<u32>(color.z));
+	void setFogColor(Vector4D color) {
+		fogColor = video::SColor(static_cast<u32>(color.w), static_cast<u32>(color.x), static_cast<u32>(color.y), static_cast<u32>(color.z));
 		applyFogSettings();
 	}
 
@@ -426,10 +426,10 @@ namespace Warden {
 		applyFogSettings();
 	}
 
-	void setFogSettings(Vector2D dist, Vector3D color, int i, float density, bool var, bool var1) {
+	void setFogSettings(Vector2D dist, Vector4D color, int i, float density, bool var, bool var1) {
 		startDistance = dist.x;
 		endDistance = dist.y;
-		fogColor = video::SColor(255, static_cast<u32>(color.x), static_cast<u32>(color.y), static_cast<u32>(color.z));
+		fogColor = video::SColor(static_cast<u32>(color.w), static_cast<u32>(color.x), static_cast<u32>(color.y), static_cast<u32>(color.z));
 		switch (i) {
 		case 0: fogType = video::EFT_FOG_LINEAR; break;
 		case 1: fogType = video::EFT_FOG_EXP; break;
@@ -443,13 +443,13 @@ namespace Warden {
 	}
 
 	// Shadows
-	void setAmbientColor(const Vector3D& color) {
-		smgr->setAmbientLight(video::SColorf(static_cast<u32>(color.x) / 255.0f, static_cast<u32>(color.y) / 255.0f, static_cast<u32>(color.z) / 255.0f, 1.0f));
-		effects->setAmbientColor(SColor(255, static_cast<u32>(color.x), static_cast<u32>(color.y), static_cast<u32>(color.z)));
+	void setAmbientColor(const Vector4D& color) {
+		smgr->setAmbientLight(video::SColorf(static_cast<u32>(color.x) / 255.0f, static_cast<u32>(color.y) / 255.0f, static_cast<u32>(color.z) / 255.0f, static_cast<u32>(color.w) / 255.0f));
+		effects->setAmbientColor(SColor(static_cast<u32>(color.w), static_cast<u32>(color.x), static_cast<u32>(color.y), static_cast<u32>(color.z)));
 	}
 
-	void setShadowColor(const Vector3D& color) {
-		smgr->setShadowColor(video::SColor(static_cast<u32>(color.x), static_cast<u32>(color.y), static_cast<u32>(color.z), smgr->getShadowColor().getAlpha()));
+	void setShadowColor(const Vector4D& color) {
+		smgr->setShadowColor(video::SColor(static_cast<u32>(color.x), static_cast<u32>(color.y), static_cast<u32>(color.z), static_cast<u32>(color.w)));
 	}
 
 	void setShadowOpacity(int opacity) {

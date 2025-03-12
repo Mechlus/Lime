@@ -138,12 +138,12 @@ void ParticleSystem::setEmitter(int i, sol::table params) {
 	irr::video::SColor startCol = irr::video::SColor(255, 255, 255, 255);
 	irr::video::SColor endCol = irr::video::SColor(255, 255, 255, 255);
 	if (params["minStartingColor"]) {
-		Vector3D c = static_cast<Vector3D>(params["minStartingColor"]);
-		startCol = irr::video::SColor(255.0, c.x, c.y, c.z);
+		Vector4D c = static_cast<Vector4D>(params["minStartingColor"]);
+		startCol = irr::video::SColor(c.w, c.x, c.y, c.z);
 	}
 	if (params["maxStartingColor"]) {
-		Vector3D c = static_cast<Vector3D>(params["maxStartingColor"]);
-		endCol = irr::video::SColor(255.0, c.x, c.y, c.z);
+		Vector4D c = static_cast<Vector4D>(params["maxStartingColor"]);
+		endCol = irr::video::SColor(c.w, c.x, c.y, c.z);
 	}
 	em->setMinStartColor(startCol);
 	em->setMaxStartColor(endCol);
@@ -196,8 +196,8 @@ void ParticleSystem::addAffector(int i, sol::table params) {
 		int timeNeeded = 1000.0;
 
 		if (params["targetColor"]) {
-			Vector3D c = static_cast<Vector3D>(params["targetColor"]);
-			targetColor = irr::video::SColor(0.0, c.x, c.y, c.z);
+			Vector4D c = static_cast<Vector4D>(params["targetColor"]);
+			targetColor = irr::video::SColor(c.w, c.x, c.y, c.z);
 		}
 
 		if (params["time"]) {

@@ -22,7 +22,7 @@ public:
     Camera3D();
     Camera3D(const Camera3D& other);
 
-    ~Camera3D() { destroy(); }
+    //~Camera3D() { destroy(); }
 
     irr::scene::ICameraSceneNode* createCamera();
     void destroy();

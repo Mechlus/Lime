@@ -19,22 +19,13 @@ Image2D::Image2D(const Image2D& other) {
 	img = other.img;
 }
 
-Vector3D Image2D::getColor() {
-	return img ? Vector3D(img->getColor().getRed(), img->getColor().getGreen(), img->getColor().getBlue()) : Vector3D();
+Vector4D Image2D::getColor() {
+	return img ? Vector4D(img->getColor().getRed(), img->getColor().getGreen(), img->getColor().getBlue(), img->getColor().getAlpha()) : Vector4D();
 }
 
-void Image2D::setColor(Vector3D& color) {
+void Image2D::setColor(Vector4D& color) {
 	if (img)
-		img->setColor(irr::video::SColor(img->getColor().getAlpha(), color.x, color.y, color.z));
-}
-
-int Image2D::getOpacity() {
-	return img ? img->getColor().getAlpha() : 0;
-}
-
-void Image2D::setOpacity(int o) {
-	if (img)
-		img->setColor(irr::video::SColor(o, img->getColor().getRed(), img->getColor().getGreen(), img->getColor().getBlue()));
+		img->setColor(irr::video::SColor(color.w, color.x, color.y, color.z));
 }
 
 bool Image2D::getVisible() {
@@ -152,8 +143,7 @@ void bindImage2D() {
 		"enabled", sol::property(&Image2D::getEnabled, &Image2D::setEnabled),
 		"useAlpha", sol::property(&Image2D::getUseAlpha, &Image2D::setUseAlpha),
 		"scaleToFit", sol::property(&Image2D::scalesToFit, &Image2D::setScalesToFit),
-		"color", sol::property(&Image2D::getColor, &Image2D::setColor),
-		"opacity", sol::property(&Image2D::getOpacity, &Image2D::setOpacity)
+		"color", sol::property(&Image2D::getColor, &Image2D::setColor)
 	);
 
 	bind_type["destroy"] = &Image2D::destroy;

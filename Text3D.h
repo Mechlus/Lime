@@ -5,6 +5,7 @@
 #include "StaticMesh.h"
 #include "Vector2D.h"
 #include "Vector3D.h"
+#include "Vector4D.h"
 #include <string>
 
 #include "Compatible3D.h"
@@ -19,9 +20,9 @@ public:
     Text3D();
     Text3D(const std::string& tx);
     Text3D(const std::string& tx, const Vector3D& pos);
-    Text3D(const std::string& tx, const Vector3D& pos, const Vector3D& col, int op);
+    Text3D(const std::string& tx, const Vector3D& pos, const Vector4D& col);
     Text3D(const std::string& tx, const std::string& fontName);
-    Text3D(const std::string& tx, const Vector3D& pos, const Vector3D& col, int op, const std::string& fontName);
+    Text3D(const std::string& tx, const Vector3D& pos, const Vector4D& col, const std::string& fontName);
 
     std::string getText();
     void setText(const std::string& tx);
@@ -32,11 +33,8 @@ public:
     Vector3D getPosition();
     void setPosition(const Vector3D& pos);
 
-    Vector3D getColor();
-    void setColor(const Vector3D& col);
-
-    int getOpacity();
-    void setOpacity(int op);
+    Vector4D getColor();
+    void setColor(const Vector4D& col);
 
     void updateColor();
 

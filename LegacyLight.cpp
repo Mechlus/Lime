@@ -1,27 +1,27 @@
 #include "LegacyLight.h"
 
-LegacyLight::LegacyLight(int type, const Vector3D& pos, const Vector3D& rot, const Vector3D& color) {
+LegacyLight::LegacyLight(int type, const Vector3D& pos, const Vector3D& rot, const Vector4D& color) {
 	vector3df p = vector3df(pos.x, pos.y, pos.z);
 	vector3df r = vector3df(rot.x, rot.y, rot.z);
-	SColorf col = SColorf(color.x / 255.0, color.y / 255.0, color.z / 255.0);
+	SColorf col = SColorf(color.x / 255.0, color.y / 255.0, color.z / 255.0, color.w / 255.0);
 	light = smgr->addLightSceneNode(0, p, col);
 	light->setLightType((E_LIGHT_TYPE)type);
 	light->setRotation(r);
 }
 
-LegacyLight::LegacyLight() : LegacyLight(0, Vector3D(), Vector3D(), Vector3D(255)) {}
+LegacyLight::LegacyLight() : LegacyLight(0, Vector3D(), Vector3D(), Vector4D(255)) {}
 
 LegacyLight::LegacyLight(const LegacyLight& other) : LegacyLight(other.light->getLightType(), 
 													 Vector3D(other.light->getPosition().X, other.light->getPosition().Y, other.light->getPosition().Z),
 													 Vector3D(other.light->getRotation().X, other.light->getRotation().Y, other.light->getRotation().Z),
-													 Vector3D(other.light->getLightData().DiffuseColor.getRed(), other.light->getLightData().DiffuseColor.getGreen(), other.light->getLightData().DiffuseColor.getBlue()))
+													 Vector4D(other.light->getLightData().DiffuseColor.getRed(), other.light->getLightData().DiffuseColor.getGreen(), other.light->getLightData().DiffuseColor.getBlue(), other.light->getLightData().DiffuseColor.getAlpha()))
 {
 	
 }
 
-LegacyLight::LegacyLight(int type) : LegacyLight(type, Vector3D(), Vector3D(), Vector3D()) {}
+LegacyLight::LegacyLight(int type) : LegacyLight(type, Vector3D(), Vector3D(), Vector4D()) {}
 
-LegacyLight::LegacyLight(const Vector3D& pos) : LegacyLight(0, pos, Vector3D(), Vector3D()) {}
+LegacyLight::LegacyLight(const Vector3D& pos) : LegacyLight(0, pos, Vector3D(), Vector4D()) {}
 
 Vector3D LegacyLight::getPosition() {
 	return true ? Vector3D(light->getPosition().X, light->getPosition().Y, light->getPosition().Z) : Vector3D();
@@ -41,43 +41,43 @@ void LegacyLight::setRotation(const Vector3D& rot) {
 		light->setRotation(vector3df(rot.x, rot.y, rot.z));
 }
 
-Vector3D LegacyLight::getLightColor() {
+Vector4D LegacyLight::getLightColor() {
 	if (light) {
 		SColorf c = light->getLightData().DiffuseColor;
-		Vector3D(c.getRed() * 255.0, c.getGreen() * 255.0, c.getBlue() * 255.0);
+		Vector4D(c.getRed() * 255.0, c.getGreen() * 255.0, c.getBlue() * 255.0, c.getAlpha() * 255.0);
 	}
-	return Vector3D();
+	return Vector4D();
 }
 
-void LegacyLight::setLightColor(const Vector3D& col) {
+void LegacyLight::setLightColor(const Vector4D& col) {
 	if (light)
-		light->getLightData().DiffuseColor = (SColorf(col.x / 255.0, col.y / 255.0, col.z / 255.0, 1.0));
+		light->getLightData().DiffuseColor = (SColorf(col.x / 255.0, col.y / 255.0, col.z / 255.0, col.w / 255.0));
 }
 
-Vector3D LegacyLight::getAmbientColor() {
+Vector4D LegacyLight::getAmbientColor() {
 	if (light) {
 		SColorf c = light->getLightData().AmbientColor;
-		Vector3D(c.getRed() * 255.0, c.getGreen() * 255.0, c.getBlue() * 255.0);
+		Vector4D(c.getRed() * 255.0, c.getGreen() * 255.0, c.getBlue() * 255.0, c.getAlpha() * 255.0);
 	}
-	return Vector3D();
+	return Vector4D();
 }
 
-void LegacyLight::setAmbientColor(const Vector3D& col) {
+void LegacyLight::setAmbientColor(const Vector4D& col) {
 	if (light)
-		light->getLightData().AmbientColor = (SColorf(col.x / 255.0, col.y / 255.0, col.z / 255.0, 1.0));
+		light->getLightData().AmbientColor = (SColorf(col.x / 255.0, col.y / 255.0, col.z / 255.0, col.w / 255.0));
 }
 
-Vector3D LegacyLight::getSpecColor() {
+Vector4D LegacyLight::getSpecColor() {
 	if (light) {
 		SColorf c = light->getLightData().SpecularColor;
-		Vector3D(c.getRed() * 255.0, c.getGreen() * 255.0, c.getBlue() * 255.0);
+		Vector4D(c.getRed() * 255.0, c.getGreen() * 255.0, c.getBlue() * 255.0, c.getAlpha() * 255.0);
 	}
-	return Vector3D();
+	return Vector4D();
 }
 
-void LegacyLight::setSpecColor(const Vector3D& col) {
+void LegacyLight::setSpecColor(const Vector4D& col) {
 	if (light)
-		light->getLightData().SpecularColor = (SColorf(col.x / 255.0, col.y / 255.0, col.z / 255.0, 1.0));
+		light->getLightData().SpecularColor = (SColorf(col.x / 255.0, col.y / 255.0, col.z / 255.0, col.w / 255.0));
 }
 
 int LegacyLight::getType() {
@@ -165,7 +165,7 @@ void LegacyLight::setVisible(bool visible) {
 
 void bindLegacyLight() {
 	sol::usertype<LegacyLight> bind_type = lua->new_usertype<LegacyLight>("LegacyLight",
-		sol::constructors<LegacyLight(), LegacyLight(const LegacyLight& other), LegacyLight(int type), LegacyLight(const Vector3D& pos), LegacyLight(int type, const Vector3D & pos, const Vector3D & rot, const Vector3D & color)>(),
+		sol::constructors<LegacyLight(), LegacyLight(const LegacyLight& other), LegacyLight(int type), LegacyLight(const Vector3D& pos), LegacyLight(int type, const Vector3D & pos, const Vector3D & rot, const Vector4D & color)>(),
 
 		sol::base_classes, sol::bases<Compatible3D>(),
 

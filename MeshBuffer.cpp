@@ -5,7 +5,7 @@ using namespace core;
 using namespace scene;
 
 MeshBuffer::MeshBuffer() {
-	buffer = &irr::scene::SMeshBuffer();
+	buffer = new irr::scene::SMeshBuffer();
 }
 
 MeshBuffer::~MeshBuffer() {
@@ -16,15 +16,15 @@ MeshBuffer::~MeshBuffer() {
 void MeshBuffer::pushFace(const Vector3D& v1, const Vector3D& v2, const Vector3D& v3,
                           const Vector3D& n1, const Vector3D& n2, const Vector3D& n3,
                           const Vector2D& uvw1, const Vector2D& uvw2, const Vector2D& uvw3,
-                          const Vector3D& c1, const Vector3D& c2, const Vector3D& c3) {
+                          const Vector4D& c1, const Vector4D& c2, const Vector4D& c3) {
     if (!buffer) return;
 
     buffer->Vertices.reallocate(buffer->Vertices.size() + 3);
     buffer->Vertices.set_used(buffer->Vertices.size() + 3);
 
-    buffer->Vertices[currentIndex] = S3DVertex(vector3df(v1.x, v1.y, v1.z), vector3df(n1.x, n1.y, n1.z), SColor(255, c1.x, c1.y, c1.z), vector2df(uvw1.x, uvw1.y));
-    buffer->Vertices[currentIndex + 1] = S3DVertex(vector3df(v2.x, v2.y, v2.z), vector3df(n2.x, n2.y, n2.z), SColor(255, c2.x, c2.y, c2.z), vector2df(uvw2.x, uvw2.y));
-    buffer->Vertices[currentIndex + 2] = S3DVertex(vector3df(v3.x, v3.y, v3.z), vector3df(n3.x, n3.y, n3.z), SColor(255, c3.x, c3.y, c3.z), vector2df(uvw3.x, uvw3.y));
+    buffer->Vertices[currentIndex] = S3DVertex(vector3df(v1.x, v1.y, v1.z), vector3df(n1.x, n1.y, n1.z), SColor(c1.w, c1.x, c1.y, c1.z), vector2df(uvw1.x, uvw1.y));
+    buffer->Vertices[currentIndex + 1] = S3DVertex(vector3df(v2.x, v2.y, v2.z), vector3df(n2.x, n2.y, n2.z), SColor(c2.w, c2.x, c2.y, c2.z), vector2df(uvw2.x, uvw2.y));
+    buffer->Vertices[currentIndex + 2] = S3DVertex(vector3df(v3.x, v3.y, v3.z), vector3df(n3.x, n3.y, n3.z), SColor(c3.w, c3.x, c3.y, c3.z), vector2df(uvw3.x, uvw3.y));
 
     buffer->Indices.reallocate(buffer->Indices.size() + 3);
     buffer->Indices.set_used(buffer->Indices.size() + 3);
@@ -40,7 +40,7 @@ void MeshBuffer::clear() {
     if (buffer) {
         buffer->drop();
         currentIndex = 0;
-        buffer = &irr::scene::SMeshBuffer();
+        buffer = new irr::scene::SMeshBuffer();
     }
 }
 

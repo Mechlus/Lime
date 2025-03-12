@@ -8,15 +8,15 @@ void Light::createBase() {
 	target->setPosition(irr::core::vector3df(0, 0, 50));
 }
 
-Light::Light() : Light(Vector3D(0, 0, 0), Vector3D(0, 0, 0), Vector3D(255, 255, 255), Vector2D(0.1, 50.0), 90, false) {
+Light::Light() : Light(Vector3D(0, 0, 0), Vector3D(0, 0, 0), Vector4D(255, 255, 255, 255), Vector2D(0.1, 50.0), 90, false) {
 }
-Light::Light(const Vector3D& pos, const Vector3D& rot, const Vector3D& col)
+Light::Light(const Vector3D& pos, const Vector3D& rot, const Vector4D& col)
 	: Light(pos, rot, col, Vector2D(0.1, 50.0), 90, false) {
 }
-Light::Light(const Vector3D& pos, const Vector3D& rot, const Vector3D& col, const Vector2D& viewPlanes, float fov, bool directional) {
+Light::Light(const Vector3D& pos, const Vector3D& rot, const Vector4D& col, const Vector2D& viewPlanes, float fov, bool directional) {
 	createBase();
 
-	SColorf c = SColorf(col.x / 255.0, col.y / 255.0, col.z / 255.0, 1.0);
+	SColorf c = SColorf(col.x / 255.0, col.y / 255.0, col.z / 255.0, col.w / 255.0);
 	holder->setPosition(vector3df(pos.x, pos.y, pos.z));
 
 	index = irrHandler->lights;
@@ -64,17 +64,17 @@ void Light::setRotation(const Vector3D& rot) {
 	}
 }
 
-Vector3D Light::getColor() {
+Vector4D Light::getColor() {
 	if (true) {
 		SColorf c = effects->getShadowLight(index).getLightColor();
-		Vector3D(c.getRed(), c.getGreen(), c.getBlue());
+		Vector4D(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
 	}
-	return Vector3D();
+	return Vector4D();
 }
 
-void Light::setColor(const Vector3D& col) {
+void Light::setColor(const Vector4D& col) {
 	if (true)
-		effects->getShadowLight(index).setLightColor(SColorf(col.x / 255.0, col.y / 255.0, col.z / 255.0, 1.0));
+		effects->getShadowLight(index).setLightColor(SColorf(col.x / 255.0, col.y / 255.0, col.z / 255.0, col.w / 255.0));
 }
 
 bool Light::getDirectional() {
@@ -130,7 +130,7 @@ void Light::setDebug(bool visible) {
 
 void bindLight() {
 	sol::usertype<Light> bind_type = lua->new_usertype<Light>("Light",
-		sol::constructors<Light(), Light(const Vector3D & pos, const Vector3D & rot, const Vector3D & col), Light(const Vector3D & pos, const Vector3D & rot, const Vector3D & col, const Vector2D & viewPlanes, float fov, bool directional)>(),
+		sol::constructors<Light(), Light(const Vector3D & pos, const Vector3D & rot, const Vector4D & col), Light(const Vector3D & pos, const Vector3D & rot, const Vector4D & col, const Vector2D & viewPlanes, float fov, bool directional)>(),
 
 		sol::base_classes, sol::bases<Compatible3D>(),
 

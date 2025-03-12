@@ -4,6 +4,7 @@
 #include "IrrManagers.h"
 #include "Vector2D.h"
 #include "Vector3D.h"
+#include "Vector4D.h"
 #include "Image2D.h"
 #include <string>
 
@@ -37,17 +38,11 @@ public:
     bool getDrawBackground();
     void setDrawBackground(bool draw);
 
-    Vector3D getBackgroundColor();
-    void setBackgroundColor(const Vector3D& col);
+    Vector4D getBackgroundColor();
+    void setBackgroundColor(const Vector4D& col);
 
-    int getBackgroundOpacity();
-    void setBackgroundOpacity(int op);
-
-    Vector3D getTextColor();
-    void setTextColor(const Vector3D& col);
-
-    int getTextOpacity();
-    void setTextOpacity(int op);
+    Vector4D getTextColor();
+    void setTextColor(const Vector4D& col);
 
     Vector2D getSize();
     void setSize(const Vector2D& size);

@@ -5,6 +5,7 @@
 #include "StaticMesh.h"
 #include "Vector2D.h"
 #include "Vector3D.h"
+#include "Vector4D.h"
 #include "LuaLime.h"
 #include "DebugVisual.h"
 #include <string>
@@ -20,8 +21,8 @@ public:
     DebugSceneNode* d = nullptr;
 
     Light();
-    Light(const Vector3D& pos, const Vector3D& rot, const Vector3D& col);
-    Light(const Vector3D& pos, const Vector3D& rot, const Vector3D& col, const Vector2D& viewPlanes, float fov, bool directional);
+    Light(const Vector3D& pos, const Vector3D& rot, const Vector4D& col);
+    Light(const Vector3D& pos, const Vector3D& rot, const Vector4D& col, const Vector2D& viewPlanes, float fov, bool directional);
 
     void createBase();
     void updateTarget();
@@ -32,8 +33,8 @@ public:
     Vector3D getRotation();
     void setRotation(const Vector3D& rot);
 
-    Vector3D getColor();
-    void setColor(const Vector3D& col);
+    Vector4D getColor();
+    void setColor(const Vector4D& col);
 
     bool getDirectional();
     void setDirectional(bool enable);

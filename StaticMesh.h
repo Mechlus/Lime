@@ -5,6 +5,7 @@
 #include "Material.h"
 #include "Vector2D.h"
 #include "Vector3D.h"
+#include "Vector4D.h"
 #include "LuaLime.h"
 #include <string>
 #include <vector>
@@ -22,7 +23,6 @@ public:
     irr::scene::ITriangleSelector* selector;
     bool collisionEnabled;
     irr::video::SColor vColor;
-    int opacity;
     int shadow;
     bool hadShadow;
 
@@ -79,14 +79,14 @@ public:
     void setDebug(bool visible);
 
     sol::table getBoundingBox();
+    void recalculateBoundingBox();
     void makePlanarMapping();
     void setHardwareHint(int i);
 
-    int getOpacity();
-    void setOpacity(int op);
+    Vector4D getVColor();
+    void setVColor(const Vector4D& col);
 
-    Vector3D getVColor();
-    void setVColor(const Vector3D& col);
+    bool writeToFile(std::string path);
 
     irr::scene::ISceneNode* getNode() const override { return meshNode; }
 };

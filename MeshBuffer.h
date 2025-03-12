@@ -4,6 +4,7 @@
 #include "IrrManagers.h"
 #include "Vector3D.h"
 #include "Vector2D.h"
+#include "Vector4D.h"
 
 class MeshBuffer {
 public:
@@ -13,7 +14,7 @@ public:
 	void pushFace(const Vector3D& v1, const Vector3D& v2, const Vector3D& v3,
 		const Vector3D& n1, const Vector3D& n2, const Vector3D& n3,
 		const Vector2D& uvw1, const Vector2D& uvw2, const Vector2D& uvw3,
-		const Vector3D& c1, const Vector3D& c2, const Vector3D& c3);
+		const Vector4D& c1, const Vector4D& c2, const Vector4D& c3);
 	void clear();
 	void destroy();
 	void recalculateBoundingBox();

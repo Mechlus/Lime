@@ -3,6 +3,7 @@
 #include "irrlicht.h"
 #include "IrrManagers.h"
 #include "Vector2D.h"
+#include "Vector4D.h"
 #include "StaticMesh.h"
 #include "Material.h"
 #include "Texture.h"

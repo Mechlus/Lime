@@ -101,23 +101,13 @@ void EditBox::setWrap(bool wrap) {
     if (box) box->setWordWrap(wrap);
 }
 
-Vector3D EditBox::getTextColor() {
-    return box ? Vector3D(box->getOverrideColor().getRed(), box->getOverrideColor().getGreen(), box->getOverrideColor().getBlue()) : Vector3D();
+Vector4D EditBox::getTextColor() {
+    return box ? Vector4D(box->getOverrideColor().getRed(), box->getOverrideColor().getGreen(), box->getOverrideColor().getBlue(), box->getOverrideColor().getAlpha()) : Vector4D();
 }
 
-void EditBox::setTextColor(const Vector3D& col) {
+void EditBox::setTextColor(const Vector4D& col) {
     if (box) {
-        box->setOverrideColor(irr::video::SColor(box->getOverrideColor().getAlpha(), col.x, col.y, col.z));
-    }
-}
-
-int EditBox::getTextOpacity() {
-    return box ? box->getOverrideColor().getAlpha() : 0;
-}
-
-void EditBox::setTextOpacity(int op) {
-    if (box) {
-        box->setOverrideColor(irr::video::SColor(op, box->getOverrideColor().getRed(), box->getOverrideColor().getGreen(), box->getOverrideColor().getBlue()));
+        box->setOverrideColor(irr::video::SColor(col.w, col.x, col.y, col.z));
     }
 }
 
@@ -203,7 +193,6 @@ void bindEditBox() {
         "size", sol::property(&EditBox::getSize, &EditBox::setSize),
         "wrap", sol::property(&EditBox::getWrap, &EditBox::setWrap),
         "textColor", sol::property(&EditBox::getTextColor, &EditBox::setTextColor),
-        "textOpacity", sol::property(&EditBox::getTextOpacity, &EditBox::setTextOpacity),
         "text", sol::property(&EditBox::getText, &EditBox::setText),
         "drawBorder", sol::property(&EditBox::getDrawBorder, &EditBox::setDrawBorder),
         "enabled", sol::property(&EditBox::getIsEnabled, &EditBox::setIsEnabled),

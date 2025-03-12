@@ -108,42 +108,22 @@ void Text2D::setDrawBackground(bool draw) {
 		text->setDrawBackground(draw);
 }
 
-Vector3D Text2D::getBackgroundColor() {
-	return text ? Vector3D(text->getBackgroundColor().getRed(), text->getBackgroundColor().getGreen(), text->getBackgroundColor().getBlue()) : Vector3D();
+Vector4D Text2D::getBackgroundColor() {
+	return text ? Vector4D(text->getBackgroundColor().getRed(), text->getBackgroundColor().getGreen(), text->getBackgroundColor().getBlue(), text->getBackgroundColor().getAlpha()) : Vector4D();
 }
 
-void Text2D::setBackgroundColor(const Vector3D& col) {
+void Text2D::setBackgroundColor(const Vector4D& col) {
 	if (text)
-		text->setBackgroundColor(irr::video::SColor(text->getBackgroundColor().getAlpha(), col.x, col.y, col.z));
+		text->setBackgroundColor(irr::video::SColor(col.w, col.x, col.y, col.z));
 }
 
-int Text2D::getBackgroundOpacity() {
-	return text ? text->getBackgroundColor().getAlpha() : 0;
+Vector4D Text2D::getTextColor() {
+	return text ? Vector4D(text->getOverrideColor().getRed(), text->getOverrideColor().getGreen(), text->getOverrideColor().getBlue(), text->getOverrideColor().getAlpha()) : Vector4D();
 }
 
-void Text2D::setBackgroundOpacity(int op) {
-	if (text) {
-		text->setDrawBackground(op == 0 ? false : true);
-		text->setBackgroundColor(irr::video::SColor(op, text->getBackgroundColor().getRed(), text->getBackgroundColor().getGreen(), text->getBackgroundColor().getBlue()));
-	}
-}
-
-Vector3D Text2D::getTextColor() {
-	return text ? Vector3D(text->getOverrideColor().getRed(), text->getOverrideColor().getGreen(), text->getOverrideColor().getBlue()) : Vector3D();
-}
-
-void Text2D::setTextColor(const Vector3D& col) {
+void Text2D::setTextColor(const Vector4D& col) {
 	if (text)
-		text->setOverrideColor(irr::video::SColor(text->getOverrideColor().getAlpha(), col.x, col.y, col.z));
-}
-
-int Text2D::getTextOpacity() {
-	return text ? text->getOverrideColor().getAlpha() : 0;
-}
-
-void Text2D::setTextOpacity(int op) {
-	if (text)
-		text->setOverrideColor(irr::video::SColor(op, text->getOverrideColor().getRed(), text->getOverrideColor().getGreen(), text->getOverrideColor().getBlue()));
+		text->setOverrideColor(irr::video::SColor(col.w, col.x, col.y, col.z));
 }
 
 bool Text2D::setFont(const std::string& fontName) {
@@ -200,9 +180,7 @@ void bindText2D() {
 		"size", sol::property(&Text2D::getSize, &Text2D::setSize),
 		"wrap", sol::property(&Text2D::getWrap, &Text2D::setWrap),
 		"backgroundColor", sol::property(&Text2D::getBackgroundColor, &Text2D::setBackgroundColor),
-		"backgroundOpacity", sol::property(&Text2D::getBackgroundOpacity, &Text2D::setBackgroundOpacity),
 		"textColor", sol::property(&Text2D::getTextColor, &Text2D::setTextColor),
-		"textOpacity", sol::property(&Text2D::getTextOpacity, &Text2D::setTextOpacity),
 		"text", sol::property(&Text2D::getText, &Text2D::setText),
 		"drawBorder", sol::property(&Text2D::getDrawBorder, &Text2D::setDrawBorder)
 	);

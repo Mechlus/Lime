@@ -4,6 +4,7 @@
 #include "IrrManagers.h"
 #include "Vector2D.h"
 #include "Vector3D.h"
+#include "Vector4D.h"
 #include "LuaLime.h"
 #include "DebugVisual.h"
 #include <string>
@@ -18,7 +19,7 @@ public:
 
     irr::scene::ISceneNode* getNode() const override { return light; }
 
-    LegacyLight(int type, const Vector3D& pos, const Vector3D& rot, const Vector3D& color);
+    LegacyLight(int type, const Vector3D& pos, const Vector3D& rot, const Vector4D& color);
     LegacyLight(int type);
     LegacyLight(const Vector3D& pos);
     LegacyLight();
@@ -27,12 +28,12 @@ public:
     void setPosition(const Vector3D& pos);
     Vector3D getRotation();
     void setRotation(const Vector3D& rot);
-    Vector3D getLightColor();
-    void setLightColor(const Vector3D& col);
-    Vector3D getAmbientColor();
-    void setAmbientColor(const Vector3D& col);
-    Vector3D getSpecColor();
-    void setSpecColor(const Vector3D& col);
+    Vector4D getLightColor();
+    void setLightColor(const Vector4D& col);
+    Vector4D getAmbientColor();
+    void setAmbientColor(const Vector4D& col);
+    Vector4D getSpecColor();
+    void setSpecColor(const Vector4D& col);
     int getType();
     void setType(int i);
     Vector2D getCones();

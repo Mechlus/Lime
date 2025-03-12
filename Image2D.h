@@ -3,6 +3,7 @@
 #include "irrlicht.h"
 #include "IrrManagers.h"
 #include "Vector2D.h"
+#include "Vector4D.h"
 #include "Texture.h"
 #include <string>
 #include <vector>
@@ -19,11 +20,8 @@ public:
     Image2D(const Texture& tex, const Vector2D& pos, const Vector2D& dimensions);
     Image2D(const Image2D& other);
 
-    Vector3D getColor();
-    void setColor(Vector3D& color);
-
-    int getOpacity();
-    void setOpacity(int o);
+    Vector4D getColor();
+    void setColor(Vector4D& color);
 
     bool getVisible();
     void setVisible(bool vis);

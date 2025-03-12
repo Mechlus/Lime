@@ -68,36 +68,36 @@ void Material::setLighting(bool i) {
     mat.Lighting = i;
 }
 
-Vector3D Material::getDiffuseColor() {
-    return Vector3D(mat.DiffuseColor.getRed(), mat.DiffuseColor.getGreen(), mat.DiffuseColor.getBlue());
+Vector4D Material::getDiffuseColor() {
+    return Vector4D(mat.DiffuseColor.getRed(), mat.DiffuseColor.getGreen(), mat.DiffuseColor.getBlue(), mat.DiffuseColor.getAlpha());
 }
 
-void Material::setDiffuseColor(Vector3D& color) {
-    mat.DiffuseColor.set(mat.DiffuseColor.getAlpha(), color.x, color.y, color.z);
+void Material::setDiffuseColor(Vector4D& color) {
+    mat.DiffuseColor.set(color.w, color.x, color.y, color.z);
 }
 
-Vector3D Material::getAmbientColor() {
-    return Vector3D(mat.AmbientColor.getRed(), mat.AmbientColor.getGreen(), mat.AmbientColor.getBlue());
+Vector4D Material::getAmbientColor() {
+    return Vector4D(mat.AmbientColor.getRed(), mat.AmbientColor.getGreen(), mat.AmbientColor.getBlue(), mat.AmbientColor.getAlpha());
 }
 
-void Material::setAmbientColor(Vector3D& color) {
-    mat.AmbientColor.set(mat.AmbientColor.getAlpha(), color.x, color.y, color.z);
+void Material::setAmbientColor(Vector4D& color) {
+    mat.AmbientColor.set(color.w, color.x, color.y, color.z);
 }
 
-Vector3D Material::getEmissiveColor() {
-    return Vector3D(mat.EmissiveColor.getRed(), mat.EmissiveColor.getGreen(), mat.EmissiveColor.getBlue());
+Vector4D Material::getEmissiveColor() {
+    return Vector4D(mat.EmissiveColor.getRed(), mat.EmissiveColor.getGreen(), mat.EmissiveColor.getBlue(), mat.EmissiveColor.getAlpha());
 }
 
-void Material::setEmissiveColor(Vector3D& color) {
-    mat.EmissiveColor.set(mat.EmissiveColor.getAlpha(), color.x, color.y, color.z);
+void Material::setEmissiveColor(Vector4D& color) {
+    mat.EmissiveColor.set(color.w, color.x, color.y, color.z);
 }
 
-Vector3D Material::getSpecularColor() {
-    return Vector3D(mat.SpecularColor.getRed(), mat.SpecularColor.getGreen(), mat.SpecularColor.getBlue());
+Vector4D Material::getSpecularColor() {
+    return Vector4D(mat.SpecularColor.getRed(), mat.SpecularColor.getGreen(), mat.SpecularColor.getBlue(), mat.SpecularColor.getAlpha());
 }
 
-void Material::setSpecularColor(Vector3D& color) {
-    mat.SpecularColor.set(mat.SpecularColor.getAlpha(), color.x, color.y, color.z);
+void Material::setSpecularColor(Vector4D& color) {
+    mat.SpecularColor.set(color.w, color.x, color.y, color.z);
 }
 
 int Material::getID() {

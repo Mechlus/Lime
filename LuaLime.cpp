@@ -2,6 +2,7 @@
 
 #include "Vector2D.h"
 #include "Vector3D.h"
+#include "Vector4D.h"
 #include "Billboard.h"
 #include "Camera3D.h"
 #include "Material.h"
@@ -42,6 +43,7 @@ int LuaLime::initLua(irr::scene::ISceneManager* smgr, irr::video::IVideoDriver* 
 	// objs
 	bindVector2D();
 	bindVector3D();
+	bindVector4D();
 	bindBillboard();
 	bindCamera3D();
 	bindMaterial();

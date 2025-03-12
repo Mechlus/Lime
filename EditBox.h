@@ -6,6 +6,7 @@
 #include <string>
 #include <unordered_map>
 #include "Image2D.h"
+#include "Vector4D.h"
 
 class EditBox {
     irr::gui::IGUIEditBox* box;
@@ -42,11 +43,8 @@ public:
     bool getWrap();
     void setWrap(bool wrap);
 
-    Vector3D getTextColor();
-    void setTextColor(const Vector3D& col);
-
-    int getTextOpacity();
-    void setTextOpacity(int op);
+    Vector4D getTextColor();
+    void setTextColor(const Vector4D& col);
 
     bool setFont(const std::string& fontName);
 

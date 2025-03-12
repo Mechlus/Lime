@@ -181,6 +181,7 @@
     <ClCompile Include="Trail.cpp" />
     <ClCompile Include="Vector2D.cpp" />
     <ClCompile Include="Vector3D.cpp" />
+    <ClCompile Include="Vector4D.cpp" />
     <ClCompile Include="WaterMesh.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -230,6 +231,7 @@
     <ClInclude Include="Trail.h" />
     <ClInclude Include="Vector2D.h" />
     <ClInclude Include="Vector3D.h" />
+    <ClInclude Include="Vector4D.h" />
     <ClInclude Include="Warden.h" />
     <ClInclude Include="WaterMesh.h" />
     <ClInclude Include="XEffects.h" />
