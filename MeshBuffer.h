@@ -24,6 +24,7 @@ public:
 	u16 currentIndex = 0;
 private:
 	irr::scene::SMeshBuffer* buffer;
+	core::aabbox3d<f32> bbox;
 
 	void addVertex(const vector3df& pos, const vector3df& normal, SColor color, const vector2df& uvw) {
 		S3DVertex vertex;

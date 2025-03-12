@@ -317,19 +317,26 @@ bool StaticMesh::loadMeshViaBuffer(const MeshBuffer& b) {
     if (meshNode) meshNode->drop();
     SMesh* m = new SMesh();
     m->addMeshBuffer(b.getBuffer());
+    m->getMeshBuffer(0)->recalculateBoundingBox();
 
     irr::scene::IMeshManipulator* meshManipulator = device->getSceneManager()->getMeshManipulator();
     meshNode = smgr->addAnimatedMeshSceneNode(meshManipulator->createAnimatedMesh(m));
 
     m->drop();
 
-    if (irrHandler->defaultExclude)
-        effects->excludeNodeFromLightingCalculations(meshNode);
-
     if (!meshNode)
         return false;
 
+    if (irrHandler->defaultExclude)
+        effects->excludeNodeFromLightingCalculations(meshNode);
+
     return true;
+}
+
+void StaticMesh::setAutomaticCulling(bool enable) {
+    if (!meshNode) return;
+
+    meshNode->setAutomaticCulling(enable ? EAC_BOX : EAC_OFF);
 }
 
 void bindStaticMesh() {
@@ -366,4 +373,5 @@ void bindStaticMesh() {
     bindType["setHardwareMappingHint"] = &StaticMesh::setHardwareHint;
     bindType["ignoreLighting"] = &StaticMesh::exclude;
     bindType["writeToFile"] = &StaticMesh::writeToFile;
+    bindType["setAutomaticCulling"] = &StaticMesh::setAutomaticCulling;
 }

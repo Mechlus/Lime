@@ -52,7 +52,14 @@ void MeshBuffer::destroy() {
 }
 
 void MeshBuffer::recalculateBoundingBox() {
-    if (buffer) buffer->recalculateBoundingBox();
+    if (!buffer) return;
+
+    bbox.reset(buffer->Vertices[0].Pos);
+    for (s32 i = 1; i < buffer->Vertices.size(); i++) {
+        bbox.addInternalPoint(buffer->Vertices[i].Pos);
+    }
+
+    buffer->BoundingBox = bbox;
 }
 
 int MeshBuffer::getVertexCount() const {
@@ -72,5 +79,5 @@ void bindMeshBuffer() {
     bind_type["destroy"] = &MeshBuffer::destroy;
     bind_type["clear"] = &MeshBuffer::clear;
     bind_type["getVertexCount"] = &MeshBuffer::getVertexCount;
-    bind_type["recalculateBoundingBox"] = &MeshBuffer::recalculateBoundingBox;
+    bind_type["generateBoundingBox"] = &MeshBuffer::recalculateBoundingBox;
 }

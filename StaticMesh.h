@@ -88,6 +88,8 @@ public:
 
     bool writeToFile(std::string path);
 
+    void setAutomaticCulling(bool enable);
+
     irr::scene::ISceneNode* getNode() const override { return meshNode; }
 };
 
