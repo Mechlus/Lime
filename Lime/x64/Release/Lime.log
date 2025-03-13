@@ -1,25 +1,13 @@
-﻿  StaticMesh.cpp
+﻿  Trail.cpp
 D:\Irrlicht\Lime\EffectHandler.h(212,21): warning C4305: 'initializing': truncation from 'double' to 'irr::f32'
-  (compiling source file 'StaticMesh.cpp')
+  (compiling source file 'Trail.cpp')
   
 D:\Irrlicht\Lime\EffectHandler.h(311,21): warning C4018: '<': signed/unsigned mismatch
-  (compiling source file 'StaticMesh.cpp')
+  (compiling source file 'Trail.cpp')
   
-D:\Irrlicht\Lime\StaticMesh.cpp(135,39): warning C4018: '>=': signed/unsigned mismatch
-D:\Irrlicht\Lime\StaticMesh.cpp(194,12): warning C4244: 'return': conversion from 'irr::f32' to 'int', possible loss of data
-D:\Irrlicht\Lime\StaticMesh.cpp(199,35): warning C4244: 'argument': conversion from 'int' to 'irr::f32', possible loss of data
-D:\Irrlicht\Lime\StaticMesh.cpp(295,90): warning C4244: 'argument': conversion from 'irr::u32' to 'float', possible loss of data
-D:\Irrlicht\Lime\StaticMesh.cpp(295,71): warning C4244: 'argument': conversion from 'irr::u32' to 'float', possible loss of data
-D:\Irrlicht\Lime\StaticMesh.cpp(295,53): warning C4244: 'argument': conversion from 'irr::u32' to 'float', possible loss of data
-D:\Irrlicht\Lime\StaticMesh.cpp(295,34): warning C4244: 'argument': conversion from 'irr::u32' to 'float', possible loss of data
-D:\Irrlicht\Lime\StaticMesh.cpp(299,57): warning C4244: 'argument': conversion from 'const float' to 'irr::u32', possible loss of data
-D:\Irrlicht\Lime\StaticMesh.cpp(299,50): warning C4244: 'argument': conversion from 'const float' to 'irr::u32', possible loss of data
-D:\Irrlicht\Lime\StaticMesh.cpp(299,43): warning C4244: 'argument': conversion from 'const float' to 'irr::u32', possible loss of data
-D:\Irrlicht\Lime\StaticMesh.cpp(299,36): warning C4244: 'argument': conversion from 'const float' to 'irr::u32', possible loss of data
   Generating code
-  2 of 40504 functions (<0.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    10 functions had inline decision re-evaluated but remain unchanged
+  Previous IPDB and IOBJ mismatch, fall back to full compilation.
+  All 40504 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Finished generating code
   Lime.vcxproj -> D:\Irrlicht\Lime\x64\Release\Lime.exe
   'pwsh.exe' is not recognized as an internal or external command,
