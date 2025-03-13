@@ -11,12 +11,20 @@ public:
     std::string path;
 
     Texture();
+    Texture(const Vector2D& size);
     Texture(const std::string imgpath);
 
     bool load(const std::string& imgpath);
     std::string getPath() const;
     void keyColor(const Vector2D& pos);
     void saveTexture(std::string path);
+    void createEmpty(const Vector2D& size);
+    bool append(const Texture& tex, const Vector2D& pos); // Copies texture to another
+    bool appendFromFile(std::string filePath, const Vector2D& pos); // Copies texture to another
+
+    bool doAppend(irr::video::IImage* img, vector2di pos);
+
+    irr::video::IImage* texToImg(irr::video::ITexture* tex);
 };
 
 void bindTexture();
