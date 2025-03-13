@@ -1,26 +1,14 @@
-﻿  MeshBuffer.cpp
-C:\LimeDir\Lime\EffectHandler.h(212,21): warning C4305: 'initializing': truncation from 'double' to 'irr::f32'
-  (compiling source file 'MeshBuffer.cpp')
+﻿  Trail.cpp
+D:\Irrlicht\Lime\EffectHandler.h(212,21): warning C4305: 'initializing': truncation from 'double' to 'irr::f32'
+  (compiling source file 'Trail.cpp')
   
-C:\LimeDir\Lime\EffectHandler.h(311,21): warning C4018: '<': signed/unsigned mismatch
-  (compiling source file 'MeshBuffer.cpp')
+D:\Irrlicht\Lime\EffectHandler.h(311,21): warning C4018: '<': signed/unsigned mismatch
+  (compiling source file 'Trail.cpp')
   
-C:\LimeDir\Lime\MeshBuffer.cpp(26,133): warning C4244: 'argument': conversion from 'const float' to 'irr::u32', possible loss of data
-C:\LimeDir\Lime\MeshBuffer.cpp(26,127): warning C4244: 'argument': conversion from 'const float' to 'irr::u32', possible loss of data
-C:\LimeDir\Lime\MeshBuffer.cpp(26,121): warning C4244: 'argument': conversion from 'const float' to 'irr::u32', possible loss of data
-C:\LimeDir\Lime\MeshBuffer.cpp(26,115): warning C4244: 'argument': conversion from 'const float' to 'irr::u32', possible loss of data
-C:\LimeDir\Lime\MeshBuffer.cpp(27,137): warning C4244: 'argument': conversion from 'const float' to 'irr::u32', possible loss of data
-C:\LimeDir\Lime\MeshBuffer.cpp(27,131): warning C4244: 'argument': conversion from 'const float' to 'irr::u32', possible loss of data
-C:\LimeDir\Lime\MeshBuffer.cpp(27,125): warning C4244: 'argument': conversion from 'const float' to 'irr::u32', possible loss of data
-C:\LimeDir\Lime\MeshBuffer.cpp(27,119): warning C4244: 'argument': conversion from 'const float' to 'irr::u32', possible loss of data
-C:\LimeDir\Lime\MeshBuffer.cpp(28,137): warning C4244: 'argument': conversion from 'const float' to 'irr::u32', possible loss of data
-C:\LimeDir\Lime\MeshBuffer.cpp(28,131): warning C4244: 'argument': conversion from 'const float' to 'irr::u32', possible loss of data
-C:\LimeDir\Lime\MeshBuffer.cpp(28,125): warning C4244: 'argument': conversion from 'const float' to 'irr::u32', possible loss of data
-C:\LimeDir\Lime\MeshBuffer.cpp(28,119): warning C4244: 'argument': conversion from 'const float' to 'irr::u32', possible loss of data
-C:\LimeDir\Lime\MeshBuffer.cpp(66,23): warning C4018: '<': signed/unsigned mismatch
   Generating code
-  2 of 40489 functions (<0.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    19 functions had inline decision re-evaluated but remain unchanged
+  Previous IPDB and IOBJ mismatch, fall back to full compilation.
+  All 40504 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Finished generating code
-  Lime.vcxproj -> C:\LimeDir\Lime\x64\Release\Lime.exe
+  Lime.vcxproj -> D:\Irrlicht\Lime\x64\Release\Lime.exe
+  'pwsh.exe' is not recognized as an internal or external command,
+  operable program or batch file.

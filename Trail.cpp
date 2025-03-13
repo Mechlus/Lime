@@ -80,7 +80,7 @@ float Trail::getWidth() {
 void Trail::setWidth(float w) {
 	if (!t)
 		return;
-	t->setTrailWidth(w);
+	t->setTrailWidth(-w);
 	trailWidth = w;
 }
 
@@ -193,11 +193,11 @@ void bindTrail() {
 		"scale", sol::property(&Trail::getScale, &Trail::setScale),
 		"debug", sol::property(&Trail::getDebug, &Trail::setDebug),
 		"shadows", sol::property(&Trail::getShadows, &Trail::setShadows),
-		"width", sol::property(&Trail::getWidth, &Trail::setWidth),
+		"height", sol::property(&Trail::getWidth, &Trail::setWidth),
 		"wind", sol::property(&Trail::getWind, &Trail::setWind),
 		"segments", sol::property(&Trail::getSegments, &Trail::setSegments),
 		"alignment", sol::property(&Trail::getAlignmentMode, &Trail::setAlignmentMode),
-		"fixedLength", sol::property(&Trail::getFixedSize, &Trail::setFixedSize)
+		"segmentLength", sol::property(&Trail::getFixedSize, &Trail::setFixedSize)
 	);
 
 	bind_type["destroy"] = &Trail::destroy;

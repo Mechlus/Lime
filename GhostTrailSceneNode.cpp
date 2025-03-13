@@ -244,7 +244,7 @@ void ghostTrailSceneNode::updateTrailData()
 
             // Problem here
             if (fixedSegSize > 0.001f)
-                out = fixedSegSize * wind;
+                out = fixedSegSize * wind * (f32)windStrength;
             else
                 out = wind * (f32)windStrength / (f32)(numberOfSegments + 2);
 
