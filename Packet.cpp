@@ -86,6 +86,7 @@ void Packet::append(int type, sol::object data) {
 
 void Packet::clear() {
 	if (p) enet_packet_destroy(p);
+    pos = 0;
 }
 
 int Packet::getSize() {
@@ -96,6 +97,54 @@ int Packet::getSenderID() {
 	return p ? originalID : -1;
 }
 
+sol::object Packet::getNext(int type) {
+    sol::object o = get(type, pos);
+
+    DATA_TYPE t = (DATA_TYPE)type;
+    switch (t) {
+    case DATA_TYPE::BYTE:
+    {
+        uint8_t value;
+        pos += sizeof(value);
+    }
+        break;
+    case DATA_TYPE::SHORT:
+    {
+        uint16_t value;
+        pos += sizeof(value);
+    }
+        break;
+    case DATA_TYPE::INTEGER:
+    {
+        int32_t value;
+        pos += sizeof(value);
+    }
+        break;
+    case DATA_TYPE::FLOAT:
+    {
+        float value;
+        pos += sizeof(value);
+    }
+        break;
+    case DATA_TYPE::STRING:
+    {
+        uint16_t value;
+        pos += sizeof(value);
+    }
+        break;
+    }
+
+    return o;
+}
+
+void Packet::setPosition(int p) {
+    if (p) pos = p;
+}
+
+int Packet::getPosition() {
+    return p ? pos : 0;
+}
+
 sol::object Packet::get(int type, size_t bytePos) {
     DATA_TYPE t = (DATA_TYPE)type;
     sol::object result;
@@ -104,7 +153,7 @@ sol::object Packet::get(int type, size_t bytePos) {
         case DATA_TYPE::BYTE: {
             uint8_t value;
             memcpy(&value, p->data + bytePos, sizeof(value));
-            result = sol::make_object((*lua), value);  // LuaState should be the current Lua state object
+            result = sol::make_object((*lua), value);
             break;
         }
         case DATA_TYPE::SHORT: {
@@ -156,12 +205,15 @@ bool Packet::writeToFile(int bytePos, std::string path) {
 void bindPacket() {
     sol::usertype<Packet> bind_type = lua->new_usertype<Packet>("Packet",
         sol::constructors<Packet()>(),
+        sol::meta_function::garbage_collect, &Packet::clear,
         
-        "ID", &Packet::originalID);
+        "ID", &Packet::originalID,
+        "position", sol::property(&Packet::getPosition, &Packet::setPosition));
 
     bind_type["append"] = &Packet::append;
     bind_type["get"] = &Packet::get;
     bind_type["getSize"] = &Packet::getSize;
     bind_type["destroy"] = &Packet::clear;
     bind_type["writeToFile"] = &Packet::writeToFile;
+    bind_type["getNext"] = &Packet::getNext;
 }

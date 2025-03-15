@@ -1,13 +1,57 @@
-﻿  Trail.cpp
+﻿  Billboard.cpp
 D:\Irrlicht\Lime\EffectHandler.h(212,21): warning C4305: 'initializing': truncation from 'double' to 'irr::f32'
-  (compiling source file 'Trail.cpp')
+  (compiling source file 'Billboard.cpp')
   
 D:\Irrlicht\Lime\EffectHandler.h(311,21): warning C4018: '<': signed/unsigned mismatch
-  (compiling source file 'Trail.cpp')
+  (compiling source file 'Billboard.cpp')
   
+  Packet.cpp
+D:\Irrlicht\Lime\EffectHandler.h(212,21): warning C4305: 'initializing': truncation from 'double' to 'irr::f32'
+  (compiling source file 'Packet.cpp')
+  
+D:\Irrlicht\Lime\EffectHandler.h(311,21): warning C4018: '<': signed/unsigned mismatch
+  (compiling source file 'Packet.cpp')
+  
+D:\Irrlicht\Lime\Packet.cpp(93,9): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+  ParticleSystem.cpp
+D:\Irrlicht\Lime\EffectHandler.h(212,21): warning C4305: 'initializing': truncation from 'double' to 'irr::f32'
+  (compiling source file 'ParticleSystem.cpp')
+  
+D:\Irrlicht\Lime\EffectHandler.h(311,21): warning C4018: '<': signed/unsigned mismatch
+  (compiling source file 'ParticleSystem.cpp')
+  
+D:\Irrlicht\Lime\ParticleSystem.cpp(116,42): warning C4244: 'argument': conversion from 'T' to 'irr::s32', possible loss of data
+D:\Irrlicht\Lime\ParticleSystem.cpp(116,42): warning C4244:         with
+D:\Irrlicht\Lime\ParticleSystem.cpp(116,42): warning C4244:         [
+D:\Irrlicht\Lime\ParticleSystem.cpp(116,42): warning C4244:             T=float
+D:\Irrlicht\Lime\ParticleSystem.cpp(116,42): warning C4244:         ]
+D:\Irrlicht\Lime\ParticleSystem.cpp(125,21): warning C4244: 'argument': conversion from 'float' to 'irr::u32', possible loss of data
+D:\Irrlicht\Lime\ParticleSystem.cpp(126,21): warning C4244: 'argument': conversion from 'float' to 'irr::u32', possible loss of data
+D:\Irrlicht\Lime\ParticleSystem.cpp(135,31): warning C4244: 'argument': conversion from 'float' to 'irr::u32', possible loss of data
+D:\Irrlicht\Lime\ParticleSystem.cpp(136,31): warning C4244: 'argument': conversion from 'float' to 'irr::u32', possible loss of data
+D:\Irrlicht\Lime\ParticleSystem.cpp(142,49): warning C4244: 'argument': conversion from 'float' to 'irr::u32', possible loss of data
+D:\Irrlicht\Lime\ParticleSystem.cpp(142,44): warning C4244: 'argument': conversion from 'float' to 'irr::u32', possible loss of data
+D:\Irrlicht\Lime\ParticleSystem.cpp(142,39): warning C4244: 'argument': conversion from 'float' to 'irr::u32', possible loss of data
+D:\Irrlicht\Lime\ParticleSystem.cpp(142,34): warning C4244: 'argument': conversion from 'float' to 'irr::u32', possible loss of data
+D:\Irrlicht\Lime\ParticleSystem.cpp(146,47): warning C4244: 'argument': conversion from 'float' to 'irr::u32', possible loss of data
+D:\Irrlicht\Lime\ParticleSystem.cpp(146,42): warning C4244: 'argument': conversion from 'float' to 'irr::u32', possible loss of data
+D:\Irrlicht\Lime\ParticleSystem.cpp(146,37): warning C4244: 'argument': conversion from 'float' to 'irr::u32', possible loss of data
+D:\Irrlicht\Lime\ParticleSystem.cpp(146,32): warning C4244: 'argument': conversion from 'float' to 'irr::u32', possible loss of data
+D:\Irrlicht\Lime\ParticleSystem.cpp(196,18): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+D:\Irrlicht\Lime\ParticleSystem.cpp(200,53): warning C4244: 'argument': conversion from 'float' to 'irr::u32', possible loss of data
+D:\Irrlicht\Lime\ParticleSystem.cpp(200,48): warning C4244: 'argument': conversion from 'float' to 'irr::u32', possible loss of data
+D:\Irrlicht\Lime\ParticleSystem.cpp(200,43): warning C4244: 'argument': conversion from 'float' to 'irr::u32', possible loss of data
+D:\Irrlicht\Lime\ParticleSystem.cpp(200,38): warning C4244: 'argument': conversion from 'float' to 'irr::u32', possible loss of data
+D:\Irrlicht\Lime\ParticleSystem.cpp(212,57): warning C4305: 'argument': truncation from 'double' to 'T'
+D:\Irrlicht\Lime\ParticleSystem.cpp(212,57): warning C4305:         with
+D:\Irrlicht\Lime\ParticleSystem.cpp(212,57): warning C4305:         [
+D:\Irrlicht\Lime\ParticleSystem.cpp(212,57): warning C4305:             T=irr::f32
+D:\Irrlicht\Lime\ParticleSystem.cpp(212,57): warning C4305:         ]
+D:\Irrlicht\Lime\ParticleSystem.cpp(213,9): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
   Generating code
-  Previous IPDB and IOBJ mismatch, fall back to full compilation.
-  All 40504 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  1604 of 41014 functions ( 3.9%) were compiled, the rest were copied from previous compilation.
+    305 functions were new in current compilation
+    3313 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   Lime.vcxproj -> D:\Irrlicht\Lime\x64\Release\Lime.exe
   'pwsh.exe' is not recognized as an internal or external command,
