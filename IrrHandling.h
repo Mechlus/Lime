@@ -94,7 +94,8 @@ public:
 
 	// Lua function call queue
 	std::queue<std::pair<sol::function, sol::table>> threadedLuaQueue;
-	std::mutex tlqMutex;
+	std::mutex tlqLock;
+
 
 	// XEffects
 	E_FILTER_TYPE defaultShadowFiltering = E_FILTER_TYPE::EFT_8PCF;

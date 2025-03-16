@@ -483,15 +483,15 @@ void IrrHandling::displayMessage(std::string title, std::string message, int ima
 }
 
 void IrrHandling::addLuaTask(sol::function f, sol::table args) {
-	std::unique_lock<std::mutex> lock(tlqMutex);
+	tlqLock.lock();
 
 	threadedLuaQueue.push({ f, args });
 
-	lock.unlock();
+	tlqLock.unlock();
 }
 
 void IrrHandling::runLuaTasks() {
-	std::unique_lock<std::mutex> lock(tlqMutex);
+	tlqLock.lock();
 
 	while (!threadedLuaQueue.empty()) {
 		std::pair<sol::function, sol::table> task = threadedLuaQueue.front();
@@ -527,5 +527,5 @@ void IrrHandling::runLuaTasks() {
 		threadedLuaQueue.pop();
 	}
 
-	lock.unlock();
+	tlqLock.unlock();
 }
