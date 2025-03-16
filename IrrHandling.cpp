@@ -197,14 +197,7 @@ void IrrHandling::appLoop() {
 	lua->script("math.randomseed(os.time())");
 
 	// Call start in main
-	if ((*lua)["Lime"]["OnStart"].get_type() == sol::type::function) {
-		sol::protected_function_result result = luaOnStart(dt);
-		if (!result.valid())
-		{
-			sol::error err = result;
-			dConsole.sendMsg(std::string(err.what()).c_str(), MESSAGE_TYPE::WARNING);
-		}
-	}
+	testLuaFunc((*lua)["Lime"]["OnStart"]);
 
 	u32 then = device->getTimer()->getTime();
 
@@ -216,14 +209,38 @@ void IrrHandling::appLoop() {
 		dt = (now - then) / 16.667f;
 		then = now;
 
-		// Call update in main
-		if ((*lua)["Lime"]["OnUpdate"].get_type() == sol::type::function) {
-			sol::protected_function_result result = luaOnUpdate(dt);
-			if (!result.valid())
-			{
-				sol::error err = result;
-				dConsole.sendMsg(std::string(err.what()).c_str(), MESSAGE_TYPE::WARNING);
+		if (!ranHandlers) {
+			ranHandlers = true;
+			if (networkHandler)
+				networkHandler->handle(irrHandler);
+		}
+
+		try {
+			if ((*lua)["Lime"]["OnUpdate"].get_type() == sol::type::function) {
+				sol::protected_function_result result = luaOnUpdate(dt);
+				if (!result.valid())
+				{
+					sol::error err = result;
+					dConsole.sendMsg(std::string(err.what()).c_str(), MESSAGE_TYPE::WARNING);
+				}
 			}
+		}
+		catch (const sol::error& e) {
+			std::string err = e.what();
+
+			dConsole.doOutput = true;
+			dConsole.sendMsg(err.c_str(), MESSAGE_TYPE::WARNING);
+			dConsole.writeOutput();
+
+			err = "Lime encountered an error:\n" + err;
+
+			std::wstring wStr = std::wstring(err.begin(), err.end());
+			const wchar_t* wCharStr = wStr.c_str();
+
+			MessageBox(nullptr, wStr.c_str(), TEXT("Lime Runtime Error"), MB_ICONEXCLAMATION);
+
+			end();
+			return;
 		}
 
 		if (mainCamera) {
@@ -262,29 +279,46 @@ void IrrHandling::appLoop() {
 		if (frameTime < frameDur)
 			device->sleep((frameDur - frameTime) / 2.0);*/
 
-		if (!ranHandlers) {
-			ranHandlers = true;
-			if (networkHandler)
-				networkHandler->handle(irrHandler);
-		}
-
 		irrHandler->runLuaTasks();
 	}
 
 	if (networkHandler)
 		networkHandler->shutdown();
 
-	// Call end in main
-	if ((*lua)["Lime"]["OnEnd"].get_type() == sol::type::function) {
-		sol::protected_function_result result = luaOnEnd();
-		if (!result.valid())
-		{
-			sol::error err = result;
-			dConsole.sendMsg(std::string(err.what()).c_str(), MESSAGE_TYPE::WARNING);
-		}
-	}
+	testLuaFunc((*lua)["Lime"]["OnEnd"]);
+
 	if (!didEnd)
 		end();
+}
+
+void IrrHandling::testLuaFunc(sol::function f) {
+	try {
+		if (f.get_type() == sol::type::function) {
+			sol::protected_function_result result = f();
+			if (!result.valid())
+			{
+				sol::error err = result;
+				dConsole.sendMsg(std::string(err.what()).c_str(), MESSAGE_TYPE::WARNING);
+			}
+		}
+	}
+	catch (const sol::error& e) {
+		std::string err = e.what();
+
+		dConsole.doOutput = true;
+		dConsole.sendMsg(err.c_str(), MESSAGE_TYPE::WARNING);
+		dConsole.writeOutput();
+
+		err = "Lime encountered an error:\n" + err;
+
+		std::wstring wStr = std::wstring(err.begin(), err.end());
+		const wchar_t* wCharStr = wStr.c_str();
+
+		MessageBox(nullptr, wStr.c_str(), TEXT("Lime Runtime Error"), MB_ICONEXCLAMATION);
+
+		end();
+		return;
+	}
 }
 
 void IrrHandling::doWriteTextureThreaded(irr::video::ITexture* texture, std::string name) {
@@ -449,10 +483,16 @@ void IrrHandling::displayMessage(std::string title, std::string message, int ima
 }
 
 void IrrHandling::addLuaTask(sol::function f, sol::table args) {
+	std::unique_lock<std::mutex> lock(tlqMutex);
+
 	threadedLuaQueue.push({ f, args });
+
+	lock.unlock();
 }
 
 void IrrHandling::runLuaTasks() {
+	std::unique_lock<std::mutex> lock(tlqMutex);
+
 	while (!threadedLuaQueue.empty()) {
 		std::pair<sol::function, sol::table> task = threadedLuaQueue.front();
 		if (task.first.valid()) {
@@ -464,8 +504,28 @@ void IrrHandling::runLuaTasks() {
 				}
 			}
 
-			sol::protected_function_result result = task.first(sol::as_args(args));
+			try {
+				task.first(sol::as_args(args));
+			}
+			catch (const sol::error& e) {
+				std::string err = e.what();
+
+				dConsole.doOutput = true;
+				dConsole.sendMsg(err.c_str(), MESSAGE_TYPE::WARNING);
+				dConsole.writeOutput();
+
+				err = "Lime encountered an error:\n" + err;
+
+				std::wstring wStr = std::wstring(err.begin(), err.end());
+				const wchar_t* wCharStr = wStr.c_str();
+
+				MessageBox(nullptr, wStr.c_str(), TEXT("Lime Runtime Error"), MB_ICONEXCLAMATION);
+
+				end();
+			}
 		}
 		threadedLuaQueue.pop();
 	}
+
+	lock.unlock();
 }

@@ -10,10 +10,10 @@ public:
 	Packet();
 	Packet(const void* data, size_t size, int sender);
 	Packet(ENetPacket* p, int id);
-	~Packet();
+	//~Packet();
 
 	void append(int type, sol::object data); // Append data to packet
-	void clear(); // Clears binary
+	void destroy(); // Destroy packet
 
 	int getSize(); // Returns size
 

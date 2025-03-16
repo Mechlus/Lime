@@ -10,7 +10,7 @@ enum struct DATA_TYPE {
 };
 
 Packet::Packet() {
-	p = new ENetPacket();
+    p = enet_packet_create(nullptr, 0, false);
 }
 
 Packet::Packet(ENetPacket* pac, int id) {
@@ -18,10 +18,11 @@ Packet::Packet(ENetPacket* pac, int id) {
     originalID = id;
 }
 
+/*
 Packet::~Packet() {
     if (p)
         enet_packet_destroy(p);
-}
+}*/
 
 Packet::Packet(const void* data, size_t size, int sender) {
 	p = enet_packet_create(data, size, ENET_PACKET_FLAG_RELIABLE);
@@ -84,8 +85,10 @@ void Packet::append(int type, sol::object data) {
     }
 }
 
-void Packet::clear() {
-	if (p) enet_packet_destroy(p);
+void Packet::destroy() {
+    if (p)
+        enet_packet_destroy(p);
+    p = nullptr;
     pos = 0;
 }
 
@@ -98,6 +101,8 @@ int Packet::getSenderID() {
 }
 
 sol::object Packet::getNext(int type) {
+    if (!p) return 0;
+
     sol::object o = get(type, pos);
 
     DATA_TYPE t = (DATA_TYPE)type;
@@ -146,6 +151,7 @@ int Packet::getPosition() {
 }
 
 sol::object Packet::get(int type, size_t bytePos) {
+    if (!p) return 0;
     DATA_TYPE t = (DATA_TYPE)type;
     sol::object result;
 
@@ -188,6 +194,7 @@ sol::object Packet::get(int type, size_t bytePos) {
 }
 
 bool Packet::writeToFile(int bytePos, std::string path) {
+    if (!p) return false;
     if (bytePos < 0 || bytePos >= p->dataLength) return false;
 
     size_t dataSize = p->dataLength - bytePos - 4;
@@ -205,7 +212,6 @@ bool Packet::writeToFile(int bytePos, std::string path) {
 void bindPacket() {
     sol::usertype<Packet> bind_type = lua->new_usertype<Packet>("Packet",
         sol::constructors<Packet()>(),
-        sol::meta_function::garbage_collect, &Packet::clear,
         
         "ID", &Packet::originalID,
         "position", sol::property(&Packet::getPosition, &Packet::setPosition));
@@ -213,7 +219,7 @@ void bindPacket() {
     bind_type["append"] = &Packet::append;
     bind_type["get"] = &Packet::get;
     bind_type["getSize"] = &Packet::getSize;
-    bind_type["destroy"] = &Packet::clear;
+    bind_type["destroy"] = &Packet::destroy;
     bind_type["writeToFile"] = &Packet::writeToFile;
     bind_type["getNext"] = &Packet::getNext;
 }

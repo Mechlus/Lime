@@ -157,8 +157,13 @@ void netBodyServer(NetworkHandler* n, IrrHandling* m) {
 
 		switch (event.type) {
 		case ENET_EVENT_TYPE_CONNECT:
-			if (onPeerConnect.valid())
-				m->addLuaTask(onPeerConnect, sol::table());
+			if (onPeerConnect.valid()) {
+				sol::table t = lua->create_table();
+				t[1] = event.peer->incomingPeerID;
+				t[2] = event.peer->address.host;
+
+				m->addLuaTask(onPeerConnect, t);
+			}
 			else {
 				if (n->verbose) dConsole.sendMsg("Networking WARNING: A peer connected but NetworkServer.OnClientConnect is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
 			}
@@ -174,8 +179,13 @@ void netBodyServer(NetworkHandler* n, IrrHandling* m) {
 			}
 			break;
 		case ENET_EVENT_TYPE_DISCONNECT:
-			if (onPeerDisconnect.valid())
-				m->addLuaTask(onPeerDisconnect, sol::table());
+			if (onPeerDisconnect.valid()) {
+				sol::table t = lua->create_table();
+				t[1] = event.peer->outgoingPeerID;
+				t[2] = event.peer->address.host;
+
+				m->addLuaTask(onPeerDisconnect, t);
+			}
 			else {
 				if (n->verbose) dConsole.sendMsg("Networking WARNING: A peer disconnected but NetworkServer.OnClientDisconnect is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
 			}
@@ -192,7 +202,7 @@ void netBodyServer(NetworkHandler* n, IrrHandling* m) {
 			break;
 		case ENET_EVENT_TYPE_RECEIVE:
 			if (onPacketReceived.valid()) {
-				sol::table t = lua->create_table(); // Order matters here. Pushing the packet first causes crashes!
+				sol::table t = lua->create_table();
 				t[1] = event.channelID;
 				t[2] = Packet(event.packet, event.peer->incomingPeerID);
 				
@@ -432,6 +442,11 @@ void NetworkHandler::connectClient(std::string ad, int port, int channels) {
 		return;
 	}
 
+	if (peer) {
+		if (verbose) dConsole.sendMsg("Networking WARNING: Client could not connect to address; client is already connected to a server", MESSAGE_TYPE::NETWORK_VERBOSE);
+		return;
+	}
+
 	ENetAddress address;
 	enet_address_set_host(&address, ad.c_str());
 	address.port = port;
@@ -443,10 +458,10 @@ void NetworkHandler::connectClient(std::string ad, int port, int channels) {
 		msg += std::to_string(port);
 		dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
 	}
+	
+	peer = enet_host_connect(client, &address, channels, 0);
 
 	std::thread connectThread([this, address, channels]() {
-		peer = enet_host_connect(client, &address, channels, 0);
-
 		if (!peer) {
 			if (verbose) dConsole.sendMsg("Networking WARNING: Failed to create peer connection", MESSAGE_TYPE::NETWORK_VERBOSE);
 
@@ -475,9 +490,9 @@ void NetworkHandler::connectClient(std::string ad, int port, int channels) {
 				}
 			}
 		}
-		});
+	});
 
-	connectThread.detach();
+	connectThread.join();
 }
 
 void NetworkHandler::disconnectClient() {

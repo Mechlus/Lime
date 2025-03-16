@@ -16,6 +16,7 @@
 #include "XEffects.h"
 
 #include <queue>
+#include <mutex>
 
 struct CameraToQueue {
 public:
@@ -52,6 +53,7 @@ public:
 	int getMemUsed();
 	void end();
 	void appLoop();
+	void testLuaFunc(sol::function f);
 	void doWriteTextureThreaded(irr::video::ITexture* texture, std::string name);
 	void writeTextureToFile(irr::video::ITexture* texture, std::string name);
 	void updateFPS();
@@ -92,6 +94,7 @@ public:
 
 	// Lua function call queue
 	std::queue<std::pair<sol::function, sol::table>> threadedLuaQueue;
+	std::mutex tlqMutex;
 
 	// XEffects
 	E_FILTER_TYPE defaultShadowFiltering = E_FILTER_TYPE::EFT_8PCF;
