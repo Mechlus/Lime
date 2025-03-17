@@ -483,6 +483,69 @@ void IrrHandling::displayMessage(std::string title, std::string message, int ima
 	MessageBox(nullptr, nMessageC, nTitleC, icon);
 }
 
+void IrrHandling::addPacketToSend(PacketToSend p) {
+	tlqLock.lock();
+
+	if (p.p.p)
+		packetOutQueue.push(p);
+
+	tlqLock.unlock();
+}
+
+void IrrHandling::runPacketToSend() {
+	tlqLock.lock();
+
+	std::unordered_map<enet_uint16, ENetPeer*> peers = networkHandler->getPeers();
+
+	while (!packetOutQueue.empty()) {
+		PacketToSend task = packetOutQueue.front();
+
+		if (task.p.p) {
+			if (task.peerID == -1 && task.channel == -1) { // Server to all
+
+
+			} else if (task.peerID != -1 && task.channel != -1) { // Server to peer
+				ENetPeer* thisPeer = peers[task.peerID];
+				if (!thisPeer) {
+					if (verbose) {
+						std::string msg = "Networking WARNING: Failed to send packet to peer with ID ";
+						msg += std::to_string(task.peerID);
+						msg += "; peer does not exist";
+						dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
+					}
+					continue;
+				}
+
+				task.p.p->flags = task.tcp ? ENET_PACKET_FLAG_RELIABLE : ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT;
+				enet_peer_send(thisPeer, task.channel, task.p.p);
+
+				if (verbose) {
+					std::string msg = "Packet of size ";
+					msg += std::to_string(task.p.p->dataLength);
+					msg += "B sent to peer with ID ";
+					msg += std::to_string(task.peerID);
+					msg += " on channel ";
+					msg += std::to_string(task.channel);
+					msg += " via ";
+					msg += task.tcp ? "TCP" : "UDP";
+					dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
+				}
+			} else if (task.peerID == -1 && task.channel != -1) { // Peer to server
+
+
+			}
+		}
+
+		packetOutQueue.pop();
+	}
+
+	if (networkHandler->getHost()) {
+		enet_host_flush(networkHandler->getHost());
+	}
+
+	tlqLock.unlock();
+}
+
 void IrrHandling::addLuaTask(sol::function f, sol::table args) {
 	threadedLuaQueue.push({ f, args });
 }

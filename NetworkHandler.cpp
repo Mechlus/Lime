@@ -533,3 +533,7 @@ void NetworkHandler::sendPacketToAll(const Packet& p, int channel, bool tcp) {
 		dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
 	}
 }
+
+std::unordered_map<enet_uint16, ENetPeer*> NetworkHandler::getPeers() {
+	return peerMap;
+}

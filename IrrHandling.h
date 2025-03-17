@@ -94,7 +94,11 @@ public:
 	// Lua function call queue
 	std::queue<std::pair<sol::function, sol::table>> threadedLuaQueue;
 	std::queue<std::pair<bool, ENetEvent>> eventOutQueue;
+	std::queue<PacketToSend> packetOutQueue;
 	std::mutex tlqLock;
+
+	void addPacketToSend(PacketToSend p);
+	void runPacketToSend();
 
 	void addLuaTask(sol::function f, sol::table args);
 	void runLuaTasks();

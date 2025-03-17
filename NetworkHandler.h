@@ -6,6 +6,15 @@
 #include "Packet.h"
 #include "mutex"
 
+struct PacketToSend {
+public:
+	PacketToSend(const Packet& pack, int chID, int pID, bool t) : p(pack), channel(chID), peerID(pID), tcp(t) {}
+	Packet p;
+	int channel;
+	int peerID;
+	bool tcp;
+};
+
 class NetworkHandler
 {
 public:
@@ -48,6 +57,8 @@ public:
 	bool initialized = false;
 	bool verbose = false;
 	bool finished = false;
+
+	std::unordered_map<enet_uint16, ENetPeer*> getPeers();
 private:
 	// Server
 	ENetHost* server = nullptr;
