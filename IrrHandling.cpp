@@ -486,7 +486,7 @@ void IrrHandling::displayMessage(std::string title, std::string message, int ima
 void IrrHandling::addPacketToSend(const PacketToSend& p) {
 	tlqLock.lock();
 
-	if (p.p.p)
+	if (p.p)
 		packetOutQueue.push(p);
 
 	tlqLock.unlock();
@@ -500,14 +500,14 @@ void IrrHandling::runPacketToSend() {
 	while (!packetOutQueue.empty()) {
 		PacketToSend task = packetOutQueue.front();
 
-		if (task.p.p) {
-			task.p.p->flags = task.tcp ? ENET_PACKET_FLAG_RELIABLE : ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT;
+		if (task.p) {
+			task.p->flags = task.tcp ? ENET_PACKET_FLAG_RELIABLE : ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT;
 			if (task.peerID == -1 && task.channel == -1) { // Server to all
-				enet_host_broadcast(networkHandler->getHost(), task.channel, task.p.p);
+				enet_host_broadcast(networkHandler->getHost(), task.channel, task.p);
 
 				if (verbose) {
 					std::string msg = "Packet of size ";
-					msg += std::to_string(task.p.p->dataLength);
+					msg += std::to_string(task.p->dataLength);
 					msg += "B sent to all ";
 					msg += " on channel ";
 					msg += std::to_string(task.channel);
@@ -527,11 +527,11 @@ void IrrHandling::runPacketToSend() {
 					continue;
 				}
 
-				enet_peer_send(thisPeer, task.channel, task.p.p);
+				enet_peer_send(thisPeer, task.channel, task.p);
 
 				if (verbose) {
 					std::string msg = "Packet of size ";
-					msg += std::to_string(task.p.p->dataLength);
+					msg += std::to_string(task.p->dataLength);
 					msg += "B sent to peer with ID ";
 					msg += std::to_string(task.peerID);
 					msg += " on channel ";
@@ -543,11 +543,11 @@ void IrrHandling::runPacketToSend() {
 			} else if (task.peerID == -1 && task.channel != -1) { // Peer to server
 				if (!networkHandler->getPeer()) continue;
 
-				enet_peer_send(networkHandler->getPeer(), task.channel, task.p.p);
+				enet_peer_send(networkHandler->getPeer(), task.channel, task.p);
 
 				if (verbose) {
 					std::string msg = "Packet of size ";
-					msg += std::to_string(task.p.p->dataLength);
+					msg += std::to_string(task.p->dataLength);
 					msg += "B sent to server";
 					msg += " on channel ";
 					msg += std::to_string(task.channel);

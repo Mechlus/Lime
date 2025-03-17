@@ -440,7 +440,7 @@ void NetworkHandler::sendPacketToServer(const Packet& p, int channel, bool tcp) 
 		return;
 	}
 
-	irrNetHandler->addPacketToSend(PacketToSend(p, channel, -1, tcp));
+	irrNetHandler->addPacketToSend(PacketToSend(p.p, channel, -1, tcp));
 }
 
 void NetworkHandler::sendPacketToPeer(int peerID, const Packet& p, int channel, bool tcp) {
@@ -459,7 +459,7 @@ void NetworkHandler::sendPacketToPeer(int peerID, const Packet& p, int channel, 
 		return;
 	}
 
-	irrNetHandler->addPacketToSend(PacketToSend(p, channel, peerID, tcp));
+	irrNetHandler->addPacketToSend(PacketToSend(p.p, channel, peerID, tcp));
 }
 
 void NetworkHandler::sendPacketToAll(const Packet& p, int channel, bool tcp) {
@@ -478,7 +478,7 @@ void NetworkHandler::sendPacketToAll(const Packet& p, int channel, bool tcp) {
 		return;
 	}
 
-	irrNetHandler->addPacketToSend(PacketToSend(p, -1, -1, tcp));
+	irrNetHandler->addPacketToSend(PacketToSend(p.p, -1, -1, tcp));
 }
 
 std::unordered_map<enet_uint16, ENetPeer*> NetworkHandler::getPeers() {

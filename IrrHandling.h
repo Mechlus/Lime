@@ -21,8 +21,8 @@
 
 struct PacketToSend {
 public:
-	PacketToSend(const Packet& pack, int chID, int pID, bool t) : p(pack), channel(chID), peerID(pID), tcp(t) {}
-	Packet p;
+	PacketToSend(ENetPacket* pack, int chID, int pID, bool t) : p(pack), channel(chID), peerID(pID), tcp(t) {}
+	ENetPacket* p;
 	int channel;
 	int peerID;
 	bool tcp;

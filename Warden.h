@@ -827,7 +827,7 @@ namespace Warden {
 	}
 
 	void connectClient(std::string ad, int port, int channels) {
-		if (networkHandler) networkHandler->connectClient(ad, port, channels, irrHandler);
+		if (networkHandler) networkHandler->connectClient(ad, port, channels);
 	}
 
 	void disconnectClient() {
