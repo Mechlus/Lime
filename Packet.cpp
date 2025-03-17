@@ -30,6 +30,7 @@ Packet::Packet(const void* data, size_t size, int sender) {
 }
 
 void Packet::append(int type, sol::object data) {
+    if (!p) return;
 	DATA_TYPE t = (DATA_TYPE)type;
 
     switch (t) {

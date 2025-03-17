@@ -851,6 +851,7 @@ namespace Warden {
 	}
 
 	void sendPacketToServer(int channel, const Packet& p, bool tcp) {
+		dConsole.sendMsg("Sending a packet to the server...", MESSAGE_TYPE::LUA_WARNING);
 		if (networkHandler) networkHandler->sendPacketToServer(p, channel, tcp);
 	}
 

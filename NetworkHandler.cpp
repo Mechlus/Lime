@@ -152,7 +152,14 @@ void netBodyServer(NetworkHandler* n, IrrHandling* m) {
 		int out = enet_host_service(n->getHost(), &event, 1);
 		if (out <= 0) continue;
 
+		if (event.type == ENET_EVENT_TYPE_RECEIVE) {
+			dConsole.sendMsg("Received packet from client...", MESSAGE_TYPE::LUA_WARNING);
+		}
+
 		m->addEventTask(true, event);
+
+		if (event.type = ENET_EVENT_TYPE_RECEIVE)
+			dConsole.sendMsg("Added received packet to event out queue", MESSAGE_TYPE::LUA_WARNING);
 	}
 }
 
