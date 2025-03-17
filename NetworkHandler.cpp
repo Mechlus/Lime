@@ -54,6 +54,7 @@ bool NetworkHandler::shutdown() {
 }
 
 void NetworkHandler::handle(IrrHandling* m) {
+	irrNetHandler = m;
 	netServerThread = std::thread(netBodyServer, this, m);
 	netClientThread = std::thread(netBodyClient, this, m);
 }
@@ -142,10 +143,6 @@ void netBodyServer(NetworkHandler* n, IrrHandling* m) {
 	// Server Network Loop
 	ENetEvent event;
 
-	sol::protected_function onPeerConnect = (*lua)["NetworkServer"]["OnClientConnect"];
-	sol::protected_function onPeerDisconnect = (*lua)["NetworkServer"]["OnClientDisconnect"];
-	sol::protected_function onPacketReceived = (*lua)["NetworkServer"]["OnPacketReceived"];
-
 	while (!n->finished) {
 		if (!n->initialized || !(n->getHost())) {
 			std::this_thread::yield();
@@ -155,74 +152,13 @@ void netBodyServer(NetworkHandler* n, IrrHandling* m) {
 		int out = enet_host_service(n->getHost(), &event, 1);
 		if (out <= 0) continue;
 
-		switch (event.type) {
-		case ENET_EVENT_TYPE_CONNECT:
-			if (onPeerConnect.valid()) {
-				sol::table t = lua->create_table();
-				t[1] = event.peer->incomingPeerID;
-				t[2] = event.peer->address.host;
-
-				m->addLuaTask(onPeerConnect, t);
-			}
-			else {
-				if (n->verbose) dConsole.sendMsg("Networking WARNING: A peer connected but NetworkServer.OnClientConnect is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
-			}
-
-			n->getPeerMap()[event.peer->incomingPeerID] = event.peer;
-
-			if (n->verbose) {
-				std::string msg = "Client joined presuming ID ";
-				msg += std::to_string(event.peer->incomingPeerID);
-				msg += " from IP ";
-				msg += std::to_string(event.peer->address.host);
-				dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
-			}
-			break;
-		case ENET_EVENT_TYPE_DISCONNECT:
-			if (onPeerDisconnect.valid()) {
-				sol::table t = lua->create_table();
-				t[1] = event.peer->outgoingPeerID;
-				t[2] = event.peer->address.host;
-
-				m->addLuaTask(onPeerDisconnect, t);
-			}
-			else {
-				if (n->verbose) dConsole.sendMsg("Networking WARNING: A peer disconnected but NetworkServer.OnClientDisconnect is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
-			}
-
-			n->getPeerMap().erase(event.peer->incomingPeerID);
-
-			if (n->verbose) {
-				std::string msg = "Client disconnected abandoning ID ";
-				msg += std::to_string(event.peer->incomingPeerID);
-				msg += " from IP ";
-				msg += std::to_string(event.peer->address.host);
-				dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
-			}
-			break;
-		case ENET_EVENT_TYPE_RECEIVE:
-			if (onPacketReceived.valid()) {
-				sol::table t = lua->create_table();
-				t[1] = event.channelID;
-				t[2] = Packet(event.packet, event.peer->incomingPeerID);
-				
-				m->addLuaTask(onPacketReceived, t);
-			} else {
-				if (n->verbose) dConsole.sendMsg("Networking WARNING: A packet was received but NetworkServer.OnPacketReceived is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
-				enet_packet_destroy(event.packet);
-			}
-			break;
-		}
+		m->addEventTask(true, event);
 	}
 }
 
 void netBodyClient(NetworkHandler* n, IrrHandling* m) {
 	// Client Network Loop
 	ENetEvent event;
-
-	sol::protected_function onConnect = (*lua)["NetworkClient"]["OnConnect"];
-	sol::protected_function onDisconnect = (*lua)["NetworkClient"]["OnDisconnect"];
-	sol::protected_function onPacketReceived = (*lua)["NetworkClient"]["OnPacketReceived"];
 
 	while (!n->finished) {
 		if (!n->initialized || !(n->getClient())) {
@@ -235,53 +171,7 @@ void netBodyClient(NetworkHandler* n, IrrHandling* m) {
 		int out = enet_host_service(n->getClient(), &event, 1);
 		if (out <= 0) continue;
 
-		switch (event.type) {
-		case ENET_EVENT_TYPE_CONNECT:
-			if (onConnect.valid())
-				m->addLuaTask(onConnect, sol::table());
-			else {
-				if (n->verbose) dConsole.sendMsg("Networking WARNING: Client connected but NetworkClient.OnConnect is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
-			}
-
-			//if (!n->getHost()) n->getPeerMap()[event.peer->incomingPeerID] = event.peer;
-
-			if (n->verbose) {
-				std::string msg = "Connected to server via client ";
-				dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
-			}
-			break;
-		case ENET_EVENT_TYPE_DISCONNECT:
-			if (onDisconnect.valid()) {
-				sol::table t = lua->create_table();
-				t[1] = event.data;
-				m->addLuaTask(onDisconnect, t);
-			}
-			else {
-				if (n->verbose) dConsole.sendMsg("Networking WARNING: Client disconnected but NetworkClient.OnDisconnect is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
-			}
-
-			//if (!n->getHost()) n->getPeerMap().erase(event.peer->incomingPeerID);
-
-			if (n->verbose) {
-				std::string msg = "Disconnected from server as client, reason code ";
-				msg += std::to_string(event.data);
-				dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
-			}
-			break;
-		case ENET_EVENT_TYPE_RECEIVE:
-			if (onPacketReceived.valid()) {
-				sol::table t = lua->create_table();
-				t[1] = event.channelID;
-				t[2] = Packet(event.packet, event.peer->incomingPeerID);
-
-				m->addLuaTask(onPacketReceived, t);
-			}
-			else {
-				if (n->verbose) dConsole.sendMsg("Networking WARNING: A packet was received but NetworkClient.OnPacketReceived is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
-				enet_packet_destroy(event.packet);
-			}
-			break;
-		}
+		m->addEventTask(false, event);
 	}
 }
 
@@ -466,9 +356,7 @@ void NetworkHandler::connectClient(std::string ad, int port, int channels) {
 			if (verbose) dConsole.sendMsg("Networking WARNING: Failed to create peer connection", MESSAGE_TYPE::NETWORK_VERBOSE);
 
 			sol::protected_function f = (*lua)["NetworkClient"]["OnConnectFail"];
-			if (f.valid()) {
-				sol::protected_function_result result = f();
-			}
+			irrNetHandler->addLuaTask(f, sol::table());
 			return;
 		}
 		else {
@@ -477,17 +365,13 @@ void NetworkHandler::connectClient(std::string ad, int port, int channels) {
 				if (verbose) dConsole.sendMsg("Client connected to server", MESSAGE_TYPE::NETWORK_VERBOSE);
 
 				sol::protected_function f = (*lua)["NetworkClient"]["OnConnect"];
-				if (f.valid()) {
-					sol::protected_function_result result = f();
-				}
+				irrNetHandler->addLuaTask(f, sol::table());
 			}
 			else {
 				if (verbose) dConsole.sendMsg("Client failed to connect to server", MESSAGE_TYPE::NETWORK_VERBOSE);
 
 				sol::protected_function f = (*lua)["NetworkClient"]["OnConnectFail"];
-				if (f.valid()) {
-					sol::protected_function_result result = f();
-				}
+				irrNetHandler->addLuaTask(f, sol::table());
 			}
 		}
 	});
@@ -556,7 +440,9 @@ void NetworkHandler::sendPacketToServer(const Packet& p, int channel, bool tcp) 
 		return;
 	}
 
+	netLock.lock();
 	p.p->flags = tcp ? ENET_PACKET_FLAG_RELIABLE : ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT;
+
 	enet_peer_send(peer, channel, p.p);
 	enet_host_flush(client);
 
@@ -570,6 +456,7 @@ void NetworkHandler::sendPacketToServer(const Packet& p, int channel, bool tcp) 
 		msg += tcp ? "TCP" : "UDP";
 		dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
 	}
+	netLock.unlock();
 }
 
 void NetworkHandler::sendPacketToPeer(int peerID, const Packet& p, int channel, bool tcp) {

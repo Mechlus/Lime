@@ -4,6 +4,7 @@
 #include <thread>
 
 #include "Packet.h"
+#include "mutex"
 
 class NetworkHandler
 {
@@ -55,8 +56,12 @@ private:
 	ENetHost* client = nullptr;
 	ENetPeer* peer = nullptr;
 
+	std::mutex netLock;
+
 	std::thread netServerThread;
 	std::thread netClientThread;
+
+	IrrHandling* irrNetHandler = nullptr;
 
 	std::unordered_map<enet_uint16, ENetPeer*> peerMap;
 };

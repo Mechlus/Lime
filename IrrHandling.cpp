@@ -279,6 +279,7 @@ void IrrHandling::appLoop() {
 		if (frameTime < frameDur)
 			device->sleep((frameDur - frameTime) / 2.0);*/
 
+		irrHandler->runEventTasks();
 		irrHandler->runLuaTasks();
 	}
 
@@ -483,11 +484,7 @@ void IrrHandling::displayMessage(std::string title, std::string message, int ima
 }
 
 void IrrHandling::addLuaTask(sol::function f, sol::table args) {
-	tlqLock.lock();
-
 	threadedLuaQueue.push({ f, args });
-
-	tlqLock.unlock();
 }
 
 void IrrHandling::runLuaTasks() {
@@ -497,10 +494,9 @@ void IrrHandling::runLuaTasks() {
 		std::pair<sol::function, sol::table> task = threadedLuaQueue.front();
 		if (task.first.valid()) {
 			std::vector<sol::object> args;
-			//args.push_back(sol::nil);
 			if (task.second.valid()) {
 				for (size_t i = 1; i <= task.second.size(); ++i) {
-					args.push_back(sol::make_object((*lua), task.second[i]));
+					args.push_back(task.second[i]);
 				}
 			}
 
@@ -525,6 +521,145 @@ void IrrHandling::runLuaTasks() {
 			}
 		}
 		threadedLuaQueue.pop();
+	}
+
+	tlqLock.unlock();
+}
+
+void IrrHandling::addEventTask(bool b, ENetEvent event) {
+	tlqLock.lock();
+
+	eventOutQueue.push({ b, event });
+
+	tlqLock.unlock();
+}
+
+void IrrHandling::runEventTasks() {
+	tlqLock.lock();
+
+	sol::protected_function SonPeerConnect = (*lua)["NetworkServer"]["OnClientConnect"];
+	sol::protected_function SonPeerDisconnect = (*lua)["NetworkServer"]["OnClientDisconnect"];
+	sol::protected_function SonPacketReceived = (*lua)["NetworkServer"]["OnPacketReceived"];
+	sol::protected_function ConConnect = (*lua)["NetworkClient"]["OnConnect"];
+	sol::protected_function ConDisconnect = (*lua)["NetworkClient"]["OnDisconnect"];
+	sol::protected_function ConPacketReceived = (*lua)["NetworkClient"]["OnPacketReceived"];
+
+	while (!eventOutQueue.empty()) {
+		std::pair<bool, ENetEvent> task = eventOutQueue.front();
+		
+		ENetEvent event = task.second;
+		if (task.first) { // Server
+			switch (event.type) {
+			case ENET_EVENT_TYPE_CONNECT:
+				if (SonPeerConnect.valid()) {
+					sol::table t = lua->create_table();
+					t[1] = event.peer->incomingPeerID;
+					t[2] = event.peer->address.host;
+
+					addLuaTask(SonPeerConnect, t);
+				}
+				else {
+					if (verbose) dConsole.sendMsg("Networking WARNING: A peer connected but NetworkServer.OnClientConnect is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
+				}
+
+				networkHandler->getPeerMap()[event.peer->incomingPeerID] = event.peer;
+
+				if (verbose) {
+					std::string msg = "Client joined presuming ID ";
+					msg += std::to_string(event.peer->incomingPeerID);
+					msg += " from IP ";
+					msg += std::to_string(event.peer->address.host);
+					dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
+				}
+				break;
+			case ENET_EVENT_TYPE_DISCONNECT:
+				if (SonPeerDisconnect.valid()) {
+					sol::table t = lua->create_table();
+					t[1] = event.peer->outgoingPeerID;
+					t[2] = event.peer->address.host;
+
+					addLuaTask(SonPeerDisconnect, t);
+				}
+				else {
+					if (verbose) dConsole.sendMsg("Networking WARNING: A peer disconnected but NetworkServer.OnClientDisconnect is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
+				}
+
+				networkHandler->getPeerMap().erase(event.peer->incomingPeerID);
+
+				if (verbose) {
+					std::string msg = "Client disconnected abandoning ID ";
+					msg += std::to_string(event.peer->incomingPeerID);
+					msg += " from IP ";
+					msg += std::to_string(event.peer->address.host);
+					dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
+				}
+				break;
+			case ENET_EVENT_TYPE_RECEIVE:
+				if (SonPacketReceived.valid()) {
+					sol::table t = lua->create_table();
+					t[1] = event.channelID;
+					t[2] = Packet(event.packet, event.peer->incomingPeerID);
+
+					addLuaTask(SonPacketReceived, t);
+				}
+				else {
+					if (verbose) dConsole.sendMsg("Networking WARNING: A packet was received but NetworkServer.OnPacketReceived is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
+					enet_packet_destroy(event.packet);
+				}
+				break;
+			}
+		}
+		else { // Client
+			switch (event.type) {
+			case ENET_EVENT_TYPE_CONNECT:
+				if (ConConnect.valid())
+					addLuaTask(ConConnect, sol::table());
+				else {
+					if (verbose) dConsole.sendMsg("Networking WARNING: Client connected but NetworkClient.OnConnect is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
+				}
+
+				//if (!n->getHost()) n->getPeerMap()[event.peer->incomingPeerID] = event.peer;
+
+				if (verbose) {
+					std::string msg = "Connected to server via client ";
+					dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
+				}
+				break;
+			case ENET_EVENT_TYPE_DISCONNECT:
+				if (ConDisconnect.valid()) {
+					sol::table t = lua->create_table();
+					t[1] = event.data;
+					addLuaTask(ConDisconnect, t);
+				}
+				else {
+					if (verbose) dConsole.sendMsg("Networking WARNING: Client disconnected but NetworkClient.OnDisconnect is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
+				}
+
+				//if (!n->getHost()) n->getPeerMap().erase(event.peer->incomingPeerID);
+
+				if (verbose) {
+					std::string msg = "Disconnected from server as client, reason code ";
+					msg += std::to_string(event.data);
+					dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
+				}
+				break;
+			case ENET_EVENT_TYPE_RECEIVE:
+				if (ConPacketReceived.valid()) {
+					sol::table t = lua->create_table();
+					t[1] = event.channelID;
+					t[2] = Packet(event.packet, event.peer->incomingPeerID);
+
+					addLuaTask(ConPacketReceived, t);
+				}
+				else {
+					if (verbose) dConsole.sendMsg("Networking WARNING: A packet was received but NetworkClient.OnPacketReceived is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
+					enet_packet_destroy(event.packet);
+				}
+				break;
+			}
+		}
+
+		eventOutQueue.pop();
 	}
 
 	tlqLock.unlock();

@@ -17,6 +17,7 @@
 
 #include <queue>
 #include <mutex>
+#include <enet\enet.h>
 
 struct CameraToQueue {
 public:
@@ -63,8 +64,6 @@ public:
 	void setCameraMatrix(irr::scene::ICameraSceneNode* c);
 	void HandleCameraQueue();
 	void displayMessage(std::string title, std::string message, int image);
-	void addLuaTask(sol::function f, sol::table args);
-	void runLuaTasks();
 	int m_frameLimit = 60;
 	float dt;
 	bool didEnd = false;
@@ -94,8 +93,14 @@ public:
 
 	// Lua function call queue
 	std::queue<std::pair<sol::function, sol::table>> threadedLuaQueue;
+	std::queue<std::pair<bool, ENetEvent>> eventOutQueue;
 	std::mutex tlqLock;
 
+	void addLuaTask(sol::function f, sol::table args);
+	void runLuaTasks();
+
+	void addEventTask(bool, ENetEvent);
+	void runEventTasks();
 
 	// XEffects
 	E_FILTER_TYPE defaultShadowFiltering = E_FILTER_TYPE::EFT_8PCF;
