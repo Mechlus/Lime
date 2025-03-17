@@ -6,15 +6,6 @@
 #include "Packet.h"
 #include "mutex"
 
-struct PacketToSend {
-public:
-	PacketToSend(const Packet& pack, int chID, int pID, bool t) : p(pack), channel(chID), peerID(pID), tcp(t) {}
-	Packet p;
-	int channel;
-	int peerID;
-	bool tcp;
-};
-
 class NetworkHandler
 {
 public:

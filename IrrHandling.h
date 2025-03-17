@@ -19,6 +19,15 @@
 #include <mutex>
 #include <enet\enet.h>
 
+struct PacketToSend {
+public:
+	PacketToSend(const Packet& pack, int chID, int pID, bool t) : p(pack), channel(chID), peerID(pID), tcp(t) {}
+	Packet p;
+	int channel;
+	int peerID;
+	bool tcp;
+};
+
 struct CameraToQueue {
 public:
 	CameraToQueue(irr::scene::ICameraSceneNode* c, irr::scene::ISceneNode* f, bool d, bool g) : cam(c), forward(f), defaultRendering(d), renderGUI(g), ortho(c->isTrulyOrthogonal) {};
@@ -97,7 +106,7 @@ public:
 	std::queue<PacketToSend> packetOutQueue;
 	std::mutex tlqLock;
 
-	void addPacketToSend(PacketToSend p);
+	void addPacketToSend(const PacketToSend& p);
 	void runPacketToSend();
 
 	void addLuaTask(sol::function f, sol::table args);

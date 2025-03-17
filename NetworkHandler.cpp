@@ -440,23 +440,7 @@ void NetworkHandler::sendPacketToServer(const Packet& p, int channel, bool tcp) 
 		return;
 	}
 
-	netLock.lock();
-	p.p->flags = tcp ? ENET_PACKET_FLAG_RELIABLE : ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT;
-
-	enet_peer_send(peer, channel, p.p);
-	enet_host_flush(client);
-
-	if (verbose) {
-		std::string msg = "Packet of size ";
-		msg += std::to_string(p.p->dataLength);
-		msg += "B sent to server";
-		msg += " on channel ";
-		msg += std::to_string(channel);
-		msg += " via ";
-		msg += tcp ? "TCP" : "UDP";
-		dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
-	}
-	netLock.unlock();
+	irrNetHandler->addPacketToSend(PacketToSend(p, channel, -1, tcp));
 }
 
 void NetworkHandler::sendPacketToPeer(int peerID, const Packet& p, int channel, bool tcp) {
@@ -475,32 +459,7 @@ void NetworkHandler::sendPacketToPeer(int peerID, const Packet& p, int channel, 
 		return;
 	}
 
-	ENetPeer* thisPeer = peerMap[peerID];
-	if (!thisPeer) {
-		if (verbose) {
-			std::string msg = "Networking WARNING: Failed to send packet to peer with ID ";
-			msg += std::to_string(peerID);
-			msg += "; peer does not exist";
-			dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
-		}
-		return;
-	}
-
-	p.p->flags = tcp ? ENET_PACKET_FLAG_RELIABLE : ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT;
-	enet_peer_send(thisPeer, channel, p.p);
-	enet_host_flush(server ? server : client);
-
-	if (verbose) {
-		std::string msg = "Packet of size ";
-		msg += std::to_string(p.p->dataLength);
-		msg += "B sent to peer with ID ";
-		msg += std::to_string(peerID);
-		msg += " on channel ";
-		msg += std::to_string(channel);
-		msg += " via ";
-		msg += tcp ? "TCP" : "UDP";
-		dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
-	}
+	irrNetHandler->addPacketToSend(PacketToSend(p, channel, peerID, tcp));
 }
 
 void NetworkHandler::sendPacketToAll(const Packet& p, int channel, bool tcp) {
@@ -519,19 +478,7 @@ void NetworkHandler::sendPacketToAll(const Packet& p, int channel, bool tcp) {
 		return;
 	}
 
-	p.p->flags = tcp ? ENET_PACKET_FLAG_RELIABLE : ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT;
-	enet_host_broadcast(server ? server : client, channel, p.p);
-
-	if (verbose) {
-		std::string msg = "Packet of size ";
-		msg += std::to_string(p.p->dataLength);
-		msg += "B sent to all ";
-		msg += " on channel ";
-		msg += std::to_string(channel);
-		msg += " via ";
-		msg += tcp ? "TCP" : "UDP";
-		dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
-	}
+	irrNetHandler->addPacketToSend(PacketToSend(p, -1, -1, tcp));
 }
 
 std::unordered_map<enet_uint16, ENetPeer*> NetworkHandler::getPeers() {

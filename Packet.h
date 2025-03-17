@@ -4,12 +4,11 @@
 #include <enet\enet.h>
 
 class Packet {
-private:
-
 public:
 	Packet();
 	Packet(const void* data, size_t size, int sender);
 	Packet(ENetPacket* p, int id);
+	Packet(ENetPacket* pa, int id, int pe) : p(pa), originalID(id), pos(pe) {}
 	//~Packet();
 
 	void append(int type, sol::object data); // Append data to packet
