@@ -586,7 +586,6 @@ void IrrHandling::runLuaTasks() {
 				}
 			}
 
-			dConsole.sendMsg("Running lua task", MESSAGE_TYPE::LUA_WARNING);
 			try {
 				task.first(sol::as_args(args));
 			}
@@ -606,7 +605,6 @@ void IrrHandling::runLuaTasks() {
 
 				end();
 			}
-			dConsole.sendMsg("Done lua task", MESSAGE_TYPE::LUA_WARNING);
 		}
 		threadedLuaQueue.pop();
 	}
@@ -615,11 +613,7 @@ void IrrHandling::runLuaTasks() {
 }
 
 void IrrHandling::addEventTask(bool b, ENetEvent event) {
-	tlqLock.lock();
-
 	eventOutQueue.push({ b, event });
-
-	tlqLock.unlock();
 }
 
 void IrrHandling::runEventTasks() {
@@ -683,14 +677,12 @@ void IrrHandling::runEventTasks() {
 				}
 				break;
 			case ENET_EVENT_TYPE_RECEIVE:
-				dConsole.sendMsg("Adding lua task for receive on server", MESSAGE_TYPE::LUA_WARNING);
 				if (SonPacketReceived.valid()) {
 					sol::table t = lua->create_table();
 					t[1] = event.channelID;
 					t[2] = Packet(event.packet, event.peer->connectID);
 
 					addLuaTask(SonPacketReceived, t);
-					dConsole.sendMsg("Added lua task successfully", MESSAGE_TYPE::LUA_WARNING);
 				}
 				else {
 					if (verbose) dConsole.sendMsg("Networking WARNING: A packet was received but NetworkServer.OnPacketReceived is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);

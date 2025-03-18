@@ -49,6 +49,7 @@ void MeshBuffer::pushFace(const Vector3D& v1, const Vector3D& v2, const Vector3D
 void MeshBuffer::clear() {
     if (buffer) {
         buffer->drop();
+        delete buffer;
         currentIndex = 0;
         buffer = new irr::scene::SMeshBuffer();
     }
@@ -57,6 +58,7 @@ void MeshBuffer::clear() {
 void MeshBuffer::destroy() {
     if (buffer) {
         buffer->drop();
+        delete buffer;
         currentIndex = 0;
     }
 }

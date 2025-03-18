@@ -22,14 +22,14 @@ void DebugConsole::abruptEnd() {
 }
 
 void DebugConsole::sendMsg(const char* msg, MESSAGE_TYPE m) {
-    std::string time = DebugConsole::getTime();
+    std::string time = getTime();
     std::string full = time + " " + msg;
 
-    if (DebugConsole::doOutput) {
-        DebugConsole::out = DebugConsole::out + full + "\n";
+    if (doOutput) {
+        out = out + full + "\n";
     }
 
-    if (!DebugConsole::enabled) {
+    if (!enabled) {
         return; // ignore if not enabled
     }
 

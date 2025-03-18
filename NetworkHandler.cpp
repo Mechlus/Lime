@@ -149,17 +149,10 @@ void netBodyServer(NetworkHandler* n, IrrHandling* m) {
 			continue;
 		}
 
-		int out = enet_host_service(n->getHost(), &event, 1);
-		if (out <= 0) continue;
-
-		if (event.type == ENET_EVENT_TYPE_RECEIVE) {
-			dConsole.sendMsg("Received packet from client...", MESSAGE_TYPE::LUA_WARNING);
+		if (n->getPeer()) {
+			if (enet_host_service(n->getHost(), &event, 250) > 0)
+				m->addEventTask(true, event);
 		}
-
-		m->addEventTask(true, event);
-
-		if (event.type = ENET_EVENT_TYPE_RECEIVE)
-			dConsole.sendMsg("Added received packet to event out queue", MESSAGE_TYPE::LUA_WARNING);
 	}
 }
 
@@ -169,16 +162,13 @@ void netBodyClient(NetworkHandler* n, IrrHandling* m) {
 
 	while (!n->finished) {
 		if (!n->initialized || !(n->getClient())) {
-			std::this_thread::yield();
 			continue;
 		}
 
-		if (!n->getPeer()) continue;
-
-		int out = enet_host_service(n->getClient(), &event, 1);
-		if (out <= 0) continue;
-
-		m->addEventTask(false, event);
+		if (n->getPeer()) {
+			if (enet_host_service(n->getClient(), &event, 250) > 0)
+				m->addEventTask(false, event);
+		}
 	}
 }
 
@@ -358,7 +348,7 @@ void NetworkHandler::connectClient(std::string ad, int port, int channels) {
 	
 	peer = enet_host_connect(client, &address, channels, 0);
 
-	std::thread connectThread([this, address, channels]() {
+	std::thread connectThread([this, address, channels]() { // Perhaps lock?
 		if (!peer) {
 			if (verbose) dConsole.sendMsg("Networking WARNING: Failed to create peer connection", MESSAGE_TYPE::NETWORK_VERBOSE);
 
