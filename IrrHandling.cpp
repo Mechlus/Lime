@@ -501,6 +501,7 @@ void IrrHandling::runPacketToSend() {
 			task.p->flags = task.tcp ? ENET_PACKET_FLAG_RELIABLE : ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT;
 			if (task.peerID == -1 && task.channel == -1) { // Server to all
 				enet_host_broadcast(networkHandler->getHost(), task.channel, task.p);
+				enet_host_flush(networkHandler->getHost());
 
 				if (verbose) {
 					std::string msg = "Packet of size ";
@@ -525,6 +526,7 @@ void IrrHandling::runPacketToSend() {
 				}
 
 				enet_peer_send(thisPeer, task.channel, task.p);
+				enet_host_flush(networkHandler->getHost());
 
 				if (verbose) {
 					std::string msg = "Packet of size ";
@@ -541,6 +543,7 @@ void IrrHandling::runPacketToSend() {
 				if (!networkHandler->getPeer()) continue;
 
 				enet_peer_send(networkHandler->getPeer(), task.channel, task.p);
+				enet_host_flush(networkHandler->getClient());
 
 				if (verbose) {
 					std::string msg = "Packet of size ";
@@ -556,14 +559,6 @@ void IrrHandling::runPacketToSend() {
 		}
 
 		packetOutQueue.pop();
-	}
-
-	if (networkHandler->getHost()) {
-		enet_host_flush(networkHandler->getHost());
-	}
-
-	if (networkHandler->getClient()) {
-		enet_host_flush(networkHandler->getClient());
 	}
 
 	tlqLock.unlock();

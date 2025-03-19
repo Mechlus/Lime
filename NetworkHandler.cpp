@@ -49,6 +49,8 @@ bool NetworkHandler::shutdown() {
 		enet_host_destroy(client);
 	}
 
+	clientTrulyConnected = false;
+
 	enet_deinitialize();
 	return true;
 }
@@ -141,6 +143,7 @@ void NetworkHandler::forceDisconnectClient(int peerID, int reason) {
 
 void netBodyServer(NetworkHandler* n, IrrHandling* m) {
 	// Server Network Loop
+	std::mutex lock;
 	ENetEvent event;
 
 	while (!n->finished) {
@@ -150,14 +153,19 @@ void netBodyServer(NetworkHandler* n, IrrHandling* m) {
 		}
 
 		if (n->getPeer()) {
-			if (enet_host_service(n->getHost(), &event, 250) > 0)
+			lock.lock();
+			if (enet_host_service(n->getHost(), &event, 1000) > 0)
 				m->addEventTask(true, event);
+			lock.unlock();
 		}
 	}
 }
 
+using namespace std::chrono_literals;
+
 void netBodyClient(NetworkHandler* n, IrrHandling* m) {
 	// Client Network Loop
+	std::mutex lock;
 	ENetEvent event;
 
 	while (!n->finished) {
@@ -165,9 +173,14 @@ void netBodyClient(NetworkHandler* n, IrrHandling* m) {
 			continue;
 		}
 
-		if (n->getPeer()) {
-			if (enet_host_service(n->getClient(), &event, 250) > 0)
+		if (n->getPeer() && n->clientTrulyConnected) {
+			lock.lock();
+			if (enet_host_service(n->getClient(), &event, 1000) > 0)
 				m->addEventTask(false, event);
+			lock.unlock();
+		}
+		else if (!n->clientTrulyConnected) {
+			std::this_thread::sleep_for(50ms);
 		}
 	}
 }
@@ -361,6 +374,8 @@ void NetworkHandler::connectClient(std::string ad, int port, int channels) {
 			if (enet_host_service(client, &event, 5000) > 0 && event.type == ENET_EVENT_TYPE_CONNECT) {
 				if (verbose) dConsole.sendMsg("Client connected to server", MESSAGE_TYPE::NETWORK_VERBOSE);
 
+				clientTrulyConnected = true;
+
 				sol::protected_function f = (*lua)["NetworkClient"]["OnConnect"];
 				irrNetHandler->addLuaTask(f, sol::table());
 			}
@@ -373,7 +388,7 @@ void NetworkHandler::connectClient(std::string ad, int port, int channels) {
 		}
 	});
 
-	connectThread.join();
+	connectThread.detach();
 }
 
 void NetworkHandler::disconnectClient() {
@@ -394,6 +409,7 @@ void NetworkHandler::disconnectClient() {
 	
 	if (verbose) dConsole.sendMsg("Disconnecting client from server", MESSAGE_TYPE::NETWORK_VERBOSE);
 	enet_peer_disconnect(peer, 0);
+	clientTrulyConnected = false;
 }
 
 bool NetworkHandler::destroyClient() {

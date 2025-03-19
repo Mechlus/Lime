@@ -48,6 +48,7 @@ public:
 	bool initialized = false;
 	bool verbose = false;
 	bool finished = false;
+	bool clientTrulyConnected = false;
 
 	std::unordered_map<enet_uint16, ENetPeer*> getPeers();
 private:
