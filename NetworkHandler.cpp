@@ -361,9 +361,10 @@ void NetworkHandler::connectClient(std::string ad, int port, int channels) {
 	
 	peer = enet_host_connect(client, &address, channels, 0);
 
-	std::thread connectThread([this, address, channels]() { // Perhaps lock?
+	bool doVerbose = verbose;
+	std::thread connectThread([this, address, channels, doVerbose]() {
 		if (!peer) {
-			if (verbose) dConsole.sendMsg("Networking WARNING: Failed to create peer connection", MESSAGE_TYPE::NETWORK_VERBOSE);
+			if (doVerbose) dConsole.sendMsg("Networking WARNING: Failed to create peer connection", MESSAGE_TYPE::NETWORK_VERBOSE);
 
 			sol::protected_function f = (*lua)["NetworkClient"]["OnConnectFail"];
 			irrNetHandler->addLuaTask(f, sol::table());
@@ -372,7 +373,7 @@ void NetworkHandler::connectClient(std::string ad, int port, int channels) {
 		else {
 			ENetEvent event;
 			if (enet_host_service(client, &event, 5000) > 0 && event.type == ENET_EVENT_TYPE_CONNECT) {
-				if (verbose) dConsole.sendMsg("Client connected to server", MESSAGE_TYPE::NETWORK_VERBOSE);
+				if (doVerbose) dConsole.sendMsg("Client connected to server", MESSAGE_TYPE::NETWORK_VERBOSE);
 
 				clientTrulyConnected = true;
 
@@ -380,7 +381,7 @@ void NetworkHandler::connectClient(std::string ad, int port, int channels) {
 				irrNetHandler->addLuaTask(f, sol::table());
 			}
 			else {
-				if (verbose) dConsole.sendMsg("Client failed to connect to server", MESSAGE_TYPE::NETWORK_VERBOSE);
+				if (doVerbose) dConsole.sendMsg("Client failed to connect to server", MESSAGE_TYPE::NETWORK_VERBOSE);
 
 				sol::protected_function f = (*lua)["NetworkClient"]["OnConnectFail"];
 				irrNetHandler->addLuaTask(f, sol::table());

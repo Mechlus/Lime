@@ -490,6 +490,7 @@ void IrrHandling::addPacketToSend(const PacketToSend& p) {
 }
 
 void IrrHandling::runPacketToSend() {
+	bool doVerbose = verbose;
 	tlqLock.lock();
 
 	std::unordered_map<enet_uint16, ENetPeer*> peers = networkHandler->getPeers();
@@ -503,7 +504,7 @@ void IrrHandling::runPacketToSend() {
 				enet_host_broadcast(networkHandler->getHost(), task.channel, task.p);
 				enet_host_flush(networkHandler->getHost());
 
-				if (verbose) {
+				if (doVerbose) {
 					std::string msg = "Packet of size ";
 					msg += std::to_string(task.p->dataLength);
 					msg += "B sent to all ";
@@ -516,7 +517,7 @@ void IrrHandling::runPacketToSend() {
 			} else if (task.peerID != -1 && task.channel != -1) { // Server to peer
 				ENetPeer* thisPeer = peers[task.peerID];
 				if (!thisPeer) {
-					if (verbose) {
+					if (doVerbose) {
 						std::string msg = "Networking WARNING: Failed to send packet to peer with ID ";
 						msg += std::to_string(task.peerID);
 						msg += "; peer does not exist";
@@ -528,7 +529,7 @@ void IrrHandling::runPacketToSend() {
 				enet_peer_send(thisPeer, task.channel, task.p);
 				enet_host_flush(networkHandler->getHost());
 
-				if (verbose) {
+				if (doVerbose) {
 					std::string msg = "Packet of size ";
 					msg += std::to_string(task.p->dataLength);
 					msg += "B sent to peer with ID ";
@@ -545,7 +546,7 @@ void IrrHandling::runPacketToSend() {
 				enet_peer_send(networkHandler->getPeer(), task.channel, task.p);
 				enet_host_flush(networkHandler->getClient());
 
-				if (verbose) {
+				if (doVerbose) {
 					std::string msg = "Packet of size ";
 					msg += std::to_string(task.p->dataLength);
 					msg += "B sent to server";
@@ -612,6 +613,7 @@ void IrrHandling::addEventTask(bool b, ENetEvent event) {
 }
 
 void IrrHandling::runEventTasks() {
+	bool doVerbose = verbose;
 	tlqLock.lock();
 
 	sol::protected_function SonPeerConnect = (*lua)["NetworkServer"]["OnClientConnect"];
@@ -636,12 +638,12 @@ void IrrHandling::runEventTasks() {
 					addLuaTask(SonPeerConnect, t);
 				}
 				else {
-					if (verbose) dConsole.sendMsg("Networking WARNING: A peer connected but NetworkServer.OnClientConnect is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
+					if (doVerbose) dConsole.sendMsg("Networking WARNING: A peer connected but NetworkServer.OnClientConnect is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
 				}
 
 				networkHandler->getPeerMap()[event.peer->incomingPeerID] = event.peer;
 
-				if (verbose) {
+				if (doVerbose) {
 					std::string msg = "Client joined presuming ID ";
 					msg += std::to_string(event.peer->incomingPeerID);
 					msg += " from IP ";
@@ -658,12 +660,12 @@ void IrrHandling::runEventTasks() {
 					addLuaTask(SonPeerDisconnect, t);
 				}
 				else {
-					if (verbose) dConsole.sendMsg("Networking WARNING: A peer disconnected but NetworkServer.OnClientDisconnect is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
+					if (doVerbose) dConsole.sendMsg("Networking WARNING: A peer disconnected but NetworkServer.OnClientDisconnect is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
 				}
 
 				networkHandler->getPeerMap().erase(event.peer->incomingPeerID);
 
-				if (verbose) {
+				if (doVerbose) {
 					std::string msg = "Client disconnected abandoning ID ";
 					msg += std::to_string(event.peer->incomingPeerID);
 					msg += " from IP ";
@@ -680,7 +682,7 @@ void IrrHandling::runEventTasks() {
 					addLuaTask(SonPacketReceived, t);
 				}
 				else {
-					if (verbose) dConsole.sendMsg("Networking WARNING: A packet was received but NetworkServer.OnPacketReceived is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
+					if (doVerbose) dConsole.sendMsg("Networking WARNING: A packet was received but NetworkServer.OnPacketReceived is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
 					enet_packet_destroy(event.packet);
 				}
 				break;
@@ -692,12 +694,12 @@ void IrrHandling::runEventTasks() {
 				if (ConConnect.valid())
 					addLuaTask(ConConnect, sol::table());
 				else {
-					if (verbose) dConsole.sendMsg("Networking WARNING: Client connected but NetworkClient.OnConnect is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
+					if (doVerbose) dConsole.sendMsg("Networking WARNING: Client connected but NetworkClient.OnConnect is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
 				}
 
 				//if (!n->getHost()) n->getPeerMap()[event.peer->incomingPeerID] = event.peer;
 
-				if (verbose) {
+				if (doVerbose) {
 					std::string msg = "Connected to server via client ";
 					dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
 				}
@@ -709,12 +711,12 @@ void IrrHandling::runEventTasks() {
 					addLuaTask(ConDisconnect, t);
 				}
 				else {
-					if (verbose) dConsole.sendMsg("Networking WARNING: Client disconnected but NetworkClient.OnDisconnect is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
+					if (doVerbose) dConsole.sendMsg("Networking WARNING: Client disconnected but NetworkClient.OnDisconnect is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
 				}
 
 				//if (!n->getHost()) n->getPeerMap().erase(event.peer->incomingPeerID);
 
-				if (verbose) {
+				if (doVerbose) {
 					std::string msg = "Disconnected from server as client, reason code ";
 					msg += std::to_string(event.data);
 					dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
@@ -729,7 +731,7 @@ void IrrHandling::runEventTasks() {
 					addLuaTask(ConPacketReceived, t);
 				}
 				else {
-					if (verbose) dConsole.sendMsg("Networking WARNING: A packet was received but NetworkClient.OnPacketReceived is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
+					if (doVerbose) dConsole.sendMsg("Networking WARNING: A packet was received but NetworkClient.OnPacketReceived is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
 					enet_packet_destroy(event.packet);
 				}
 				break;
