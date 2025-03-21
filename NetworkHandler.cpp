@@ -204,9 +204,8 @@ void NetworkHandler::hostServer(std::string ip, int port, int maxClients, int ma
 	server = enet_host_create(&address, maxClients, maxChannels, 0, 0);
 
 	char ipString[64];
-	int out = enet_address_get_host_ip(&server->address, ipString, sizeof(ipString));
 
-	if (!server || out != 0) {
+	if (!server || enet_address_get_host_ip(&server->address, ipString, sizeof(ipString)) != 0) {
 		std::string ms = "";
 		ms = "Networking WARNING: Server could not be hosted on IP ";
 		ms += ipString;

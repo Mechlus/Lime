@@ -663,11 +663,11 @@ void IrrHandling::runEventTasks() {
 					if (doVerbose) dConsole.sendMsg("Networking WARNING: A peer disconnected but NetworkServer.OnClientDisconnect is not declared", MESSAGE_TYPE::NETWORK_VERBOSE);
 				}
 
-				networkHandler->getPeerMap().erase(event.peer->incomingPeerID);
+				networkHandler->getPeerMap().erase(event.peer->connectID);
 
 				if (doVerbose) {
 					std::string msg = "Client disconnected abandoning ID ";
-					msg += std::to_string(event.peer->incomingPeerID);
+					msg += std::to_string(event.peer->connectID);
 					msg += " from IP ";
 					msg += std::to_string(event.peer->address.host);
 					dConsole.sendMsg(msg.c_str(), MESSAGE_TYPE::NETWORK_VERBOSE);
